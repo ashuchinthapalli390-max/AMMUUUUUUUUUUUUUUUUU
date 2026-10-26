@@ -1,0 +1,35 @@
+{
+  "name": "ammu-birthday-react",
+  "version": "9.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Ammu Birthday React v9 source: calendar, check-in, cinematic chapters, keepsakes, 3D cake, sequential vouchers, shop and admin-only delivery verification",
+  "scripts": {
+    "dev": "node tools/dev.mjs",
+    "client": "vite --host 127.0.0.1 --port 5173 --strictPort",
+    "api": "node server.mjs",
+    "build": "vite build",
+    "start": "node server.mjs",
+    "preview": "vite preview --host 127.0.0.1 --port 5173",
+    "vendor:three": "node tools/vendor-three.mjs",
+    "postinstall": "node tools/vendor-three.mjs",
+    "check": "node --check server.mjs && node --check public/js/app.js && node --check public/js/experience.js && node --check public/js/keepsakes.js && node --check public/js/admin.js && node --check public/js/cake3d.js && node --check tools/dev.mjs && node tools/verify-layout.mjs",
+    "validate": "npm run check && npm run build",
+    "test:api": "python tools/test-api.py"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "three": "0.170.0",
+    "gsap": "^3.13.0",
+    "framer-motion": "^12.23.12",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "vite": "^7.1.5",
+    "@vitejs/plugin-react": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}

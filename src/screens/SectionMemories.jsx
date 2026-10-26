@@ -1,0 +1,6 @@
+import React from "react"; import LiquidMemory from "../LiquidMemory.jsx";
+export default function SectionMemories(){
+  return (
+<section id={"memories"} className={"section blush gallery-section"}><div className={"wrap"}><div className={"section-top"}><span className={"eyebrow"}>{"THE LITTLE THINGS WE KEEP"}</span><h2>{"About Our "}<em>{"Journey"}</em></h2><p>{"Every little photograph feels like a page from a story worth keeping."}</p></div><LiquidMemory /><div className="scrapbook-gallery-heading"><h3>Our Polaroid scrapbook ♡</h3><button className="btn btn-outline" type="button" onClick={()=>{document.getElementById("memories")?.classList.remove("gallery-view");window.ammuRefreshPage?.("memories")}}>← Back to liquid memories</button></div><div className={"gallery-tabs"} id={"gallery-tabs"}></div><div id={"gallery-grid"} className={"gallery-grid"}></div><div className={"gallery-foot"}><button className={"btn btn-outline"} id={"gallery-prev"}>← Earlier Memories</button><span id="gallery-page-index">SCRAPBOOK PAGE 01</span><button className={"btn btn-pink"} id={"gallery-more"}>Next Memories ↗</button><span>{"Every memory has a little magic, even the blurry ones."}</span></div></div></section>
+);
+}

@@ -1,0 +1,4 @@
+import React from "react";
+export default function AdminLogin(){return (
+<div id={"admin-login"} className={"login"}><div className={"login-card"}><div className={"login-icon"}>{"💗"}</div><div className={"tag"}>{"PRIVATE • ASHU ONLY"}</div><h1>{"Ashu's "}<em>{"Studio"}</em></h1><p>{"Edit the memories, photos, gifts, products, messages and orders before Ammu opens her surprise."}</p><form id={"login-form"}><label>{"Admin Password "}<input type={"password"} id={"password"} autoComplete={"current-password"} placeholder={"Private admin password"} required={true} /></label><button className={"primary"} type={"submit"}>{"Enter My Studio →"}</button><p className={"error"} id={"login-error"}></p></form><a href={"/"}>{"← Back to birthday website"}</a><p className={"hint"}>{"First setup: copy "}<code>{"config.example.json"}</code>{" to "}<code>{"config.local.json"}</code>{" and create a strong "}<code>{"ADMIN_PASSWORD"}</code>{"."}</p></div></div>
+);}

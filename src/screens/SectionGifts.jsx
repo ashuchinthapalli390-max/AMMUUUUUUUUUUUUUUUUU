@@ -1,0 +1,6 @@
+import React from "react";
+export default function SectionGifts(){
+  return (
+<section id={"gifts"} className={"section ivory gift-section"}><div className={"wrap"}><div className={"section-top"}><span className={"eyebrow"}>{"THREE SURPRISES • FROM ASHU"}</span><h2>{"Wrapped With "}<em>{"Love & Chaos"}</em></h2><p>{"One to make you laugh, one from my heart, and one little shopping world made for you."}</p></div><div className={"gift-trio"}><button className={"gift-box-card"} data-gift={"pranks"}><div className={"gift-graphic"}>{"🎁"}</div><span>{"GIFT NO. 01"}</span><h3>{"The Millionaire Dreams"}</h3><p>{"Some extremely expensive gifts that only exist in Ashu's imagination."}</p><b>{"Open This Gift →"}</b></button><button className={"gift-box-card"} data-gift={"memberships"}><div className={"gift-graphic"}>{"💌"}</div><span>{"GIFT NO. 02"}</span><h3>{"Forever Little Promises"}</h3><p>{"Lifetime membership, cute vouchers and your secret shopping coupon."}</p><b>{"Open This Gift →"}</b></button><button className={"gift-box-card"} data-gift={"shop"}><div className={"gift-graphic"}>{"🛍️"}</div><span>{"GIFT NO. 03"}</span><h3>{"Potti's Shopping World"}</h3><p>{"From earrings to shoes and tiny toys. You choose what goes in the cart."}</p><b>{"Start Shopping →"}</b></button></div></div></section>
+);
+}

@@ -1,0 +1,4 @@
+import React from 'react';
+import {motion} from 'framer-motion';
+import './love-reveal.css';
+export default function LoveReveal(){return <main className="love-reveal-page"><motion.div className="love-letter-shell" initial={{opacity:0,y:60,scale:.93}} animate={{opacity:1,y:0,scale:1}} transition={{duration:1.1,type:'spring',bounce:.15}}><div className="love-overline">A SECRET LITTLE UNIVERSE • 17 NOVEMBER ♡</div><img src="/assets/photos/original_black.jpg" alt="Ammu in her black embroidered dress and glasses"/><h1>THE MOST IMPORTANT AND LOVELYYYY PERSON IN ASHUUUU'S LIFE...</h1><h2>IT'S YOUUUUU, DARLINGEYYYYYYYYYYY AMMUUUUUUUUUUUUU! 💗</h2><p>Somewhere between our funny fights, midnight talks and tiny adventures, you became a part of a million lovely memories.</p><div className="love-signature">Forever your silly friend,<b> From Ashuuuuuuuuu ♡</b></div><button onClick={()=>location.href='/#home'}>Back to Our Universe 🌸</button></motion.div></main>}

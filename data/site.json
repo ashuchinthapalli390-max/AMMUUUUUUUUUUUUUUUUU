@@ -1,0 +1,950 @@
+{
+  "title": "A Little Universe For Ammuuuu",
+  "birthdayDate": "2026-11-17T00:00:00+05:30",
+  "heroTitle": "Happiest Birthday, Ammuuuuuuuuuuuuuuuuu",
+  "sender": "From Ashu",
+  "nickname": "Pottiiiiiiii",
+  "coupon": "POTTI1703",
+  "heroImage": "/assets/photos/original_black.jpg",
+  "gallery": [
+    {
+      "id": "photo01",
+      "src": "/assets/photos/ammu_01.jpg",
+      "caption": "A moment worth keeping",
+      "category": "Candid",
+      "approved": true
+    },
+    {
+      "id": "photo02",
+      "src": "/assets/photos/ammu_02.jpg",
+      "caption": "Tiny moments, big memories",
+      "category": "Traditional",
+      "approved": true
+    },
+    {
+      "id": "photo03",
+      "src": "/assets/photos/ammu_03.jpg",
+      "caption": "Ammuuu being Ammuuu",
+      "category": "Cute",
+      "approved": true
+    },
+    {
+      "id": "photo04",
+      "src": "/assets/photos/ammu_04.jpg",
+      "caption": "Somewhere between flowers and sunshine",
+      "category": "Aesthetic",
+      "approved": true
+    },
+    {
+      "id": "photo05",
+      "src": "/assets/photos/ammu_05.jpg",
+      "caption": "Always a little magic",
+      "category": "Memories",
+      "approved": true
+    },
+    {
+      "id": "photo06",
+      "src": "/assets/photos/ammu_06.jpg",
+      "caption": "The sweetest little smile",
+      "category": "Aesthetic",
+      "approved": true
+    },
+    {
+      "id": "photo07",
+      "src": "/assets/photos/ammu_07.jpg",
+      "caption": "A moment worth keeping",
+      "category": "Candid",
+      "approved": true
+    },
+    {
+      "id": "photo08",
+      "src": "/assets/photos/ammu_08.jpg",
+      "caption": "Tiny moments, big memories",
+      "category": "Traditional",
+      "approved": true
+    },
+    {
+      "id": "photo09",
+      "src": "/assets/photos/ammu_09.jpg",
+      "caption": "Ammuuu being Ammuuu",
+      "category": "Cute",
+      "approved": true
+    },
+    {
+      "id": "photo10",
+      "src": "/assets/photos/ammu_10.jpg",
+      "caption": "Somewhere between flowers and sunshine",
+      "category": "Aesthetic",
+      "approved": true
+    },
+    {
+      "id": "photo11",
+      "src": "/assets/photos/ammu_11.jpg",
+      "caption": "Always a little magic",
+      "category": "Memories",
+      "approved": true
+    },
+    {
+      "id": "photo12",
+      "src": "/assets/photos/ammu_12.jpg",
+      "caption": "The sweetest little smile",
+      "category": "Aesthetic",
+      "approved": true
+    },
+    {
+      "id": "photo13",
+      "src": "/assets/photos/ammu_13.jpg",
+      "caption": "A moment worth keeping",
+      "category": "Candid",
+      "approved": true
+    },
+    {
+      "id": "photo14",
+      "src": "/assets/photos/ammu_14.jpg",
+      "caption": "Tiny moments, big memories",
+      "category": "Traditional",
+      "approved": true
+    },
+    {
+      "id": "photo15",
+      "src": "/assets/photos/ammu_15.jpg",
+      "caption": "Ammuuu being Ammuuu",
+      "category": "Cute",
+      "approved": true
+    },
+    {
+      "id": "photo16",
+      "src": "/assets/photos/ammu_16.jpg",
+      "caption": "Somewhere between flowers and sunshine",
+      "category": "Aesthetic",
+      "approved": true
+    },
+    {
+      "id": "photo17",
+      "src": "/assets/photos/ammu_17.jpg",
+      "caption": "Always a little magic",
+      "category": "Memories",
+      "approved": true
+    },
+    {
+      "id": "photo18",
+      "src": "/assets/photos/ammu_18.jpg",
+      "caption": "The sweetest little smile",
+      "category": "Aesthetic",
+      "approved": true
+    },
+    {
+      "id": "photo19",
+      "src": "/assets/photos/ammu_19.jpg",
+      "caption": "A moment worth keeping",
+      "category": "Candid",
+      "approved": true
+    },
+    {
+      "id": "photo20",
+      "src": "/assets/photos/ammu_20.jpg",
+      "caption": "Tiny moments, big memories",
+      "category": "Traditional",
+      "approved": true
+    },
+    {
+      "id": "photo21",
+      "src": "/assets/photos/ammu_21.jpg",
+      "caption": "Ammuuu being Ammuuu",
+      "category": "Cute",
+      "approved": false
+    },
+    {
+      "id": "photo22",
+      "src": "/assets/photos/ammu_22.jpg",
+      "caption": "Somewhere between flowers and sunshine",
+      "category": "Aesthetic",
+      "approved": false
+    },
+    {
+      "id": "photo23",
+      "src": "/assets/photos/ammu_23.jpg",
+      "caption": "Always a little magic",
+      "category": "Memories",
+      "approved": false
+    },
+    {
+      "id": "photo24",
+      "src": "/assets/photos/ammu_24.jpg",
+      "caption": "The sweetest little smile",
+      "category": "Aesthetic",
+      "approved": false
+    },
+    {
+      "id": "photo25",
+      "src": "/assets/photos/ammu_25.jpg",
+      "caption": "A moment worth keeping",
+      "category": "Candid",
+      "approved": false
+    },
+    {
+      "id": "photo26",
+      "src": "/assets/photos/ammu_26.jpg",
+      "caption": "Tiny moments, big memories",
+      "category": "Traditional",
+      "approved": false
+    },
+    {
+      "id": "photo27",
+      "src": "/assets/photos/ammu_27.jpg",
+      "caption": "Ammuuu being Ammuuu",
+      "category": "Cute",
+      "approved": false
+    },
+    {
+      "id": "photo28",
+      "src": "/assets/photos/ammu_28.jpg",
+      "caption": "Somewhere between flowers and sunshine",
+      "category": "Aesthetic",
+      "approved": false
+    },
+    {
+      "id": "photo29",
+      "src": "/assets/photos/ammu_29.jpg",
+      "caption": "Always a little magic",
+      "category": "Memories",
+      "approved": false
+    },
+    {
+      "id": "photo30",
+      "src": "/assets/photos/ammu_30.jpg",
+      "caption": "The sweetest little smile",
+      "category": "Aesthetic",
+      "approved": false
+    }
+  ],
+  "chapters": [
+    {
+      "id": "first-hackathon",
+      "title": "The 24-Hour Hackathon: Our First Hello",
+      "description": "Before CodeXa Girls, Ashu first saw Ammu at the 24-hour hackathon. Her laptop was there too. A small encounter before all our future memories.",
+      "icon": "💻",
+      "image": "/assets/photos/original_black.jpg"
+    },
+    {
+      "id": "lost-phone",
+      "title": "The Lost Phone & First Gmail Memory",
+      "description": "Later, when Ammu misplaced her phone at a shop, Ashu tried to help her locate it, learned her Gmail address and saved a contact as “Amrutha.” After that, the CodeXa Girls conversations began.",
+      "icon": "📱",
+      "image": "/assets/photos/original_white.jpg"
+    },
+    {
+      "id": "ch1",
+      "title": "CodeXa Girls",
+      "description": "It started with teasing, tiny arguments, and a group where we never expected to become this close.",
+      "icon": "💬",
+      "image": "/assets/photos/ammu_01.jpg"
+    },
+    {
+      "id": "ch2",
+      "title": "Marvel, K-dramas & Anime",
+      "description": "Marvel, Tony Stark, K-dramas and anime gave us a hundred reasons to keep talking.",
+      "icon": "✨",
+      "image": "/assets/photos/ammu_03.jpg"
+    },
+    {
+      "id": "ch3",
+      "title": "Discord Movie Nights",
+      "description": "Movies, games and one more episode together slowly became our favourite routine.",
+      "icon": "🎮",
+      "image": "/assets/photos/ammu_05.jpg"
+    },
+    {
+      "id": "ch4",
+      "title": "The Midnight Chapter",
+      "description": "Reels, DMs, calls and the nights we stayed awake sharing little pieces of our lives.",
+      "icon": "🌙",
+      "image": "/assets/photos/ammu_07.jpg"
+    },
+    {
+      "id": "ch5",
+      "title": "Our Solo Leveling Confusion",
+      "description": "The rewatch plan, Gayu, Deepak, a misunderstanding and one memorable night of screensharing.",
+      "icon": "🍿",
+      "image": "/assets/photos/ammu_09.jpg"
+    },
+    {
+      "id": "ch6",
+      "title": "Tony Stark Forever",
+      "description": "Somewhere in an MCU recap, we found another reason to laugh about Iron Man.",
+      "icon": "❤️",
+      "image": "/assets/photos/ammu_11.jpg"
+    },
+    {
+      "id": "ch7",
+      "title": "The 9:30 PM Ticket Drama",
+      "description": "That Spider-Man ticket situation and the sweetest scolding from Pottiiiiiiii.",
+      "icon": "🎟️",
+      "image": "/assets/photos/ammu_13.jpg"
+    },
+    {
+      "id": "ch8",
+      "title": "The First Movie: Irumudi",
+      "description": "Our first theatre outing. Sitting next to you in the first half made that day memorable.",
+      "icon": "🎬",
+      "image": "/assets/photos/ammu_15.jpg"
+    },
+    {
+      "id": "ch9",
+      "title": "Our Movie Archive",
+      "description": "Paradise, Doraemon, 418 and the Ranabali plan that didn’t quite happen.",
+      "icon": "🎞️",
+      "image": "/assets/photos/ammu_17.jpg"
+    },
+    {
+      "id": "ch10",
+      "title": "Our Little Food Adventures",
+      "description": "Pani puri at NRT, waffles, Domino’s and exploring anywhere the day took us.",
+      "icon": "🍕",
+      "image": "/assets/photos/ammu_19.jpg"
+    },
+    {
+      "id": "ch11",
+      "title": "The Tiny Things",
+      "description": "Your little hand signs, that seahorse sticker on my phone, the laptop you brought for me.",
+      "icon": "🐚",
+      "image": "/assets/photos/ammu_21.jpg"
+    },
+    {
+      "id": "ch12",
+      "title": "Still Us",
+      "description": "We have had our arguments. The care, laughter and friendship matter more than a perfect story.",
+      "icon": "💗",
+      "image": "/assets/photos/ammu_23.jpg"
+    }
+  ],
+  "products": [
+    {
+      "id": "p1",
+      "stage": "earrings",
+      "name": "Rose Drop Earrings",
+      "tokens": 2,
+      "unit": "hugs",
+      "category": "Jewellery",
+      "image": "/assets/products/earrings.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p2",
+      "stage": "earrings",
+      "name": "Pearl Star Earrings",
+      "tokens": 1,
+      "unit": "smile",
+      "category": "Jewellery",
+      "image": "/assets/products/earrings2.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p3",
+      "stage": "necklace",
+      "name": "Heart Locket Necklace",
+      "tokens": 3,
+      "unit": "virtual kisses",
+      "category": "Jewellery",
+      "image": "/assets/products/necklace2.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p4",
+      "stage": "necklace",
+      "name": "Moonlight Chain",
+      "tokens": 1,
+      "unit": "walk",
+      "category": "Jewellery",
+      "image": "/assets/products/necklace.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p5",
+      "stage": "bracelet",
+      "name": "Little Charm Bracelet",
+      "tokens": 2,
+      "unit": "hugs",
+      "category": "Jewellery",
+      "image": "/assets/products/bracelet.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p6",
+      "stage": "bangles",
+      "name": "Rose Gold Bangles",
+      "tokens": 1,
+      "unit": "virtual kisses",
+      "category": "Jewellery",
+      "image": "/assets/products/bangles.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p7",
+      "stage": "ring",
+      "name": "Tiny Heart Ring",
+      "tokens": 1,
+      "unit": "virtual hugs",
+      "category": "Jewellery",
+      "image": "/assets/products/ring.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p8",
+      "stage": "vaddanam",
+      "name": "Dream Vaddanam",
+      "tokens": 4,
+      "unit": "hugs",
+      "category": "Jewellery",
+      "image": "/assets/products/vaddanam.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p9",
+      "stage": "dress",
+      "name": "Blush Floral Dress",
+      "tokens": 2,
+      "unit": "walks",
+      "category": "Clothing",
+      "image": "/assets/products/dress2.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p10",
+      "stage": "dress",
+      "name": "Pastel Dream Dress",
+      "tokens": 2,
+      "unit": "hugs",
+      "category": "Clothing",
+      "image": "/assets/products/dress.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p11",
+      "stage": "pants",
+      "name": "Comfy Day Pants",
+      "tokens": 1,
+      "unit": "reel",
+      "category": "Clothing",
+      "image": "/assets/products/pants.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p12",
+      "stage": "slippers",
+      "name": "Cloudy Slippers",
+      "tokens": 2,
+      "unit": "smiles",
+      "category": "Footwear",
+      "image": "/assets/products/slippers.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p13",
+      "stage": "shoes",
+      "name": "Little Star Sneakers",
+      "tokens": 1,
+      "unit": "walk",
+      "category": "Footwear",
+      "image": "/assets/products/shoes.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p14",
+      "stage": "toys",
+      "name": "Fluffy Teddy Bear",
+      "tokens": 3,
+      "unit": "hugs",
+      "category": "Toys",
+      "image": "/assets/products/teddy.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p15",
+      "stage": "toys",
+      "name": "Bunny Plushie",
+      "tokens": 2,
+      "unit": "smiles",
+      "category": "Toys",
+      "image": "/assets/products/teddy2.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p16",
+      "stage": "toys",
+      "name": "Iron Man Collectible",
+      "tokens": 1,
+      "unit": "MCU night",
+      "category": "Toys",
+      "image": "/assets/products/ironman.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p17",
+      "stage": "keychains",
+      "name": "Seahorse Keychain",
+      "tokens": 1,
+      "unit": "giggle",
+      "category": "Accessories",
+      "image": "/assets/products/keychain.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    },
+    {
+      "id": "p18",
+      "stage": "keychains",
+      "name": "Heart Keychain",
+      "tokens": 1,
+      "unit": "hug",
+      "category": "Accessories",
+      "image": "/assets/products/flowers.jpg",
+      "description": "A little future gift idea selected with love.",
+      "link": "",
+      "active": true
+    }
+  ],
+  "shopStages": [
+    {
+      "id": "earrings",
+      "title": "Earrings",
+      "optional": false
+    },
+    {
+      "id": "necklace",
+      "title": "Necklaces",
+      "optional": false
+    },
+    {
+      "id": "bracelet",
+      "title": "Bracelets",
+      "optional": false
+    },
+    {
+      "id": "bangles",
+      "title": "Bangles",
+      "optional": false
+    },
+    {
+      "id": "ring",
+      "title": "Rings",
+      "optional": true
+    },
+    {
+      "id": "vaddanam",
+      "title": "Vaddanam",
+      "optional": true
+    },
+    {
+      "id": "dress",
+      "title": "Dresses",
+      "optional": false
+    },
+    {
+      "id": "pants",
+      "title": "Pants & Bottoms",
+      "optional": false
+    },
+    {
+      "id": "slippers",
+      "title": "Slippers",
+      "optional": false
+    },
+    {
+      "id": "shoes",
+      "title": "Shoes",
+      "optional": false
+    },
+    {
+      "id": "toys",
+      "title": "Toys & Collectibles",
+      "optional": false
+    },
+    {
+      "id": "keychains",
+      "title": "Keychains",
+      "optional": false
+    }
+  ],
+  "letters": [
+    {
+      "title": "From Ashu",
+      "text": "Dear Ammuuuu, who knew our little arguments in CodeXa Girls would become a universe of memories? Thank you for the laughs, the midnight talks, the movies and the tiniest surprises. Happiest birthday to my favourite Pottiiiiiiii. From Ashu 💗"
+    },
+    {
+      "title": "Open When You Feel Low",
+      "text": "You never need to pretend to be okay around your friends. Take your time, breathe, and remember that you matter more than any bad day."
+    },
+    {
+      "title": "Open When You Need A Smile",
+      "text": "Ammuuuu! Remember how even that silly seahorse sticker became one of our memories? Little things become big stories with you."
+    },
+    {
+      "title": "Open When You Miss Our Chats",
+      "text": "From reels to late-night calls to random jokes, I hope our conversations always find their way back to a smile."
+    },
+    {
+      "title": "A Letter To Future You",
+      "text": "I hope future you has seen so much happiness, travelled far and made the dreams you keep close come true."
+    }
+  ],
+  "wishesFromAshu": [
+    "I hope the world gives you a thousand little reasons to smile.",
+    "I hope every dream you quietly wish for finds its way to you.",
+    "I hope our silly friendship keeps growing through every season."
+  ],
+  "pranks": [
+    {
+      "id": "iphone",
+      "name": "iPhone 18 Duo",
+      "icon": "📱",
+      "joke": "I wanted to gift you this phone, but such a costly surprise might bring happy tears, so I’m protecting your mascara budget! 😭💗"
+    },
+    {
+      "id": "ironman",
+      "name": "Iron Man Suit Set",
+      "icon": "🦾",
+      "joke": "For Tony Stark’s biggest fan, naturally! But my current budget is still Peter Parker on student allowance."
+    },
+    {
+      "id": "villa",
+      "name": "A Luxury Villa",
+      "icon": "🏡",
+      "joke": "Even if I mortgage my head, the down payment is still too much, Pottiiiiiiii! 🥹"
+    },
+    {
+      "id": "bmw",
+      "name": "Three BMW Cars",
+      "icon": "🚘",
+      "joke": "One BMW wasn’t enough, so I planned three. The showroom asked me to leave before I finished dreaming. 💀"
+    }
+  ],
+  "vouchers": [
+    {
+      "id": "support",
+      "title": "Lifetime Support Membership",
+      "icon": "💗",
+      "description": "Always here to listen, cheer and care. Lifetime validity. No expiry."
+    },
+    {
+      "id": "care",
+      "title": "Lifetime Caring Membership",
+      "description": "Someone to listen, encourage and care about the little moments, with love from Ashu.",
+      "icon": "💗"
+    },
+    {
+      "id": "tease",
+      "title": "Lifetime Torcher Membership",
+      "icon": "😈",
+      "description": "Silly fights, reels, teasing and our never-ending chaos."
+    },
+    {
+      "id": "reels",
+      "title": "Unlimited Reels Membership",
+      "description": "Send all the funny reels you want, even at the most random hours.",
+      "icon": "🎞️"
+    },
+    {
+      "id": "food",
+      "title": "Food Treat Pass",
+      "icon": "🍕",
+      "description": "Pani puri, waffles or pizza. Let’s plan another food adventure."
+    },
+    {
+      "id": "movie",
+      "title": "Movie Companion Pass",
+      "icon": "🎬",
+      "description": "One more movie and a hundred more cinema memories."
+    },
+    {
+      "id": "patchup",
+      "title": "Cute Fight & Patchup Voucher",
+      "description": "One little reminder that every misunderstanding deserves listening, kindness and a fresh start.",
+      "icon": "🌷"
+    },
+    {
+      "id": "hug",
+      "title": "Virtual Hug Pass",
+      "icon": "🫂",
+      "description": "A warm virtual hug whenever you want one."
+    },
+    {
+      "id": "coupon",
+      "title": "POTTI1703 Shopping Coupon",
+      "icon": "🎟️",
+      "description": "100% off pretend hug-and-smile prices in Potti’s gift shop."
+    }
+  ],
+  "movies": [
+    {
+      "title": "Irumudi",
+      "description": "Our first movie together; the first-half seat beside you made it special.",
+      "icon": "🎟️",
+      "poster": "",
+      "status": "Watched Together",
+      "theme": "burgundy"
+    },
+    {
+      "title": "Paradise",
+      "description": "Another little movie memory.",
+      "icon": "🍿",
+      "poster": "",
+      "status": "Watched Together",
+      "theme": "violet"
+    },
+    {
+      "title": "Doraemon",
+      "description": "A recent movie outing full of nostalgia.",
+      "icon": "🪄",
+      "poster": "",
+      "status": "Watched Together",
+      "theme": "sky"
+    },
+    {
+      "title": "418",
+      "description": "Another cinema adventure for the scrapbook.",
+      "icon": "🎬",
+      "poster": "",
+      "status": "Watched Together",
+      "theme": "rose"
+    },
+    {
+      "title": "Ranabali",
+      "description": "The movie plan that did not work out.",
+      "icon": "💌",
+      "poster": "",
+      "status": "Planned",
+      "theme": "gold"
+    },
+    {
+      "title": "Spider-Man Plans",
+      "description": "The 9:30 PM ticket drama and the cute scolding.",
+      "icon": "🕷️",
+      "poster": "",
+      "status": "Planned",
+      "theme": "indigo"
+    }
+  ],
+  "stars": [
+    "Some of our best conversations happened when everyone else was asleep.",
+    "One more episode, one more game, one more memory.",
+    "Reels shared at the most random hours.",
+    "Little things we said became bigger memories.",
+    "The MCU recap that became another favourite story.",
+    "No matter how late, we always had something to talk about.",
+    "The trust we built through conversations, day by day.",
+    "Many more nights and adventures are waiting for us."
+  ],
+  "reasons": [
+    "Your voice makes even silly stories interesting.",
+    "Your little hand signs and your cute reactions.",
+    "The way you care about people and little things.",
+    "That seahorse sticker on my phone!",
+    "All the movies and little adventures.",
+    "Our midnight talks and random reels.",
+    "Even our arguments became stories.",
+    "Your love for Tony Stark and Iron Man.",
+    "The day we had pani puri together.",
+    "Your soft heart, humour and the wonderful energy you bring."
+  ],
+  "bestieCard": {
+    "name": "Ammuuuuuuuuuuuuuuuuu",
+    "nickname": "Pottiiiiiiii",
+    "number": "BESTIE-1711",
+    "photo": "/assets/photos/original_black.jpg",
+    "issuedBy": "From Ashu",
+    "perks": [
+      "Unlimited silly conversations",
+      "Movie & anime companion",
+      "Emergency virtual hugs",
+      "Random reels and food plans",
+      "Support, listening, and care"
+    ]
+  },
+  "magazinePages": [
+    {
+      "type": "cover",
+      "eyebrow": "THE ONE & ONLY / NOVEMBER EDITION",
+      "title": "The Ammuuu Issue",
+      "subtitle": "A little book about an extraordinary person.",
+      "body": "Birthday Edition • From Ashu",
+      "image": "/assets/photos/original_black.jpg",
+      "note": "ISSUE Nº 01 • 17 NOVEMBER"
+    },
+    {
+      "type": "editorial",
+      "eyebrow": "A NOTE FROM THE EDITOR",
+      "title": "Dear Pottiiiiiiii,",
+      "subtitle": "Some stories deserve their own little magazine.",
+      "body": "This one is about the laughs, our silly fights, movie plans, midnight chats and everything we are still going to do. It started with a few messages. Somehow, it grew into a hundred little memories. Here is to celebrating you, exactly as you are.",
+      "image": "/assets/photos/original_white.jpg",
+      "note": "With care, From Ashu ♡"
+    },
+    {
+      "type": "story",
+      "eyebrow": "CHAPTER 01 / HOW IT ALL BEGAN",
+      "title": "A Fight, A Group, A Friendship",
+      "subtitle": "It all started in CodeXa Girls...",
+      "body": "From teasing and arguments to common interests. Marvel, K-dramas, anime and a Spider-Man plan: slowly, we found so many things to talk about.",
+      "image": "/assets/photos/ammu_04.jpg",
+      "note": "CODEXA GIRLS • THE BEGINNING"
+    },
+    {
+      "type": "quote",
+      "eyebrow": "A LITTLE THOUGHT",
+      "title": "Look How Far We Came",
+      "subtitle": "From strangers to a very special person.",
+      "body": "“Funny how a tiny argument can become the first line of a story that means so much.”",
+      "image": "/assets/photos/ammu_12.jpg",
+      "note": "ONE MEMORY AT A TIME"
+    },
+    {
+      "type": "story",
+      "eyebrow": "CHAPTER 02 / AFTER THE WORLD SLEPT",
+      "title": "Our Midnight Universe",
+      "subtitle": "Calls, watch parties, and endless conversations.",
+      "body": "We were both night owls. Between Discord movies, games, DMs, reels and conversations that went on late into the night, ordinary hours began turning into memories.",
+      "image": "/assets/photos/ammu_23.jpg",
+      "note": "MOONLIGHT & MESSAGES"
+    },
+    {
+      "type": "photo",
+      "eyebrow": "A LITTLE PHOTO DIARY",
+      "title": "The Smallest Moments",
+      "subtitle": "Not every memory needs a big occasion.",
+      "body": "Sometimes a sticker, a funny expression, or an unexpected message becomes a story you never forget.",
+      "image": "/assets/photos/ammu_10.jpg",
+      "note": "THE LITTLE THINGS"
+    },
+    {
+      "type": "story",
+      "eyebrow": "CHAPTER 03 / LIGHTS, CAMERA, US",
+      "title": "The Movie Tickets",
+      "subtitle": "Some of our favourite plans happened outside a screen.",
+      "body": "From Irumudi, the very first film together, to Paradise, Doraemon and 418. Even the plans that never worked out have their own stories.",
+      "image": "/assets/photos/ammu_18.jpg",
+      "note": "A SEAT BESIDE YOU"
+    },
+    {
+      "type": "story",
+      "eyebrow": "CHAPTER 04 / FOOD & LITTLE ADVENTURES",
+      "title": "A Few More Outings Please",
+      "subtitle": "Pani puri, waffles, Domino’s and little walks.",
+      "body": "The place matters less than the memory. Somewhere between a plate of pani puri and a tiny adventure, we made another ordinary day a little more special.",
+      "image": "/assets/photos/ammu_16.jpg",
+      "note": "MORE FOOD PLANS PENDING"
+    },
+    {
+      "type": "photo",
+      "eyebrow": "THE BIRTHDAY PHOTO FEATURE",
+      "title": "Always This Cute?",
+      "subtitle": "The many little versions of Ammuuu.",
+      "body": "The smiles, the silly expressions, the traditional looks, the cute candid moments. Every chapter of you deserves its own page.",
+      "image": "/assets/photos/ammu_06.jpg",
+      "note": "STAR OF THE ISSUE"
+    },
+    {
+      "type": "editorial",
+      "eyebrow": "THE LITTLE THINGS COLUMN",
+      "title": "A Seahorse & a Thousand Smiles",
+      "subtitle": "Tiny gestures, enormous memories.",
+      "body": "The seahorse sticker on my phone. Your cute hand signs. The playful everyday teasing. Even bringing your laptop when I asked. These are the little things I remember and value.",
+      "image": "/assets/photos/ammu_08.jpg",
+      "note": "FROM THE MEMORY BOX"
+    },
+    {
+      "type": "quote",
+      "eyebrow": "A WISH FOR THE NEXT CHAPTER",
+      "title": "More Memories Await",
+      "subtitle": "More conversations, more films and more laughs.",
+      "body": "“I hope there are so many more pages to write, even the messy ones. Especially the funny ones.”",
+      "image": "/assets/photos/ammu_22.jpg",
+      "note": "OUR STORY IS STILL BEING WRITTEN"
+    },
+    {
+      "type": "finale",
+      "eyebrow": "THE LAST PAGE / FOR NOW",
+      "title": "Happiest Birthday Ammuuuu!",
+      "subtitle": "One of my favourite humans. Forever worth celebrating.",
+      "body": "Thank you for all the laughter, tiny adventures and long talks. Stay the wonderfully unique person you are.",
+      "image": "/assets/photos/original_white.jpg",
+      "note": "WITH LOVE • FROM ASHU ♡"
+    }
+  ],
+  "playlist": [
+    {
+      "id": "track1",
+      "title": "Our first song",
+      "artist": "From Ashu ♡",
+      "src": "/assets/music/song-01.mp3",
+      "cover": "/assets/photos/original_black.jpg"
+    },
+    {
+      "id": "track2",
+      "title": "One more midnight memory",
+      "artist": "From Ashu ♡",
+      "src": "/assets/music/song-02.mp3",
+      "cover": "/assets/photos/original_black.jpg"
+    },
+    {
+      "id": "track3",
+      "title": "A song for Pottiiiiiiii",
+      "artist": "From Ashu ♡",
+      "src": "/assets/music/song-03.mp3",
+      "cover": "/assets/photos/original_black.jpg"
+    },
+    {
+      "id": "track4",
+      "title": "Movie-night favourite",
+      "artist": "From Ashu ♡",
+      "src": "/assets/music/song-04.mp3",
+      "cover": "/assets/photos/original_black.jpg"
+    },
+    {
+      "id": "track5",
+      "title": "The birthday song",
+      "artist": "From Ashu ♡",
+      "src": "/assets/music/song-05.mp3",
+      "cover": "/assets/photos/original_black.jpg"
+    },
+    {
+      "id": "track6",
+      "title": "Our forever playlist",
+      "artist": "From Ashu ♡",
+      "src": "/assets/music/song-06.mp3",
+      "cover": "/assets/photos/original_black.jpg"
+    }
+  ]
+}
