@@ -21,7 +21,7 @@ const ENVFILE=path.join(ROOT,'config.local.json');let fileConfig={};try{fileConf
 }
 const env=(k,def='')=>process.env[k]||fileConfig[k]||def;
 const ADMIN_PASSWORD=env('ADMIN_PASSWORD'), PREVIEW_CODE=env('PREVIEW_CODE'), SECRET=env('SESSION_SECRET',crypto.randomBytes(32).toString('hex'));
-const ASHU_EMAIL=env('ASHU_EMAIL'),AMMU_EMAIL=env('AMMU_EMAIL'), EMAIL_FROM=env('EMAIL_FROM'),RESEND_API_KEY=env('RESEND_API_KEY');
+const ASHU_EMAIL=env('ASHU_EMAIL'),AMMU_EMAIL=env('AMMU_EMAIL'), EMAIL_FROM=env('EMAIL_FROM')||(env('RESEND_FROM_EMAIL')?(env('RESEND_FROM_NAME')?`${env('RESEND_FROM_NAME')} <${env('RESEND_FROM_EMAIL')}>`:env('RESEND_FROM_EMAIL')):''),RESEND_API_KEY=env('RESEND_API_KEY');
 const LOCAL_DEMO=env('DEMO_MODE','1')==='1'&&HOST==='127.0.0.1';
 const readJson=p=>JSON.parse(fs.readFileSync(p,'utf8')); let site=readJson(SITEPATH),db=readJson(DBPATH);
 if(!Array.isArray(db.checkins))db.checkins=[];
@@ -48,7 +48,7 @@ function cleanStr(v,max=1500){return String(v??'').trim().slice(0,max)}
 function sameOrigin(req){let origin=req.headers.origin;if(!origin)return;let host=req.headers.host;if(new URL(origin).host!==host)throw error(403,'Cross-origin request blocked')}
 function limitedData(){return{birthdayDate:site.birthdayDate,serverTime:new Date().toISOString(),open:false,localDemo:LOCAL_DEMO,heroImage:null}}
 function logEvent(type,detail={}){db.events.unshift({id:crypto.randomUUID(),type,detail,createdAt:new Date().toISOString()});db.events=db.events.slice(0,500)}
-async function mail(to,subject,html){const entry={id:crypto.randomUUID(),to:to||'(unconfigured)',subject,status:'pending',at:new Date().toISOString()};db.notifications.unshift(entry);db.notifications=db.notifications.slice(0,500);if(!to||!RESEND_API_KEY||!EMAIL_FROM){entry.status='not_configured';return false}try{const resp=await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${RESEND_API_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({from:EMAIL_FROM,to:[to],subject,html})});if(!resp.ok)throw new Error('Email provider status '+resp.status);entry.status='sent';return true}catch(e){entry.status='failed';entry.error=String(e.message).slice(0,200);return false}}
+async function mail(to,subject,html){const entry={id:crypto.randomUUID(),to:to||'(unconfigured)',subject,status:'pending',at:new Date().toISOString()};db.notifications.unshift(entry);db.notifications=db.notifications.slice(0,500);if(!to||!RESEND_API_KEY||!EMAIL_FROM){entry.status='not_configured';return false}try{const body={from:EMAIL_FROM,to:[to],subject,html};if(env('RESEND_REPLY_TO_EMAIL'))body.reply_to=[env('RESEND_REPLY_TO_EMAIL')];const resp=await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${RESEND_API_KEY}`,'Content-Type':'application/json'},body:JSON.stringify(body)});if(!resp.ok)throw new Error('Email provider status '+resp.status);entry.status='sent';return true}catch(e){entry.status='failed';entry.error=String(e.message).slice(0,200);return false}}
 const escapeHtml=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const emailHtml=(title,body)=>`<div style="font-family:Georgia,serif;background:#fff4f7;padding:30px;color:#673148"><h1>${escapeHtml(title)}</h1>${body}</div>`;
 function customerOrder(o){let {otpHash,otpExpires,otpTries,verificationCode,...safe}=o;return safe}
