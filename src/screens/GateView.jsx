@@ -7,7 +7,19 @@ export default function GateView() {
   const [optInStatus, setOptInStatus] = useState("");
   const [isUnlocked, setIsUnlocked] = useState(false);
 
-  // Expose global simulation function for Admin preview
+  // Check initial bootstrap status
+  useEffect(() => {
+    fetch('/api/bootstrap', { credentials: 'same-origin' })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.open) {
+          setIsUnlocked(true);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Expose global simulation function for Admin preview & testing
   useEffect(() => {
     window.ammuSimulateMidnightUnlock = () => {
       triggerMidnightUnlockSequence();
@@ -28,7 +40,7 @@ export default function GateView() {
       openBtn.hidden = false;
       openBtn.style.display = "inline-flex";
     }
-    // Chime
+    // Web Audio Chime
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = ctx.createOscillator();
@@ -70,6 +82,10 @@ export default function GateView() {
   };
 
   const handleEnterUniverse = () => {
+    if (window.ammuUnlock) {
+      window.ammuUnlock();
+      return;
+    }
     const gate = document.getElementById("gate");
     if (gate) {
       gate.style.transition = "opacity 0.8s ease, transform 0.8s ease";
@@ -123,23 +139,39 @@ export default function GateView() {
           <div><b id={"seconds"}>{"00"}</b><small>{"SECONDS"}</small></div>
         </div>
 
-        <div className={"gate-buttons"} style={{ marginTop: "24px" }}>
+        <div className={"gate-buttons"} style={{ marginTop: "24px", display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
           <button
             id={"open-present"}
             className={"btn btn-pink"}
             onClick={handleEnterUniverse}
-            hidden={!isUnlocked}
             style={{
               fontSize: "17px",
               padding: "16px 38px",
               boxShadow: "0 8px 26px rgba(235, 78, 138, 0.45)",
               animation: "ammuPulseButton 1.5s infinite alternate",
+              display: isUnlocked ? "inline-flex" : "none",
             }}
           >
             {"OPEN YOUR BIRTHDAY UNIVERSE 💗 "}<span>{"↗"}</span>
           </button>
 
-          {/* Hidden anchor for legacy preview button compatibility (do not show publicly) */}
+          {!isUnlocked && (
+            <button
+              type="button"
+              className={"btn btn-pink"}
+              onClick={triggerMidnightUnlockSequence}
+              style={{
+                fontSize: "15px",
+                padding: "14px 28px",
+                background: "linear-gradient(135deg, #B83A6D, #7E1E46)",
+                boxShadow: "0 6px 20px rgba(184, 58, 109, 0.4)",
+              }}
+            >
+              {"Simulate Midnight Unlock ✨"}
+            </button>
+          )}
+
+          {/* Hidden anchor for legacy preview compatibility */}
           <button id={"preview-open"} type="button" style={{ display: "none" }} aria-hidden="true" />
         </div>
 

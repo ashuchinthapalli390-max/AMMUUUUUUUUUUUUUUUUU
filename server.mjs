@@ -75,7 +75,7 @@ const SCHEDULER_SECRET = env('EMAIL_SCHEDULER_SECRET') || env('CRON_SECRET');
 const LIVE_SHARING_ENABLED = env('LIVE_SHARING_ENABLED', 'true') === 'true' || env('LIVE_SHARING_ENABLED') === '1';
 const PREVIEW_ENABLED = env('PREVIEW_ENABLED', 'true') === 'true' || env('PREVIEW_ENABLED') === '1';
 
-const LOCAL_DEMO = env('DEMO_MODE', '0') === '1' && HOST === '127.0.0.1';
+const LOCAL_DEMO = env('DEMO_MODE', '0') === '1' && (HOST === '127.0.0.1' || HOST === 'localhost');
 
 const readJson = p => JSON.parse(fs.readFileSync(p, 'utf8'));
 let site = readJson(SITEPATH);
@@ -278,8 +278,28 @@ function cleanStr(v, max = 1500) {
 function sameOrigin(req) {
   const origin = req.headers.origin;
   if (!origin) return;
-  const host = req.headers.host;
-  if (new URL(origin).host !== host) throw error(403, 'Cross-origin request blocked');
+  const reqHost = req.headers.host;
+  let originHost = '';
+  try {
+    originHost = new URL(origin).host;
+  } catch {
+    throw error(403, 'Invalid origin header');
+  }
+  if (originHost === reqHost) return;
+
+  // Allow local development loopbacks (127.0.0.1 and localhost across Vite :5173 and API :4173)
+  const isLocalOrigin = originHost.startsWith('127.0.0.1') || originHost.startsWith('localhost');
+  const isLocalHost = reqHost.startsWith('127.0.0.1') || reqHost.startsWith('localhost');
+  if (isLocalOrigin && isLocalHost) return;
+
+  // Allow configured APP_BASE_URL
+  if (APP_BASE_URL) {
+    try {
+      if (originHost === new URL(APP_BASE_URL).host) return;
+    } catch {}
+  }
+
+  throw error(403, 'Cross-origin request blocked');
 }
 
 function limitedData() {
