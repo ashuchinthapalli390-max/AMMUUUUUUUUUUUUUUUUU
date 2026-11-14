@@ -24,7 +24,7 @@ export default function AdminDashboard() {
         <button data-section={"settings"}>{"⚙   Website Settings"}</button>
         <button data-section={"notifications"}>{"♫   Email Log"}</button>
         <div className={"sidebar-bottom"}>
-          <a href={"/"} target={"_blank"}>{"↗   Preview Website"}</a>
+          <a href={"/admin/preview"} target={"_blank"}>{"👑   Preview Website"}</a>
           <button id={"logout"}>{"Log Out"}</button>
         </div>
       </aside>
@@ -36,7 +36,9 @@ export default function AdminDashboard() {
           </div>
           <div className={"header-actions"}>
             <span className={"pill"}>{"Desktop birthday world"}</span>
-            <a href={"/"} target={"_blank"} className={"outline"}>{"↗ View Website"}</a>
+            <a href={"/admin/preview"} target={"_blank"} className={"primary btn-preview-full"} style={{fontWeight: 'bold', padding: '8px 18px', background: 'linear-gradient(135deg, #781d45, #b83d6a)', color: '#fff', textDecoration: 'none', borderRadius: '20px', display: 'inline-flex', alignItems: 'center', gap: '6px'}}>
+              {"👑 Preview Full Birthday Website"}
+            </a>
           </div>
         </header>
         <div id={"admin-content"} className={"admin-content"}></div>

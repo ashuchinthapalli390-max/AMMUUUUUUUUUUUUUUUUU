@@ -76,7 +76,7 @@ function AdminBootstrap() {
   return null;
 }
 
-export function BirthdayWebsite() {
+export function BirthdayWebsite({ isPreview = false }) {
   const [celebrationOpen, setCelebrationOpen] = useState(false);
 
   useEffect(() => {
@@ -88,14 +88,40 @@ export function BirthdayWebsite() {
     };
   }, []);
 
+  // When opening in admin preview mode, verify admin authentication and prepare the experience immediately
+  useEffect(() => {
+    if (isPreview) {
+      fetch('/api/admin/session', { credentials: 'same-origin' })
+        .then((r) => r.json())
+        .then((data) => {
+          if (!data.authenticated) {
+            window.location.href = '/admin?unauthorized=1';
+            return;
+          }
+          // Reveal experience and bypass lock views
+          const exp = document.getElementById('experience');
+          if (exp) exp.hidden = false;
+          const gate = document.getElementById('gate');
+          if (gate) gate.hidden = true;
+          const intro = document.getElementById('intro-stage');
+          if (intro) intro.hidden = true;
+          const ribbon = document.getElementById('preview-ribbon');
+          if (ribbon) ribbon.hidden = false;
+        })
+        .catch(() => {
+          window.location.href = '/admin?unauthorized=1';
+        });
+    }
+  }, [isPreview]);
+
   return (
     <>
-      <BirthdayFrontdoor />
+      <BirthdayFrontdoor skip={isPreview} />
       <PetalLayer />
       <ToasterView />
-      <GateView />
+      <GateView isPreview={isPreview} />
       <IntroView />
-      <div id="experience" hidden>
+      <div id="experience" hidden={!isPreview ? true : false}>
         <SectionChapterUi />
         <SectionSceneTransition />
         <SectionOther2 />
@@ -137,7 +163,7 @@ export function BirthdayWebsite() {
       />
 
       {/* Private Admin Preview Toolbar (Visible only when authenticated as Ashu) */}
-      <AdminPreviewToolbar />
+      <AdminPreviewToolbar isPreview={isPreview} />
 
       <GuestBootstrap />
     </>

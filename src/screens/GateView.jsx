@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function GateView() {
+export default function GateView({ isPreview = false }) {
   const [optInOpen, setOptInOpen] = useState(false);
   const [optInEmail, setOptInEmail] = useState("");
   const [optInTier, setOptInTier] = useState("all_hourly_and_minute");
@@ -31,6 +31,11 @@ export default function GateView() {
 
   const triggerMidnightUnlockSequence = () => {
     setIsUnlocked(true);
+    const gate = document.getElementById("gate");
+    if (gate) {
+      gate.hidden = false;
+      gate.style.opacity = "1";
+    }
     const gateCopy = document.querySelector(".gate-copy");
     if (gateCopy) {
       gateCopy.classList.add("unlocked-stage");
@@ -102,8 +107,10 @@ export default function GateView() {
     }
   };
 
+  const isGateHidden = isPreview || (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin/preview'));
+
   return (
-    <section id={"gate"} className={`gate ${isUnlocked ? "is-unlocked" : ""}`} aria-label={"Birthday entrance"}>
+    <section id={"gate"} hidden={isGateHidden} className={`gate ${isUnlocked ? "is-unlocked" : ""}`} aria-label={"Birthday entrance"}>
       <div className={"gate-stars"}></div>
 
       {/* VELVET CURTAINS & GOLDEN GLOW FOR MIDNIGHT UNLOCK */}

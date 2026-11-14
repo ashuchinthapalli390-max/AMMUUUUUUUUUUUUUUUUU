@@ -246,9 +246,8 @@ function attachSession(res, role) {
 function isOpen(req) {
   const unlockInstant = Date.parse(BIRTHDAY_UNLOCK_AT || site.birthdayDate);
   const now = Date.now();
-  // Server-verified automatic unlock at midnight
+  // Server-verified automatic unlock at midnight (Nov 17, 00:00 Asia/Kolkata)
   if (now >= unlockInstant) return true;
-  if (LOCAL_DEMO) return true;
   // Authenticated admin or preview session can access preview
   if (['admin', 'preview'].includes(session(req)?.role)) return true;
   return false;
@@ -845,6 +844,16 @@ async function api(req, res, pathname, url) {
     throttle(req, 'wishes', 6, 60 * 60000);
     const values = [body.wish1, body.wish2, body.wish3, body.change, body.improve].map(v => cleanStr(v, 1200));
     if (!values.some(Boolean)) throw error(400, 'Write at least one answer');
+    const isPreview = admin(req) || req.headers['x-admin-preview'] === '1' || body.preview === true;
+    if (isPreview) {
+      return send(res, 201, {
+        ok: true,
+        id: 'preview-' + shortId(),
+        saved: true,
+        previewMode: true,
+        emailStatus: 'preview_simulated'
+      });
+    }
     const w = { id: shortId(), answers: values, createdAt: new Date().toISOString() };
     db.wishes.unshift(w);
     logEvent('wishes.submitted', { id: w.id });
@@ -861,6 +870,10 @@ async function api(req, res, pathname, url) {
     throttle(req, 'membership', 30);
     const id = cleanStr(body.id, 80);
     if (!site.vouchers.some(v => v.id === id)) throw error(400, 'Unknown voucher');
+    const isPreview = admin(req) || req.headers['x-admin-preview'] === '1' || body.preview === true;
+    if (isPreview) {
+      return send(res, 201, { ok: true, previewMode: true });
+    }
     db.memberships.push({ id: shortId(), voucher: id, claimedAt: new Date().toISOString() });
     await mail(ASHU_EMAIL, '💗 Pottiiiiiiii claimed a voucher', emailHtml('Voucher claimed!', `<p>${escapeHtml(id)}</p>`));
     saveDB();
@@ -872,7 +885,14 @@ async function api(req, res, pathname, url) {
 
 function file(req, res, pathname) {
   let p = decodeURIComponent(pathname);
-  if (p === '/' || p === '/index.html' || p === '/admin' || p === '/admin/' || p === '/my-lovely-ammu' || p === '/my-lovely-ammu/' || p === '/for-ammu' || p === '/for-ammu/') {
+  if (p === '/admin/preview' || p === '/admin/preview/') {
+    // Unauthenticated preview URL visitors cannot access private preview before birthday
+    if (!admin(req) && !isOpen(req)) {
+      res.writeHead(302, { Location: '/admin?unauthorized=1' });
+      return res.end();
+    }
+    p = '/index.html';
+  } else if (p === '/' || p === '/index.html' || p === '/admin' || p === '/admin/' || p === '/my-lovely-ammu' || p === '/my-lovely-ammu/' || p === '/for-ammu' || p === '/for-ammu/') {
     p = '/index.html';
   }
   if (p.includes('..') || p.startsWith('/data/') || p.startsWith('/src/') || p.includes('config.local')) {

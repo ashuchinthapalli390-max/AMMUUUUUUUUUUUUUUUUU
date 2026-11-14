@@ -99,7 +99,13 @@ function prepareChapters(){
  window.ammuShowElement=el=>{const section=el?.closest('section.section');if(!section)return;if(section.id!==actualScene())return goTo(section.id);
   const stop=pageStops(section);const absY=section.scrollTop+el.getBoundingClientRect().top-section.getBoundingClientRect().top-80;const index=stop.reduce((best,v,i)=>Math.abs(v-absY)<Math.abs(stop[best]-absY)?i:best,0);showPage(index)
  };
- setupWishes();setupNight();setupCertificates();setupBonusGames();goTo('home',true);
+ let initScene = 'home';
+ if (location.hash) {
+  let h = location.hash.slice(1);
+  if (['shop', 'cart', 'tracking'].includes(h)) h = 'gifts';
+  if (scenes.includes(h)) initScene = h;
+ }
+ setupWishes();setupNight();setupCertificates();setupBonusGames();goTo(initScene,true);
 }
 function goTo(id,immediate=false,lastPage=false){
  if(['shop','cart','tracking'].includes(id))id='gifts';

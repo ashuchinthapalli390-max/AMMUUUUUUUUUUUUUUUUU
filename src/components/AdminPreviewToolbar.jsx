@@ -21,7 +21,7 @@ const CHAPTERS = [
   { id: 'finale', name: '18 · After Everything, Still Us' },
 ];
 
-export default function AdminPreviewToolbar() {
+export default function AdminPreviewToolbar({ isPreview = false }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [minimized, setMinimized] = useState(false);
   const [audioMuted, setAudioMuted] = useState(false);
@@ -38,14 +38,16 @@ export default function AdminPreviewToolbar() {
       .catch(() => {});
   }, []);
 
-  if (!isAdmin) return null;
+  if (!isAdmin && !isPreview) return null;
 
   const handleSelectChapter = (e) => {
     const chapterId = e.target.value;
     if (!chapterId) return;
 
     // Use global chapter navigation or scroll
-    if (window.showChapter) {
+    if (window.ammuGo) {
+      window.ammuGo(chapterId);
+    } else if (window.showChapter) {
       window.showChapter(chapterId);
     } else {
       const el = document.getElementById(chapterId);
