@@ -4,7 +4,6 @@
   "heroTitle": "Happiest Birthday, Ammuuuuuuuuuuuuuuuuu",
   "sender": "From Ashu",
   "nickname": "Pottiiiiiiii",
-  "coupon": "POTTI1703",
   "heroImage": "/assets/photos/original_black.jpg",
   "gallery": [
     {
@@ -318,286 +317,6 @@
       "image": "/assets/photos/ammu_23.jpg"
     }
   ],
-  "products": [
-    {
-      "id": "p1",
-      "stage": "earrings",
-      "name": "Rose Drop Earrings",
-      "tokens": 2,
-      "unit": "hugs",
-      "category": "Jewellery",
-      "image": "/assets/products/earrings.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p2",
-      "stage": "earrings",
-      "name": "Pearl Star Earrings",
-      "tokens": 1,
-      "unit": "smile",
-      "category": "Jewellery",
-      "image": "/assets/products/earrings2.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p3",
-      "stage": "necklace",
-      "name": "Heart Locket Necklace",
-      "tokens": 3,
-      "unit": "virtual kisses",
-      "category": "Jewellery",
-      "image": "/assets/products/necklace2.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p4",
-      "stage": "necklace",
-      "name": "Moonlight Chain",
-      "tokens": 1,
-      "unit": "walk",
-      "category": "Jewellery",
-      "image": "/assets/products/necklace.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p5",
-      "stage": "bracelet",
-      "name": "Little Charm Bracelet",
-      "tokens": 2,
-      "unit": "hugs",
-      "category": "Jewellery",
-      "image": "/assets/products/bracelet.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p6",
-      "stage": "bangles",
-      "name": "Rose Gold Bangles",
-      "tokens": 1,
-      "unit": "virtual kisses",
-      "category": "Jewellery",
-      "image": "/assets/products/bangles.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p7",
-      "stage": "ring",
-      "name": "Tiny Heart Ring",
-      "tokens": 1,
-      "unit": "virtual hugs",
-      "category": "Jewellery",
-      "image": "/assets/products/ring.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p8",
-      "stage": "vaddanam",
-      "name": "Dream Vaddanam",
-      "tokens": 4,
-      "unit": "hugs",
-      "category": "Jewellery",
-      "image": "/assets/products/vaddanam.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p9",
-      "stage": "dress",
-      "name": "Blush Floral Dress",
-      "tokens": 2,
-      "unit": "walks",
-      "category": "Clothing",
-      "image": "/assets/products/dress2.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p10",
-      "stage": "dress",
-      "name": "Pastel Dream Dress",
-      "tokens": 2,
-      "unit": "hugs",
-      "category": "Clothing",
-      "image": "/assets/products/dress.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p11",
-      "stage": "pants",
-      "name": "Comfy Day Pants",
-      "tokens": 1,
-      "unit": "reel",
-      "category": "Clothing",
-      "image": "/assets/products/pants.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p12",
-      "stage": "slippers",
-      "name": "Cloudy Slippers",
-      "tokens": 2,
-      "unit": "smiles",
-      "category": "Footwear",
-      "image": "/assets/products/slippers.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p13",
-      "stage": "shoes",
-      "name": "Little Star Sneakers",
-      "tokens": 1,
-      "unit": "walk",
-      "category": "Footwear",
-      "image": "/assets/products/shoes.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p14",
-      "stage": "toys",
-      "name": "Fluffy Teddy Bear",
-      "tokens": 3,
-      "unit": "hugs",
-      "category": "Toys",
-      "image": "/assets/products/teddy.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p15",
-      "stage": "toys",
-      "name": "Bunny Plushie",
-      "tokens": 2,
-      "unit": "smiles",
-      "category": "Toys",
-      "image": "/assets/products/teddy2.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p16",
-      "stage": "toys",
-      "name": "Iron Man Collectible",
-      "tokens": 1,
-      "unit": "MCU night",
-      "category": "Toys",
-      "image": "/assets/products/ironman.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p17",
-      "stage": "keychains",
-      "name": "Seahorse Keychain",
-      "tokens": 1,
-      "unit": "giggle",
-      "category": "Accessories",
-      "image": "/assets/products/keychain.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    },
-    {
-      "id": "p18",
-      "stage": "keychains",
-      "name": "Heart Keychain",
-      "tokens": 1,
-      "unit": "hug",
-      "category": "Accessories",
-      "image": "/assets/products/flowers.jpg",
-      "description": "A little future gift idea selected with love.",
-      "link": "",
-      "active": true
-    }
-  ],
-  "shopStages": [
-    {
-      "id": "earrings",
-      "title": "Earrings",
-      "optional": false
-    },
-    {
-      "id": "necklace",
-      "title": "Necklaces",
-      "optional": false
-    },
-    {
-      "id": "bracelet",
-      "title": "Bracelets",
-      "optional": false
-    },
-    {
-      "id": "bangles",
-      "title": "Bangles",
-      "optional": false
-    },
-    {
-      "id": "ring",
-      "title": "Rings",
-      "optional": true
-    },
-    {
-      "id": "vaddanam",
-      "title": "Vaddanam",
-      "optional": true
-    },
-    {
-      "id": "dress",
-      "title": "Dresses",
-      "optional": false
-    },
-    {
-      "id": "pants",
-      "title": "Pants & Bottoms",
-      "optional": false
-    },
-    {
-      "id": "slippers",
-      "title": "Slippers",
-      "optional": false
-    },
-    {
-      "id": "shoes",
-      "title": "Shoes",
-      "optional": false
-    },
-    {
-      "id": "toys",
-      "title": "Toys & Collectibles",
-      "optional": false
-    },
-    {
-      "id": "keychains",
-      "title": "Keychains",
-      "optional": false
-    }
-  ],
   "letters": [
     {
       "title": "From Ashu",
@@ -699,12 +418,6 @@
       "title": "Virtual Hug Pass",
       "icon": "🫂",
       "description": "A warm virtual hug whenever you want one."
-    },
-    {
-      "id": "coupon",
-      "title": "POTTI1703 Shopping Coupon",
-      "icon": "🎟️",
-      "description": "100% off pretend hug-and-smile prices in Potti’s gift shop."
     }
   ],
   "movies": [
@@ -945,6 +658,205 @@
       "artist": "From Ashu ♡",
       "src": "/assets/music/song-06.mp3",
       "cover": "/assets/photos/original_black.jpg"
+    }
+  ],
+  "flyingNotes": [
+    {
+      "id": "note-1",
+      "message": "You're mine, only mine... my favourite little chaos! 💗",
+      "butterflyColor": "blush-pink",
+      "theme": "heart-seal",
+      "probability": 25,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-2",
+      "message": "No one can replace you in our little collection of memories.",
+      "butterflyColor": "lavender",
+      "theme": "gold-ribbon",
+      "probability": 20,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-3",
+      "message": "You're one of the loveliest people I've ever known, Pottiiiiiiii.",
+      "butterflyColor": "rose-gold",
+      "theme": "flower-sticker",
+      "probability": 25,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-4",
+      "message": "Your smile deserves its own little universe.",
+      "butterflyColor": "pearl-white",
+      "theme": "heart-seal",
+      "probability": 20,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-5",
+      "message": "Some people become memories. You make every memory better.",
+      "butterflyColor": "soft-blue",
+      "theme": "gold-ribbon",
+      "probability": 20,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-6",
+      "message": "Your tiny reactions are cuter than a thousand butterflies.",
+      "butterflyColor": "blush-pink",
+      "theme": "flower-sticker",
+      "probability": 25,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-7",
+      "message": "Even our silly fights somehow become good stories.",
+      "butterflyColor": "lavender",
+      "theme": "heart-seal",
+      "probability": 15,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-8",
+      "message": "You're my favourite partner for movies, madness and midnight conversations.",
+      "butterflyColor": "rose-gold",
+      "theme": "gold-ribbon",
+      "probability": 20,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-9",
+      "message": "Stay the same wonderfully chaotic Ammuuuu.",
+      "butterflyColor": "pearl-white",
+      "theme": "flower-sticker",
+      "probability": 20,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-10",
+      "message": "The world is lucky to have someone like you.",
+      "butterflyColor": "soft-blue",
+      "theme": "heart-seal",
+      "probability": 25,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-11",
+      "message": "You deserve all the softest, happiest little moments.",
+      "butterflyColor": "blush-pink",
+      "theme": "gold-ribbon",
+      "probability": 25,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-12",
+      "message": "If smiles were stars, your sky would never get dark.",
+      "butterflyColor": "lavender",
+      "theme": "flower-sticker",
+      "probability": 20,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-13",
+      "message": "Nobody can copy your particular brand of cuteness.",
+      "butterflyColor": "rose-gold",
+      "theme": "heart-seal",
+      "probability": 20,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-14",
+      "message": "Our friendship has more chapters waiting to be written.",
+      "butterflyColor": "pearl-white",
+      "theme": "gold-ribbon",
+      "probability": 20,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    },
+    {
+      "id": "note-15",
+      "message": "You are special without even trying to be.",
+      "butterflyColor": "soft-blue",
+      "theme": "flower-sticker",
+      "probability": 25,
+      "sceneVisibility": "all",
+      "isEnabled": true
+    }
+  ],
+  "hiddenCompliments": [
+    {
+      "id": "c-cur-1",
+      "category": "cursor",
+      "text": "You found a little secret heartbeat! Pottiiii, you brighten every room. 💗"
+    },
+    {
+      "id": "c-cur-2",
+      "category": "cursor",
+      "text": "Tiny cursor kiss! Keep smiling, Ammuuuu."
+    },
+    {
+      "id": "c-scrap-1",
+      "category": "scrapbook",
+      "text": "Little folded scrap: 'Always choose the dessert first, Pottiii!' 🍰"
+    },
+    {
+      "id": "c-scrap-2",
+      "category": "scrapbook",
+      "text": "Handwritten scrap: 'Best adventure partner since day one.'"
+    },
+    {
+      "id": "c-star-1",
+      "category": "stars",
+      "text": "Star whisper: 'When you laugh, the midnight stars shine brighter.'"
+    },
+    {
+      "id": "c-star-2",
+      "category": "stars",
+      "text": "Star whisper: 'A wish made on this star belongs entirely to Ammu.'"
+    },
+    {
+      "id": "c-flw-1",
+      "category": "flowers",
+      "text": "A glowing rose blooms: 'May every year bring you gentleness, joy and peace.'"
+    },
+    {
+      "id": "c-flw-2",
+      "category": "flowers",
+      "text": "A wild daisy whispers: 'Your heart is so genuinely pure and kind.'"
+    },
+    {
+      "id": "c-mag-1",
+      "category": "magazine",
+      "text": "Secret ribbon note: 'Front page news: Ammu is officially the birthday star of the century!'"
+    },
+    {
+      "id": "c-mag-2",
+      "category": "magazine",
+      "text": "Bookmark whisper: 'Editor’s pick: Cutest smile in the galaxy.'"
+    },
+    {
+      "id": "c-gift-1",
+      "category": "gift",
+      "text": "Membership perk unlocked: Lifetime smiles and infinite support from Ashu guaranteed!"
+    },
+    {
+      "id": "c-gift-2",
+      "category": "gift",
+      "text": "A lifetime gift for the sweetest buddy in the universe. Never forget how loved you are!"
     }
   ]
 }

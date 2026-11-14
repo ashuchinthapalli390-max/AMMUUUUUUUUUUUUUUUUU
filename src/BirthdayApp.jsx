@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import CursorGarden from "./CursorGarden.jsx";
 import BirthdayFrontdoor from "./BirthdayFrontdoor.jsx";
 import MotionSceneFX from "./MotionSceneFX.jsx";
@@ -13,15 +13,11 @@ import SectionMagazine from "./screens/SectionMagazine.jsx";
 import SectionBestieId from "./screens/SectionBestieId.jsx";
 import SectionLetters from "./screens/SectionLetters.jsx";
 import SectionWishes from "./screens/SectionWishes.jsx";
-import GiftPackingOverlay from "./screens/GiftPackingOverlay.jsx";
 import SectionPlaylist from "./screens/SectionPlaylist.jsx";
 import SectionCake from "./screens/SectionCake.jsx";
 import SectionGifts from "./screens/SectionGifts.jsx";
 import SectionPranks from "./screens/SectionPranks.jsx";
 import SectionMemberships from "./screens/SectionMemberships.jsx";
-import SectionShop from "./screens/SectionShop.jsx";
-import SectionCart from "./screens/SectionCart.jsx";
-import SectionTracking from "./screens/SectionTracking.jsx";
 import SectionMovies from "./screens/SectionMovies.jsx";
 import SectionMidnight from "./screens/SectionMidnight.jsx";
 import SectionGames from "./screens/SectionGames.jsx";
@@ -39,15 +35,21 @@ import AdminToast from "./screens/AdminToast.jsx";
 import AdminLogin from "./screens/AdminLogin.jsx";
 import AdminDashboard from "./screens/AdminDashboard.jsx";
 import AdminEditor from "./screens/AdminEditor.jsx";
+
+// V16 New Components
+import CelebrationOverlay from "./components/CelebrationOverlay.jsx";
+import FlyingLoveLetters from "./components/FlyingLoveLetters.jsx";
+import HiddenCompliments from "./components/HiddenCompliments.jsx";
+import AdminPreviewToolbar from "./components/AdminPreviewToolbar.jsx";
+
 const dynamicImport = (path) => new Function('p', 'return import(p)')(path);
 let guestBooted = false;
 let adminBooted = false;
+
 function GuestBootstrap() {
   useEffect(() => {
     if (guestBooted) return;
     guestBooted = true;
-    // Load the proven existing interactive controllers after React commits its DOM.
-    // Cake renderer / magazine / wishlist / guided shopping / chapters remain functional.
     (async () => {
       try {
         await dynamicImport('/js/app.js');
@@ -55,69 +57,101 @@ function GuestBootstrap() {
       } catch (error) {
         console.error('Birthday interactive layer failed', error);
         const el = document.getElementById('toast');
-        if (el) {el.textContent = 'Could not start an interactive feature. Reload to try again.';el.classList.add('show');}
+        if (el) {
+          el.textContent = 'Could not start an interactive feature. Reload to try again.';
+          el.classList.add('show');
+        }
       }
     })();
   }, []);
   return null;
 }
-function AdminBootstrap(){
-  useEffect(()=>{
-    if(adminBooted)return;
-    adminBooted=true;
-    dynamicImport('/js/admin.js').catch(error=>console.error('Admin editor failed',error));
-  },[]);
+
+function AdminBootstrap() {
+  useEffect(() => {
+    if (adminBooted) return;
+    adminBooted = true;
+    dynamicImport('/js/admin.js').catch((error) => console.error('Admin editor failed', error));
+  }, []);
   return null;
 }
+
 export function BirthdayWebsite() {
-  return (<>
-    <BirthdayFrontdoor />
-    <PetalLayer />
-    <ToasterView />
-    <GateView />
-    <IntroView />
-    <div id="experience" hidden>
-      <SectionChapterUi />
-      <SectionSceneTransition />
-      <SectionOther2 />
-      <SectionPreviewRibbon />
-      <SectionHome />
-      <SectionJourney />
-      <SectionMemories />
-      <SectionMagazine />
-      <SectionBestieId />
-      <SectionLetters />
-      <SectionPlaylist />
-      <SectionWishes />
-      <SectionCake />
-      <SectionGifts />
-      <SectionPranks />
-      <SectionMemberships />
-      <SectionShop />
-      <SectionCart />
-      <SectionTracking />
-      <SectionMovies />
-      <SectionMidnight />
-      <SectionGames />
-      <SectionLittleThings />
-      <SectionCertificates />
-      <SectionFinale />
-      <SectionOther24 />
-    </div>
-    <ModalView />
-    <LightboxView />
-    <GiftPackingOverlay />
-    <CursorGarden />
-    <MotionSceneFX />
-    <GuestBootstrap />
-  </>);
+  const [celebrationOpen, setCelebrationOpen] = useState(false);
+
+  useEffect(() => {
+    window.ammuOpenCelebration = () => setCelebrationOpen(true);
+    window.ammuCloseCelebration = () => setCelebrationOpen(false);
+    return () => {
+      delete window.ammuOpenCelebration;
+      delete window.ammuCloseCelebration;
+    };
+  }, []);
+
+  return (
+    <>
+      <BirthdayFrontdoor />
+      <PetalLayer />
+      <ToasterView />
+      <GateView />
+      <IntroView />
+      <div id="experience" hidden>
+        <SectionChapterUi />
+        <SectionSceneTransition />
+        <SectionOther2 />
+        <SectionPreviewRibbon />
+        <SectionHome />
+        <SectionJourney />
+        <SectionMemories />
+        <SectionMagazine />
+        <SectionBestieId />
+        <SectionLetters />
+        <SectionPlaylist />
+        <SectionWishes />
+        <SectionCake />
+        <SectionGifts />
+        <SectionPranks />
+        <SectionMemberships />
+        <SectionMovies />
+        <SectionMidnight />
+        <SectionGames />
+        <SectionLittleThings />
+        <SectionCertificates />
+        <SectionFinale />
+        <SectionOther24 />
+      </div>
+      <ModalView />
+      <LightboxView />
+      <CursorGarden />
+      <MotionSceneFX />
+
+      {/* V16 Interactivity: Flying Letters & Hidden Compliments */}
+      <FlyingLoveLetters />
+      <HiddenCompliments />
+
+      {/* Fullscreen 3D Celebration Modal */}
+      <CelebrationOverlay
+        isOpen={celebrationOpen}
+        onClose={() => setCelebrationOpen(false)}
+        onCompleted={() => {}}
+      />
+
+      {/* Private Admin Preview Toolbar (Visible only when authenticated as Ashu) */}
+      <AdminPreviewToolbar />
+
+      <GuestBootstrap />
+    </>
+  );
 }
+
 export function AdminWebsite() {
-  return (<>
-    <AdminToast />
-    <AdminLogin />
-    <AdminDashboard />
-    <AdminEditor />
-    <AdminBootstrap />
-  </>);
+  return (
+    <>
+      <AdminToast />
+      <AdminLogin />
+      <AdminDashboard />
+      <AdminEditor />
+      <AdminBootstrap />
+    </>
+  );
 }

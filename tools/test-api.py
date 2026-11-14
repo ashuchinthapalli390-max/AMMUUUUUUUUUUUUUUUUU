@@ -25,10 +25,12 @@ try:
   urllib.request.urlopen(base+'/assets/photos/original_black.jpg')
   raise AssertionError('Photo should be locked')
  except urllib.error.HTTPError as e:assert e.code==403,e.code
+ orders_disabled,res_ord=ask('/api/orders');assert orders_disabled==404,(orders_disabled,res_ord)
+ orders_id_disabled,res_ord_id=ask('/api/orders/test-order-123');assert orders_id_disabled==404,(orders_id_disabled,res_ord_id)
  otp,result=ask('/api/admin/orders/example/otp/request','POST',{});assert otp==401
  auth,result=ask('/api/admin/login','POST',{'password':'TEST-ONLY-admin-password'});assert auth==200,(auth,result)
  otpadmin,result=ask('/api/admin/orders/example/otp/request','POST',{});assert otpadmin==404,(otpadmin,result)
- print('PASS check-in first submission, duplicate, persistent status, locked bootstrap, no public preview, admin-only OTP, protected photos; admin auth works')
+ print('PASS check-in first submission, duplicate, persistent status, locked bootstrap, no public preview, admin-only OTP, protected photos; admin auth works; shopping & order routes return 404 disabled')
 finally:
  server.terminate()
  try:server.communicate(timeout=3)

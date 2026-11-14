@@ -1,9 +1,9 @@
 // Ammu cinematic chapter experience v2. Vanilla JS + GSAP progressive enhancement.
 const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
-const scenes=['home','journey','memories','magazine','bestie-id','letters','playlist','movies','midnight','games','little-things','certificates','wishes','cake','gifts','pranks','memberships','shop','cart','tracking','finale'];
+const scenes=['home','journey','memories','magazine','bestie-id','letters','playlist','movies','midnight','games','little-things','certificates','wishes','cake','gifts','pranks','memberships','finale'];
 let current=0,moving=false,started=false,wishStep=0,formStep=0,nightIndex=0,certificateIndex=0;
 const prefersReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const chapterTitle={home:'Our Little Universe',journey:'Our Journey',memories:'Photographs & Memories',magazine:'The Birthday Magazine','bestie-id':'Bestie ID Card',letters:'Letters From Ashu',playlist:'A Beautiful Playlist For You',movies:'Our Cinema Archive',midnight:'The Midnight Universe',games:'Cute Games','little-things':'Tiny Beautiful Things',certificates:'The Certificate Gallery',wishes:'Three Birthday Wishes',cake:'3D Birthday Cake',gifts:'Three Special Gifts',pranks:'The Dream Gift Showroom',memberships:'Lifetime Vouchers',shop:'Potti Shopping World',cart:'Gift Request Checkout',tracking:'Gift Delivery Tracking',finale:'After Everything, Still Us'};
+const chapterTitle={home:'Our Little Universe',journey:'Our Journey',memories:'Photographs & Memories',magazine:'The Birthday Magazine','bestie-id':'Bestie ID Card',letters:'Letters From Ashu',playlist:'A Beautiful Playlist For You',movies:'Our Cinema Archive',midnight:'The Midnight Universe',games:'Cute Games','little-things':'Tiny Beautiful Things',certificates:'The Certificate Gallery',wishes:'Three Birthday Wishes',cake:'3D Birthday Cake',gifts:'Two Special Gifts',pranks:'The Dream Gift Showroom',memberships:'Lifetime Vouchers',finale:'After Everything, Still Us'};
 function actualScene(){return scenes[current]}
 // v4: physical wheel scrolling is blocked inside the birthday experience.
 // Page-sized storyboards are advanced by buttons and GSAP transitions only.
@@ -61,8 +61,9 @@ function step(dir){
 function prepareChapters(){
  if(started)return;started=true;document.body.classList.add('chapter-mode');$('#experience').classList.add('page-mode');$('#chapter-ui').hidden=false;
  scenes.forEach(id=>{let e=document.getElementById(id);if(e){e.classList.remove('chapter-active');$('#experience').appendChild(e)}});
- document.querySelectorAll('.site-nav a[href^="#"]').forEach(a=>{let id=a.getAttribute('href').slice(1);if(scenes.includes(id))a.addEventListener('click',ev=>{ev.preventDefault();goTo(id)})});
- document.body.addEventListener('click',ev=>{const a=ev.target.closest('#experience a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);if(scenes.includes(id)){ev.preventDefault();goTo(id)}});
+ document.querySelectorAll('.site-nav a[href^="#"]').forEach(a=>{let id=a.getAttribute('href').slice(1);if(['shop','cart','tracking'].includes(id))id='gifts';if(scenes.includes(id))a.addEventListener('click',ev=>{ev.preventDefault();goTo(id)})});
+ document.body.addEventListener('click',ev=>{const a=ev.target.closest('#experience a[href^="#"]');if(!a)return;let id=a.getAttribute('href').slice(1);if(['shop','cart','tracking'].includes(id))id='gifts';if(scenes.includes(id)){ev.preventDefault();goTo(id)}});
+ window.addEventListener('hashchange',()=>{let h=location.hash.slice(1);if(['shop','cart','tracking'].includes(h)){goTo('gifts')}else if(scenes.includes(h)){goTo(h)}});
  $('#chapter-previous').onclick=()=>step(-1);$('#chapter-next').onclick=()=>step(1);
  window.addEventListener('keydown',e=>{if(!document.body.classList.contains('page-turn-mode')||!$('#intro-stage').hidden)return;
   if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)||document.querySelector('#gallery-lightbox:not([hidden]),#modal-backdrop:not([hidden])'))return;
@@ -101,6 +102,7 @@ function prepareChapters(){
  setupWishes();setupNight();setupCertificates();setupBonusGames();goTo('home',true);
 }
 function goTo(id,immediate=false,lastPage=false){
+ if(['shop','cart','tracking'].includes(id))id='gifts';
  if(!scenes.includes(id)||moving)return;
  const target=scenes.indexOf(id),old=document.getElementById(scenes[current]);
  if(target===current&&old?.classList.contains('chapter-active'))return showPage(0,immediate);
@@ -127,13 +129,13 @@ function goTo(id,immediate=false,lastPage=false){
 }
 window.ammuGo=goTo;
 function animateContent(section){
- const selectors='.section-top,.hero-copy,.hero-photo-wrap,.story-columns,.gallery-tabs,.gallery-card,.letter-envelope,.letter-sheet,.movie-ticket,.night-phone,.night-memory-details,.game-tabs,.game-board,.cert-types,.cert-main,.wishes-one-at-time,.wishes-form-wrap,.cake-studio,.gift-box-card,.prank-card,.membership-hero,.voucher,.shop-splash,.shop-guided,.cart-layout,.tracking-ticket,.final-letter,.liquid-storyboard-stage,.magazine-desk';
+ const selectors='.section-top,.hero-copy,.hero-photo-wrap,.story-columns,.gallery-tabs,.gallery-card,.letter-envelope,.letter-sheet,.movie-ticket,.night-phone,.night-memory-details,.game-tabs,.game-board,.cert-types,.cert-main,.wishes-one-at-time,.wishes-form-wrap,.cake-studio,.gift-box-card,.prank-card,.membership-hero,.voucher,.membership-complete-card,.final-letter,.liquid-storyboard-stage,.magazine-desk';
  const els=[...section.querySelectorAll(selectors)];
  els.forEach((el,i)=>{el.classList.add('entrance-item');el.style.setProperty('--stagger-delay',Math.min(i,12)*.085+'s')});
  const gs=window.gsap;
  if(gs&&!prefersReduced){gs.fromTo(els.filter(el=>el.getBoundingClientRect().top<window.innerHeight*.95).slice(0,18),{opacity:0,y:46,rotateX:5,scale:.97},{opacity:1,y:0,rotateX:0,scale:1,duration:.95,stagger:.105,ease:'back.out(1.18)',clearProps:'transform,opacity'})}
  let obs=new IntersectionObserver(entries=>{entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('is-visible');obs.unobserve(en.target)}})},{root:section,threshold:.07});
- section.querySelectorAll('.product-card,.story-paper,.magazine-book,.voucher,.night-message,.gallery-card').forEach(el=>{el.classList.add('quiet-reveal');obs.observe(el)});
+ section.querySelectorAll('.story-paper,.magazine-book,.voucher,.night-message,.gallery-card').forEach(el=>{el.classList.add('quiet-reveal');obs.observe(el)});
  if(section.id==='wishes')showWish(wishStep);
  if(section.id==='midnight'&&nightIndex===0)renderNightPrompt();
 }
