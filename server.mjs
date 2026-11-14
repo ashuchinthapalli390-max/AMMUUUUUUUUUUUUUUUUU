@@ -264,6 +264,10 @@ const error = (status, message) => Object.assign(new Error(message), { status })
 const attempts = new Map();
 function throttle(req, key, limit = 25, interval = 60000) {
   const ip = req.socket.remoteAddress || 'anon';
+  const isLocal = LOCAL_DEMO || ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
+  if (isLocal) {
+    limit = Math.max(limit, 500);
+  }
   const id = ip + '|' + key;
   const t = Date.now();
   let a = attempts.get(id) || [];

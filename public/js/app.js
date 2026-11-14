@@ -63,12 +63,49 @@ async function init(){try{const params=new URLSearchParams(window.location.searc
 window.ammuReinitialize=init;
 setInterval(tick,1000);init();
 function renderAll(){window.ammuBirthdayConfig=state.site;if(state.site.heroImage)$('#home .photo-big img').src=state.site.heroImage;renderTimeline();renderGallery();renderLetters();renderWishes();renderPranks();renderVouchers();renderExtras();setupKeepsakes(state.site);wireGlobal();document.dispatchEvent(new Event('ammu:ready'));}
+function openGiftOverlay(id){
+ const pranks=$('#pranks');
+ const memberships=$('#memberships');
+ if(!pranks||!memberships)return;
+ if(id==='pranks'){
+   memberships.classList.remove('gift-modal-open');
+   memberships.hidden=true;
+   pranks.hidden=false;
+   pranks.classList.add('gift-modal-open');
+   document.body.classList.add('gift-modal-active');
+   renderPranks();
+   pranks.scrollTop=0;
+ }else if(id==='memberships'){
+   pranks.classList.remove('gift-modal-open');
+   pranks.hidden=true;
+   memberships.hidden=false;
+   memberships.classList.add('gift-modal-open');
+   document.body.classList.add('gift-modal-active');
+   renderVouchers();
+   memberships.scrollTop=0;
+ }
+}
+function closeGiftOverlay(){
+ const pranks=$('#pranks');
+ const memberships=$('#memberships');
+ if(pranks){pranks.classList.remove('gift-modal-open');pranks.hidden=true;}
+ if(memberships){memberships.classList.remove('gift-modal-open');memberships.hidden=true;}
+ document.body.classList.remove('gift-modal-active');
+ const gifts=$('#gifts');
+ if(gifts)gifts.scrollIntoView({behavior:'smooth',block:'start'});
+}
+window.ammuOpenGift=openGiftOverlay;
+window.ammuCloseGift=closeGiftOverlay;
+
 function wireGlobal(){if(window._ammuWired)return;window._ammuWired=true;
- $$('.gift-box-card').forEach(x=>x.onclick=()=>{let id=x.dataset.gift;window.ammuGo?.(id==='pranks'?'pranks':'memberships')});
+ $$('.gift-box-card').forEach(x=>x.onclick=()=>{let id=x.dataset.gift;openGiftOverlay(id==='pranks'?'pranks':'memberships')});
+ $('#close-pranks-modal')?.addEventListener('click',closeGiftOverlay);
+ $('#close-memberships-modal')?.addEventListener('click',closeGiftOverlay);
+ window.addEventListener('keydown',e=>{if(e.key==='Escape')closeGiftOverlay()});
  $('#cake-to-gifts').onclick=()=>window.ammuGo?.('gifts');
  $('#wishes-form').onsubmit=submitWishes;
  $('#support-claim').onclick=()=>{if(state.claims.includes('support')){modal('Lifetime Member Already!','Ammuuuu, your Forever Support Club membership is already active! 💗','🎀');return}modal('Ashu’s Lifetime Support Club','Always caring, listening, teasing and being there as friends, Pottiiiiiiii 💗','🎀',[["Accept My Membership 💗",()=>{closeModal();claim('support')}],["Maybe Later",()=>modal('Anthenaa Pottiiiiiiii? 😭','Ayyooo, okayyy! Whenever you want, the little membership card is still right here. No pressure, cutieee. 💗','🌸')]]);};
- $('#keep-memories-btn')?.addEventListener('click',()=>{modal('All Little Promises Kept ♡','Every promise is safely kept in our little universe, Pottiiiiiiii! You can revisit them anytime. 💗','🎀',[['Back To Gifts 🎁',()=>window.ammuGo?.('gifts')],['Continue To Finale →',()=>window.ammuGo?.('finale')]]);createPetals(window.innerWidth/2,window.innerHeight/2,25)});
+ $('#keep-memories-btn')?.addEventListener('click',()=>{modal('All Little Promises Kept ♡','Every promise is safely kept in our little universe, Pottiiiiiiii! You can revisit them anytime. 💗','🎀',[['Back To Gifts 🎁',()=>{closeModal();closeGiftOverlay();}],['Continue To Finale →',()=>{closeModal();closeGiftOverlay();window.ammuGo?.('finale')}]]);createPetals(window.innerWidth/2,window.innerHeight/2,25)});
  $('#gallery-more').onclick=()=>{state.galleryPage++;renderGallery();window.ammuRefreshPage?.('memories')};$('#gallery-prev').onclick=()=>{state.galleryPage=Math.max(0,state.galleryPage-1);renderGallery();window.ammuRefreshPage?.('memories')};$('#story-next').onclick=()=>selectStory(state.story+1);$('#story-prev').onclick=()=>selectStory(state.story-1);$('#letter-next').onclick=()=>selectLetter(state.letter+1);
  $('#reason-jar').onclick=()=>{const r=state.site?.reasons||['Your voice makes even silly stories interesting.','Your little hand signs and your cute reactions.','The way you care about things and people.','That seahorse sticker on my phone!','All the movies and little adventures.','Our midnight talks and random reels.','Even our arguments have become stories.','Your love for Tony Stark and Iron Man.','The day we went for pani puri.','Your soft heart, your humour and your pure energy.'];$('#reason-message').textContent='“'+r[Math.floor(Math.random()*r.length)]+'”';createPetals(window.innerWidth/2,window.innerHeight/2,16)};
  $('#hug-btn').onclick=()=>modal('Sending You A Hug','A big warm virtual hug from Ashu to his favourite Pottiiiiiiii. No questions asked.','🫂');$('#annoy-btn').onclick=()=>modal('ASHUUUUU! 😭','Patience is buffering... But your unlimited teasing membership is still active.','😈',[['Againnnn',()=>{closeModal();setTimeout(()=>$('#annoy-btn').click(),200)}],['Hehehe Okay',closeModal]]);$('#seahorse-btn').onclick=()=>modal('Remember this one?','You put a little seahorse sticker on the back of my phone. Somehow even that became one of my favourite memories.','🐚');

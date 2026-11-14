@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import SlapAshuGame from './games/SlapAshuGame.jsx';
 
 // Approved photos from public/assets/photos/
 const AMMU_PHOTOS = [
@@ -13,105 +14,67 @@ const AMMU_PHOTOS = [
 ];
 
 export default function WonderlandOfGames() {
-  const [activeTab, setActiveTab] = useState('butterflies');
-  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [activeTab, setActiveTab] = useState('slapAshu');
 
-  // Soft Web Audio synthesizers (zero external assets)
-  const playSound = (type = 'chime') => {
-    if (!soundEnabled) return;
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      if (type === 'chime') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(783.99, ctx.currentTime + 0.2);
-        gain.gain.setValueAtTime(0.08, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.36);
-      } else if (type === 'pop') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.09, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.13);
-      } else if (type === 'win') {
-        osc.type = 'sine';
-        const now = ctx.currentTime;
-        osc.frequency.setValueAtTime(440, now);
-        osc.frequency.setValueAtTime(554.37, now + 0.1);
-        osc.frequency.setValueAtTime(659.25, now + 0.2);
-        osc.frequency.setValueAtTime(880, now + 0.3);
-        gain.gain.setValueAtTime(0.1, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
-        osc.start();
-        osc.stop(now + 0.65);
-      }
-    } catch {}
-  };
+  // Decorative UI sound effects silenced per V17 specifications
+  const playSound = () => {};
 
   return (
     <div className="wonderland-games-container" style={{ width: '100%' }}>
       {/* HEADER CONTROLS */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
         <div style={{ fontSize: '13px', color: '#9E4E73', fontWeight: 600 }}>
-          🎮 Select any of the 8 interactive games designed for Ammu:
+          🎮 Select any of the interactive games designed for Ammu:
         </div>
-        <button
-          type="button"
-          onClick={() => setSoundEnabled(!soundEnabled)}
-          style={{
-            background: soundEnabled ? '#FFF0F5' : '#EFE8EB',
-            border: '1px solid #EAA4BE',
-            borderRadius: '20px',
-            padding: '6px 14px',
-            fontSize: '12px',
-            color: '#70193E',
-            cursor: 'pointer',
-            fontWeight: 600,
-          }}
-        >
-          {soundEnabled ? '🔊 Sound: ON' : '🔈 Sound: OFF'}
-        </button>
+        <div style={{ fontSize: '12px', color: '#B57492', fontStyle: 'italic' }}>
+          ✿ Pure interactive touch & click fun
+        </div>
       </div>
 
-      {/* GAME TABS (8 GAMES) */}
+      {/* GAME TABS (SLAP ASHU FEATURED + 8 RETRO GAMES) */}
       <div className="game-tabs" style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '25px' }}>
-        <button className={activeTab === 'butterflies' ? 'active' : ''} onClick={() => { setActiveTab('butterflies'); playSound('pop'); }}>
+        <button
+          className={activeTab === 'slapAshu' ? 'active' : ''}
+          onClick={() => setActiveTab('slapAshu')}
+          style={{
+            background: activeTab === 'slapAshu' ? 'linear-gradient(135deg, #c44872, #781d45)' : '#FFF0F5',
+            color: activeTab === 'slapAshu' ? '#FFFFFF' : '#781D45',
+            fontWeight: 700,
+            border: '2px solid #EAA4BE',
+            boxShadow: activeTab === 'slapAshu' ? '0 4px 14px rgba(120, 29, 69, 0.25)' : 'none',
+          }}
+        >
+          😤 Slap Ashu (3D Game)
+        </button>
+        <button className={activeTab === 'butterflies' ? 'active' : ''} onClick={() => setActiveTab('butterflies')}>
           🦋 Catch The Butterflies
         </button>
-        <button className={activeTab === 'memory' ? 'active' : ''} onClick={() => { setActiveTab('memory'); playSound('pop'); }}>
+        <button className={activeTab === 'memory' ? 'active' : ''} onClick={() => setActiveTab('memory')}>
           ✿ Our Memory Match
         </button>
-        <button className={activeTab === 'stars' ? 'active' : ''} onClick={() => { setActiveTab('stars'); playSound('pop'); }}>
+        <button className={activeTab === 'stars' ? 'active' : ''} onClick={() => setActiveTab('stars')}>
           ⭐ The Midnight Star Hunt
         </button>
-        <button className={activeTab === 'puzzle' ? 'active' : ''} onClick={() => { setActiveTab('puzzle'); playSound('pop'); }}>
+        <button className={activeTab === 'puzzle' ? 'active' : ''} onClick={() => setActiveTab('puzzle')}>
           🧩 Cute Photo Puzzle
         </button>
-        <button className={activeTab === 'quiz' ? 'active' : ''} onClick={() => { setActiveTab('quiz'); playSound('pop'); }}>
+        <button className={activeTab === 'quiz' ? 'active' : ''} onClick={() => setActiveTab('quiz')}>
           🎬 Marvel & Movie Quiz
         </button>
-        <button className={activeTab === 'garden' ? 'active' : ''} onClick={() => { setActiveTab('garden'); playSound('pop'); }}>
+        <button className={activeTab === 'garden' ? 'active' : ''} onClick={() => setActiveTab('garden')}>
           🌸 The Flower Garden
         </button>
-        <button className={activeTab === 'envelopes' ? 'active' : ''} onClick={() => { setActiveTab('envelopes'); playSound('pop'); }}>
+        <button className={activeTab === 'envelopes' ? 'active' : ''} onClick={() => setActiveTab('envelopes')}>
           💌 Secret Envelope Hunt
         </button>
-        <button className={activeTab === 'cake' ? 'active' : ''} onClick={() => { setActiveTab('cake'); playSound('pop'); }}>
+        <button className={activeTab === 'cake' ? 'active' : ''} onClick={() => setActiveTab('cake')}>
           🎂 Cake Decorator
         </button>
       </div>
 
       {/* GAME VIEWPORT */}
       <div id="game-board" className="game-board" style={{ minHeight: '440px', position: 'relative' }}>
+        {activeTab === 'slapAshu' && <SlapAshuGame onClose={() => setActiveTab('butterflies')} />}
         {activeTab === 'butterflies' && <GameButterflies playSound={playSound} />}
         {activeTab === 'memory' && <GameMemoryMatch playSound={playSound} />}
         {activeTab === 'stars' && <GameMidnightStars playSound={playSound} />}

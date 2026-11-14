@@ -2,39 +2,15 @@ import React from "react";
 
 export default function SectionOther2() {
   return (
-    <header className={"site-nav"}>
-      <div className="v5-love-banner">
-        <span className="v5-banner-heart">♡</span>
-        <strong>TO MY LOVELYYYY BUDDIEEEEE POTTIIIIIIIIIIIII</strong>
-        <span className="v5-banner-divider">✿</span>
-        <strong>FROM ASHUUUUUUU</strong>
-        <span className="v5-banner-heart">♡</span>
-      </div>
-      <a className={"brand"} href={"#home"}>
-        {"Ammuuu"}
-        <span>{"♡"}</span>
-        <small>{"from Ashu"}</small>
-      </a>
-      <nav aria-label={"Main navigation"}>
-        <a href={"#home"}>{"Home"}</a>
-        <a href={"#journey"}>{"Our Story"}</a>
-        <a href={"#memories"}>{"Memories"}</a>
-        <a href={"#magazine"}>{"Magazine"}</a>
-        <a href={"#bestie-id"}>{"ID Card"}</a>
-        <a href={"#letters"}>{"Letters"}</a>
-        <a href={"#cake"}>{"Cake Studio"}</a>
-        <a href={"#wishes"}>{"Wishes"}</a>
-        <a href={"#gifts"}>{"Gifts"}</a>
-        <a href={"#midnight"}>{"Midnight"}</a>
-        <a href={"#games"}>{"Games"}</a>
-        <a href={"#certificates"}>{"Certificates"}</a>
-      </nav>
-      <div className={"nav-actions"}>
-        <a href={"/admin"} className={"icon-btn"} title={"Ashu's Studio & Preview Controls"} style={{ textDecoration: 'none', display: 'grid', placeItems: 'center', fontSize: '13px' }}>{"👑"}</a>
-        <button className={"icon-btn"} id={"music-toggle"} title={"Play or pause music"}>{"♫"}</button>
-        <button className={"icon-btn"} id={"replay-intro"} title={"Replay intro"}>{"↻"}</button>
-        <button className={"icon-btn"} id={"mobile-menu"} title={"Menu"}>{"☰"}</button>
-      </div>
+    <header className="site-nav slim-dedication-nav" role="banner">
+      <span className="nav-edge-flower left" aria-hidden="true">✿</span>
+      <h1 className="header-dedication-title">To My Dear Lovelyy Pottiiiiiiiiiiiiiiiiiiii 💗</h1>
+      <span className="nav-edge-flower right" aria-hidden="true">✿</span>
+
+      {/* Hidden legacy anchor/button handles for headless JS compatibility */}
+      <span id="music-toggle" hidden aria-hidden="true" />
+      <span id="replay-intro" hidden aria-hidden="true" />
+      <span id="mobile-menu" hidden aria-hidden="true" />
     </header>
   );
 }

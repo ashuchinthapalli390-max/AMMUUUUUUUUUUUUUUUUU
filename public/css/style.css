@@ -524,3 +524,241 @@ body.chapter-mode .section.chapter-active.liquid-hover::after{opacity:.39!import
 @media(prefers-reduced-motion:reduce){#movies.chapter-active .movie-poster-card,#letters.chapter-active .letter-envelope,.letter-sheet{animation:none!important}}
 
 .voucher-grid .voucher{animation:v5VoucherFly .62s cubic-bezier(.16,.7,.24,1.1) both}
+
+/* ==============================================================
+   V17 REFINEMENTS: SLIM STICKY HEADER, GIFTS MODAL OVERLAY, 
+   ORGANIC INK-SPREAD MASK & SLAP ASHU MINI-GAME
+   ============================================================== */
+
+/* Slim Sticky Dedication Nav */
+.site-nav.slim-dedication-nav {
+  height: 52px !important;
+  min-height: 52px !important;
+  max-height: 52px !important;
+  background: linear-gradient(135deg, #fff9f6, #fff0f5) !important;
+  border-bottom: 1px solid #ecc9d6 !important;
+  box-shadow: 0 4px 18px rgba(120, 29, 69, 0.06) !important;
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 100 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 20px !important;
+  overflow: hidden !important;
+}
+
+.header-dedication-title {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: 'Fraunces', Georgia, serif !important;
+  font-style: italic !important;
+  font-size: clamp(14px, 2.1vw, 21px) !important;
+  font-weight: 600 !important;
+  color: #781d45 !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9), 0 0 14px rgba(235, 178, 198, 0.35) !important;
+  white-space: nowrap !important;
+}
+
+.nav-edge-flower {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  font-size: 15px !important;
+  color: #d889aa !important;
+  opacity: 0.8 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+.nav-edge-flower.left {
+  left: 20px !important;
+}
+
+.nav-edge-flower.right {
+  right: 20px !important;
+}
+
+/* Gifts Hub Modal Dialog Overlays (Prevent Gift 1 & 2 rendering in normal document scroll flow) */
+#pranks,
+#memberships {
+  display: none !important;
+}
+
+#pranks.gift-modal-open,
+#memberships.gift-modal-open {
+  display: block !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 99999 !important;
+  overflow-y: auto !important;
+  background: rgba(22, 6, 16, 0.94) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  padding: 40px 20px 80px !important;
+  animation: giftModalIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+@keyframes giftModalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+body.gift-modal-active {
+  overflow: hidden !important;
+}
+
+.gift-modal-top-bar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  max-width: 900px !important;
+  margin: 0 auto 20px !important;
+  padding: 0 10px !important;
+}
+
+.gift-modal-badge {
+  font-family: 'Fraunces', Georgia, serif !important;
+  font-style: italic !important;
+  color: #fab4d1 !important;
+  font-size: 13px !important;
+  letter-spacing: 2px !important;
+  font-weight: 700 !important;
+}
+
+.close-gift-modal-btn {
+  background: #ffffff !important;
+  color: #781d45 !important;
+  border: 2px solid #eabacb !important;
+  border-radius: 30px !important;
+  padding: 9px 24px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.25s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.close-gift-modal-btn:hover {
+  background: #ffe6f0 !important;
+  transform: translateY(-2px) scale(1.03) !important;
+  box-shadow: 0 12px 28px rgba(120, 29, 69, 0.4) !important;
+}
+
+/* Gift One Heading Hierarchy & Petals Behind Text Stacking (Phase 3) */
+.prank-header-top h2 {
+  font-family: 'Fraunces', Georgia, serif !important;
+  font-size: clamp(26px, 3.8vw, 44px) !important;
+  color: #ffffff !important;
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+.prank-header-top p {
+  color: #ffd4e5 !important;
+  font-size: clamp(14px, 1.8vw, 17px) !important;
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+.v5-prank-card {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.v5-prank-face {
+  position: relative !important;
+  z-index: 12 !important;
+}
+
+.v5-prank-face h3,
+.v5-prank-face p,
+.v5-prank-face button {
+  position: relative !important;
+  z-index: 15 !important;
+}
+
+#petal-layer {
+  z-index: 8 !important; /* Petals render strictly behind modal text */
+}
+
+/* Phase 5: Organic Ink Splatter Mask Transition */
+.ink-spread-card {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 18px !important;
+  cursor: crosshair !important;
+  box-shadow: 0 20px 48px rgba(120, 29, 69, 0.18) !important;
+}
+
+.ink-spread-card .base-black-dress-photo {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 18px !important;
+  transition: transform 0.4s ease !important;
+}
+
+.ink-spread-canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  z-index: 4 !important;
+  border-radius: 18px !important;
+}
+
+.playlist-cover-caption {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 6 !important;
+  background: linear-gradient(transparent, rgba(30, 8, 20, 0.85)) !important;
+  padding: 18px 14px 10px !important;
+  font-size: 11px !important;
+  letter-spacing: 1.5px !important;
+  color: #fff !important;
+}
+
+/* Phase 6: Slap Ashu 3D Mini-Game Styles */
+@keyframes slapComicBurst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -80%) scale(1.3) rotate(-10deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -120%) scale(0.9) rotate(15deg);
+  }
+}
+
+.slap-stage-wrapper:active {
+  transform: scale(0.985);
+}
+
+.slap-ashu-card .btn-pink:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
