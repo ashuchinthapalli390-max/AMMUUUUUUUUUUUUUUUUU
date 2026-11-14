@@ -603,22 +603,33 @@ async function api(req, res, pathname, url) {
   if (pathname === '/api/preview' && method === 'POST') {
     throttle(req, 'preview', 20, 60000);
     const codeVal = cleanStr(body.code, 100);
+    if (ADMIN_PASSWORD && codeVal === ADMIN_PASSWORD) {
+      attachSession(res, 'admin');
+      logEvent('admin.preview.unlocked');
+      return send(res, 200, { ok: true, open: true, role: 'admin' });
+    }
     if (!PREVIEW_CODE || !codeVal || codeVal !== PREVIEW_CODE) {
-      throw error(404, 'Public preview is not available');
+      throw error(404, 'Incorrect preview code or password');
     }
     attachSession(res, 'preview');
     logEvent('preview.unlocked');
-    return send(res, 200, { ok: true, open: true });
+    return send(res, 200, { ok: true, open: true, role: 'preview' });
   }
 
   if (pathname === '/api/preview' && method === 'GET') {
     const codeVal = cleanStr(url.searchParams.get('code') || url.searchParams.get('preview'), 100);
+    if (ADMIN_PASSWORD && codeVal === ADMIN_PASSWORD) {
+      attachSession(res, 'admin');
+      logEvent('admin.preview.unlocked');
+      res.writeHead(302, { Location: '/admin/preview' });
+      return res.end();
+    }
     if (!PREVIEW_CODE || !codeVal || codeVal !== PREVIEW_CODE) {
-      throw error(404, 'Public preview is not available');
+      throw error(404, 'Incorrect preview code or password');
     }
     attachSession(res, 'preview');
     logEvent('preview.unlocked');
-    res.writeHead(302, { Location: '/' });
+    res.writeHead(302, { Location: '/admin/preview' });
     return res.end();
   }
 

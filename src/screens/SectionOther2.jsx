@@ -30,6 +30,7 @@ export default function SectionOther2() {
         <a href={"#certificates"}>{"Certificates"}</a>
       </nav>
       <div className={"nav-actions"}>
+        <a href={"/admin"} className={"icon-btn"} title={"Ashu's Studio & Preview Controls"} style={{ textDecoration: 'none', display: 'grid', placeItems: 'center', fontSize: '13px' }}>{"👑"}</a>
         <button className={"icon-btn"} id={"music-toggle"} title={"Play or pause music"}>{"♫"}</button>
         <button className={"icon-btn"} id={"replay-intro"} title={"Replay intro"}>{"↻"}</button>
         <button className={"icon-btn"} id={"mobile-menu"} title={"Menu"}>{"☰"}</button>

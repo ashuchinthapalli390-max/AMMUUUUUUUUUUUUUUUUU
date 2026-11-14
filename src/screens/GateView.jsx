@@ -178,8 +178,27 @@ export default function GateView({ isPreview = false }) {
             </button>
           )}
 
-          {/* Hidden anchor for legacy preview compatibility */}
-          <button id={"preview-open"} type="button" style={{ display: "none" }} aria-hidden="true" />
+          {/* Private Preview Button for Ashu */}
+          <button
+            id={"preview-open"}
+            type="button"
+            className={"btn btn-outline"}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              borderColor: "rgba(255, 200, 220, 0.4)",
+              color: "#ffd5e6",
+              fontSize: "14px",
+              padding: "14px 26px",
+              borderRadius: "30px",
+              background: "rgba(255, 255, 255, 0.08)",
+              backdropFilter: "blur(8px)",
+              cursor: "pointer"
+            }}
+          >
+            {"👑 Private Preview Option (Ashu)"}
+          </button>
         </div>
 
         <p className={"tiny"} id={"gate-date"}>
@@ -291,11 +310,17 @@ export default function GateView({ isPreview = false }) {
           </div>
         )}
 
-        {/* Hidden inputs to preserve existing code references */}
-        <div className={"gate-preview-form"} id={"gate-preview-form"} hidden={true}>
-          <input id={"preview-code"} placeholder={"Enter private preview code"} type={"password"} autoComplete={"off"} />
-          <button className={"btn btn-pink"} id={"preview-submit"} type="button">{"Unlock Preview"}</button>
-          <p className={"tiny"} id={"preview-error"}></p>
+        {/* Private Preview Form */}
+        <div className={"gate-preview-form"} id={"gate-preview-form"} hidden={true} style={{ marginTop: "20px", padding: "18px 24px", background: "rgba(255,255,255,0.12)", borderRadius: "18px", border: "1px solid rgba(255,200,220,0.3)", maxWidth: "480px", margin: "20px auto 0" }}>
+          <p style={{ color: "#ffe7f1", fontSize: "13px", margin: "0 0 12px" }}>Enter private preview code or admin password:</p>
+          <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
+            <input id={"preview-code"} placeholder={"Enter preview code or password"} type={"password"} autoComplete={"off"} style={{ padding: "11px 18px", borderRadius: "25px", border: "1.5px solid #d889aa", background: "#fff", color: "#692842", outline: "none", fontSize: "14px" }} />
+            <button className={"btn btn-pink"} id={"preview-submit"} type="button" style={{ padding: "11px 22px", borderRadius: "25px", fontWeight: "bold" }}>{"Unlock Preview ↗"}</button>
+          </div>
+          <p className={"tiny"} id={"preview-error"} style={{ color: "#ff8dae", marginTop: "10px", fontWeight: "bold" }}></p>
+          <div style={{ marginTop: "12px", borderTop: "1px dashed rgba(255,200,220,0.3)", paddingTop: "10px" }}>
+            <a href="/admin" style={{ color: "#ffcbe0", fontSize: "12px", textDecoration: "underline" }}>Or go to Ashu's Admin Studio (/admin) ↗</a>
+          </div>
         </div>
       </div>
 
