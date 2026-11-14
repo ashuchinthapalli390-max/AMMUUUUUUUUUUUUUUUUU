@@ -1,0 +1,175 @@
+{
+  "birthdayDate": "2026-11-17T00:00:00+05:30",
+  "timezone": "Asia/Kolkata",
+  "posterNote": "21 days through 2 days, then 24 hours remaining",
+  "posters": [
+    {
+      "daysRemaining": 21,
+      "label": "21 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_21_days_left.png",
+      "filename": "ammu_countdown_21_days_left.png",
+      "theme": "Selected scrapbook original",
+      "dayOfCountdown": 1
+    },
+    {
+      "daysRemaining": 20,
+      "label": "20 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_20_days_left.png",
+      "filename": "ammu_countdown_20_days_left.png",
+      "theme": "Golden Hour",
+      "dayOfCountdown": 2
+    },
+    {
+      "daysRemaining": 19,
+      "label": "19 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_19_days_left.png",
+      "filename": "ammu_countdown_19_days_left.png",
+      "theme": "Moonlight",
+      "dayOfCountdown": 3
+    },
+    {
+      "daysRemaining": 18,
+      "label": "18 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_18_days_left.png",
+      "filename": "ammu_countdown_18_days_left.png",
+      "theme": "Cinema Noir",
+      "dayOfCountdown": 4
+    },
+    {
+      "daysRemaining": 17,
+      "label": "17 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_17_days_left.png",
+      "filename": "ammu_countdown_17_days_left.png",
+      "theme": "Lavender",
+      "dayOfCountdown": 5
+    },
+    {
+      "daysRemaining": 16,
+      "label": "16 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_16_days_left.png",
+      "filename": "ammu_countdown_16_days_left.png",
+      "theme": "Botanical Sage",
+      "dayOfCountdown": 6
+    },
+    {
+      "daysRemaining": 15,
+      "label": "15 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_15_days_left.png",
+      "filename": "ammu_countdown_15_days_left.png",
+      "theme": "Velvet Curtain",
+      "dayOfCountdown": 7
+    },
+    {
+      "daysRemaining": 14,
+      "label": "14 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_14_days_left.png",
+      "filename": "ammu_countdown_14_days_left.png",
+      "theme": "Art Deco",
+      "dayOfCountdown": 8
+    },
+    {
+      "daysRemaining": 13,
+      "label": "13 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_13_days_left.png",
+      "filename": "ammu_countdown_13_days_left.png",
+      "theme": "Mint Diary",
+      "dayOfCountdown": 9
+    },
+    {
+      "daysRemaining": 12,
+      "label": "12 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_12_days_left.png",
+      "filename": "ammu_countdown_12_days_left.png",
+      "theme": "Peach Sunrise",
+      "dayOfCountdown": 10
+    },
+    {
+      "daysRemaining": 11,
+      "label": "11 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_11_days_left.png",
+      "filename": "ammu_countdown_11_days_left.png",
+      "theme": "Postcard",
+      "dayOfCountdown": 11
+    },
+    {
+      "daysRemaining": 10,
+      "label": "10 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_10_days_left.png",
+      "filename": "ammu_countdown_10_days_left.png",
+      "theme": "Pearl Editorial",
+      "dayOfCountdown": 12
+    },
+    {
+      "daysRemaining": 9,
+      "label": "9 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_09_days_left.png",
+      "filename": "ammu_countdown_09_days_left.png",
+      "theme": "Rose Garden",
+      "dayOfCountdown": 13
+    },
+    {
+      "daysRemaining": 8,
+      "label": "8 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_08_days_left.png",
+      "filename": "ammu_countdown_08_days_left.png",
+      "theme": "Aurora",
+      "dayOfCountdown": 14
+    },
+    {
+      "daysRemaining": 7,
+      "label": "7 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_07_days_left.png",
+      "filename": "ammu_countdown_07_days_left.png",
+      "theme": "Bookshop",
+      "dayOfCountdown": 15
+    },
+    {
+      "daysRemaining": 6,
+      "label": "6 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_06_days_left.png",
+      "filename": "ammu_countdown_06_days_left.png",
+      "theme": "Royal Plum",
+      "dayOfCountdown": 16
+    },
+    {
+      "daysRemaining": 5,
+      "label": "5 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_05_days_left.png",
+      "filename": "ammu_countdown_05_days_left.png",
+      "theme": "Sakura",
+      "dayOfCountdown": 17
+    },
+    {
+      "daysRemaining": 4,
+      "label": "4 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_04_days_left.png",
+      "filename": "ammu_countdown_04_days_left.png",
+      "theme": "Blue Hour",
+      "dayOfCountdown": 18
+    },
+    {
+      "daysRemaining": 3,
+      "label": "3 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_03_days_left.png",
+      "filename": "ammu_countdown_03_days_left.png",
+      "theme": "Candlelit",
+      "dayOfCountdown": 19
+    },
+    {
+      "daysRemaining": 2,
+      "label": "2 DAYS LEFT",
+      "image": "/assets/countdown/ammu_countdown_02_days_left.png",
+      "filename": "ammu_countdown_02_days_left.png",
+      "theme": "Ribbon Pink",
+      "dayOfCountdown": 20
+    },
+    {
+      "daysRemaining": 1,
+      "label": "24 HOURS LEFT",
+      "image": "/assets/countdown/ammu_countdown_24_hours_left.png",
+      "filename": "ammu_countdown_24_hours_left.png",
+      "theme": "Midnight Surprise",
+      "dayOfCountdown": 21
+    }
+  ]
+}

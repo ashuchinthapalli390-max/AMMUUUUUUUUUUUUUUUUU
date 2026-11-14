@@ -1,0 +1,119 @@
+{
+  "playlist": [
+    {
+      "id": "samjhawan",
+      "title": "Samjhawan",
+      "artist": "Arijit Singh & Shreya Ghoshal",
+      "src": "/assets/music/01-samjhawan.mp3",
+      "cover": "/assets/music/covers/official-samjhawan.webp",
+      "caption": "A quiet little feeling",
+      "number": 1
+    },
+    {
+      "id": "baarish",
+      "title": "Baarish",
+      "artist": "Ash King & Shashaa Tirupati",
+      "src": "/assets/music/02-baarish.mp3",
+      "cover": "/assets/music/covers/02-baarish.webp",
+      "caption": "A sky full of memories",
+      "number": 2
+    },
+    {
+      "id": "tum-hi-ho",
+      "title": "Tum Hi Ho",
+      "artist": "Arijit Singh",
+      "src": "/assets/music/03-tum-hi-ho.mp3",
+      "cover": "/assets/music/covers/official-tum-hi-ho.webp",
+      "caption": "An unforgettable melody",
+      "number": 3
+    },
+    {
+      "id": "gehra-hua",
+      "title": "Gehra Hua",
+      "artist": "Arijit Singh",
+      "src": "/assets/music/04-gehra-hua.mp3",
+      "cover": "/assets/music/covers/official-gehra-hua.webp",
+      "caption": "In a world of little moments",
+      "number": 4
+    },
+    {
+      "id": "channa-mereya",
+      "title": "Channa Mereya",
+      "artist": "Arijit Singh",
+      "src": "/assets/music/05-channa-mereya.mp3",
+      "cover": "/assets/music/covers/05-channa-mereya.webp",
+      "caption": "For all the stories we keep",
+      "number": 5
+    },
+    {
+      "id": "ye-tune-kya-kiya",
+      "title": "Ye Tune Kya Kiya",
+      "artist": "Pritam · Javed Bashir",
+      "src": "/assets/music/06-ye-tune-kya-kiya.mp3",
+      "cover": "/assets/music/covers/official-ye-tune-kya-kiya.webp",
+      "caption": "Another favourite chapter",
+      "number": 6
+    }
+  ],
+  "movies": [
+    {
+      "title": "Irumudi",
+      "description": "Our first movie together; the first-half seat beside you made it special.",
+      "icon": "🎟️",
+      "poster": "/assets/cinema/irumudi.jpg",
+      "status": "Watched Together",
+      "theme": "burgundy"
+    },
+    {
+      "title": "Paradise",
+      "description": "Another little movie memory.",
+      "icon": "🍿",
+      "poster": "/assets/cinema/paradise.jpg",
+      "status": "Watched Together",
+      "theme": "violet"
+    },
+    {
+      "title": "Doraemon",
+      "description": "A recent movie outing full of nostalgia.",
+      "icon": "🪄",
+      "poster": "/assets/cinema/doraemon.jpg",
+      "status": "Watched Together",
+      "theme": "sky"
+    },
+    {
+      "title": "418",
+      "description": "Another cinema adventure for the scrapbook.",
+      "icon": "🎬",
+      "poster": "/assets/cinema/418.jpg",
+      "status": "Watched Together",
+      "theme": "rose"
+    },
+    {
+      "title": "Ranabali",
+      "description": "The movie plan that did not work out.",
+      "icon": "💌",
+      "poster": "/assets/cinema/ranabali.jpg",
+      "status": "Planned",
+      "theme": "gold"
+    },
+    {
+      "title": "Spider-Man Plans",
+      "description": "The 9:30 PM ticket drama and the cute scolding.",
+      "icon": "🕷️",
+      "poster": "/assets/cinema/spider-man-plans.jpg",
+      "status": "Planned",
+      "theme": "indigo"
+    }
+  ],
+  "countdown": {
+    "manifest": "/assets/countdown/manifest.json",
+    "images": 21,
+    "timezone": "Asia/Kolkata"
+  },
+  "notes": {
+    "photos": "Existing website photos only; do not manufacture new faces or silently overwrite user-approved choices",
+    "birthday": "2026-11-17T00:00:00+05:30",
+    "timezone": "Asia/Kolkata",
+    "public_site_config": "Merge these media keys into the repository’s current data/site.json; preserve all unrelated fields."
+  }
+}

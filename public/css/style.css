@@ -101,22 +101,152 @@
 .brand,h1 em,h2 em,h3 em,.script,.scribble,.signature,.id-controls h3 em{font-family:'Fraunces',Georgia,serif!important;font-style:italic!important;letter-spacing:-.025em;line-height:1.14}
 .brand{font-weight:600!important}.hero h1 em{font-weight:500!important}.site-nav nav a{font-weight:700}.wish-display{transition:opacity .5s,transform .6s}
 
-/* CINEMATIC v2 / full scene pages: no accidental auto-advance on wheel */
-body.chapter-mode{height:100vh;overflow:hidden!important}body.chapter-mode #experience{height:100dvh;overflow:hidden;position:relative;padding-top:83px}body.chapter-mode .site-nav{position:absolute;top:0;left:0;right:0;z-index:80;height:83px}body.chapter-mode #preview-ribbon{position:absolute;z-index:85;top:83px;width:100%;height:30px}
-body.chapter-mode #experience > section.section{display:none!important;min-height:0!important;height:calc(100dvh - 83px);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#d48da5 transparent;padding:38px 0 125px;scroll-behavior:smooth;position:relative}
-body.chapter-mode #experience > section.section.chapter-active{display:block!important;animation:chapterAppear .75s cubic-bezier(.2,.7,.2,1) both}
-body.chapter-mode #experience > section.section.chapter-active[hidden]{display:none!important}
-body.chapter-mode #experience > section.section .wrap{max-width:1370px}
-body.chapter-mode #experience > section.section .section-top{margin-bottom:30px}
-body.chapter-mode .hero.section{padding:58px 0 100px!important}
-.chapter-ui{position:fixed;left:0;right:0;bottom:0;z-index:110;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px clamp(18px,4vw,60px);background:linear-gradient(105deg,#fff9f5ed,#ffebf2ed);border-top:1px solid #eabfd0;backdrop-filter:blur(16px);box-shadow:0 -9px 32px #6c284422}
-.chapter-ui[hidden]{display:none!important}.chapter-left,.chapter-right{display:flex;align-items:center;gap:16px}.chapter-left{font-size:11px;color:#8a3e5b;letter-spacing:.16em;font-weight:800}.chapter-star{color:#e47c9e;font-size:20px}.chapter-progress{background:#efdce4;border-radius:20px;width:160px;height:5px;overflow:hidden}.chapter-progress>div{background:linear-gradient(90deg,#bd4c76,#eeaac0);height:100%;width:0;transition:width .6s}.chapter-right button{font:700 12px/1.2 var(--sans);border-radius:40px;padding:13px 19px;border:1px solid #d5a6bc;color:#8d4465;background:#fff;cursor:pointer}.chapter-right button:last-child{background:#9e486c;color:#fff}.chapter-right button:disabled{opacity:.36;cursor:not-allowed}
-#scene-transition{position:fixed;inset:0;z-index:115;pointer-events:none;visibility:hidden;background:linear-gradient(120deg,#5d2b49,#e3a1b8,#fff5ec);transform:translateY(102%)}
-@keyframes chapterAppear{from{opacity:0;transform:translateY(18px) scale(.992)}to{opacity:1;transform:none}}
-@keyframes revealCard{from{opacity:0;transform:translateY(28px) scale(.975)}to{opacity:1;transform:none}}
-.chapter-active .entrance-item{animation:revealCard .72s ease-out both;animation-delay:var(--stagger-delay,0s)}
-.chapter-active .quiet-reveal{opacity:0;transform:translateY(28px);transition:opacity .72s,transform .72s}.chapter-active .quiet-reveal.is-visible{opacity:1;transform:none}
-body.chapter-mode .section:before{opacity:.45}.scene-announce{position:fixed;left:25px;bottom:90px;color:#8e5570;font-size:12px;z-index:112;pointer-events:none}
+/* NATURAL NATIVE SCROLLING (v16) — smooth, fluid, natural document flow top to bottom */
+html {
+  scroll-behavior: smooth;
+}
+body {
+  min-height: 100vh;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+body.chapter-mode {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+.site-nav {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 83px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 250, 245, 0.94);
+  box-shadow: 0 4px 20px rgba(105, 54, 81, 0.08);
+}
+#preview-ribbon {
+  position: fixed !important;
+  z-index: 99;
+  top: 83px;
+  width: 100%;
+  height: 30px;
+}
+#experience {
+  height: auto !important;
+  min-height: 100vh;
+  overflow: visible !important;
+  position: relative;
+  padding-top: 83px;
+}
+#experience > section.section {
+  display: block !important;
+  min-height: 70vh !important;
+  height: auto !important;
+  overflow: visible !important;
+  overscroll-behavior: auto;
+  scroll-margin-top: 90px;
+  padding: 85px 0 95px;
+  position: relative;
+}
+#experience > section.section[hidden] {
+  display: none !important;
+}
+#experience > section.section .wrap {
+  max-width: 1370px;
+}
+#experience > section.section .section-top {
+  margin-bottom: 36px;
+}
+.hero.section {
+  padding: 60px 0 100px !important;
+}
+#experience > footer.footer {
+  display: block !important;
+}
+
+/* Hide forced chapter UI and screen wipes */
+#chapter-ui, .chapter-ui, #chapter-page-wipe, .chapter-page-wipe, #scene-transition {
+  display: none !important;
+}
+
+/* Distinctive cinematic entrance animations per section */
+@keyframes chapterAppear {
+  from { opacity: 0; transform: translateY(22px) scale(0.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes revealCard {
+  from { opacity: 0; transform: translateY(28px) scale(0.975); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes floatPhotoEntrance {
+  from { opacity: 0; transform: translateY(30px) rotate(-3deg) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) rotate(var(--rot, 0deg)) scale(1); }
+}
+@keyframes timelineReveal {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes polaroidSpread {
+  from { opacity: 0; transform: translateY(40px) scale(0.92) rotate(-4deg); }
+  to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt, 0deg)); }
+}
+@keyframes letterUnfold {
+  from { opacity: 0; transform: translateY(32px) scale(0.96); filter: blur(3px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes starTwinkleIn {
+  from { opacity: 0; transform: scale(0.4) rotate(-20deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+@keyframes giftBoxPop {
+  from { opacity: 0; transform: translateY(35px) scale(0.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Apply distinctive entrance triggers on scroll */
+#home.is-inview .photo-card, #home.chapter-active .photo-card {
+  animation: floatPhotoEntrance 0.85s cubic-bezier(0.2, 0.7, 0.25, 1) both;
+}
+#journey.is-inview .timeline-item, #journey.chapter-active .timeline-item {
+  animation: timelineReveal 0.75s ease-out both;
+}
+#memories.is-inview .gallery-card, #memories.chapter-active .gallery-card {
+  animation: polaroidSpread 0.8s cubic-bezier(0.2, 0.7, 0.25, 1) both;
+}
+#magazine.is-inview .magazine-book, #magazine.chapter-active .magazine-book {
+  animation: chapterAppear 0.9s cubic-bezier(0.2, 0.7, 0.25, 1) both;
+}
+#letters.is-inview .letter-paper, #letters.chapter-active .letter-paper {
+  animation: letterUnfold 0.8s ease-out both;
+}
+#movies.is-inview .movie-poster-card, #movies.chapter-active .movie-poster-card {
+  animation: v9PosterArrive 0.75s both;
+}
+#midnight.is-inview .star-btn, #midnight.chapter-active .star-btn {
+  animation: starTwinkleIn 0.7s ease-out both;
+}
+#gifts.is-inview .gift-box-card, #gifts.chapter-active .gift-box-card {
+  animation: giftBoxPop 0.8s cubic-bezier(0.2, 0.7, 0.25, 1) both;
+}
+
+.entrance-item {
+  animation: revealCard 0.72s ease-out both;
+  animation-delay: var(--stagger-delay, 0s);
+}
+.quiet-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.72s, transform 0.72s;
+}
+.quiet-reveal.is-visible, .is-inview .quiet-reveal {
+  opacity: 1;
+  transform: none;
+}
+.scene-announce{position:fixed;left:25px;bottom:90px;color:#8e5570;font-size:12px;z-index:112;pointer-events:none}
 /* Progressive 3 wishes / no giant form all at once */
 .wishes-one-at-time{max-width:850px;margin:0 auto 34px}.wishes-one-at-time .ashu-wishes{display:block;min-height:230px;position:relative}.wishes-one-at-time .wish-display{display:none;width:min(660px,100%);margin:0 auto;min-height:210px;background:#fff7fb;border:1px solid #e6b1c7;border-radius:25px;box-shadow:0 24px 65px #b4537922;padding:38px 30px;text-align:center}.wishes-one-at-time .wish-display.wish-active{display:flex;flex-direction:column;justify-content:center;gap:20px;animation:revealCard .8s ease both}.wish-display span{color:#bf6890;font-size:13px;letter-spacing:.2em}.wish-display p{font:500 clamp(26px,3vw,40px)/1.25 'Fraunces',Georgia,serif;color:#752b50}.wish-sequence-controls{display:flex;gap:18px;align-items:center;justify-content:center;padding:12px}.wish-sequence-controls span{color:#984b6c;font-size:13px}.wishes-form-wrap[hidden]{display:none!important}.wishes-form-wrap.wizard-open{animation:chapterAppear .75s ease both}.wishes-form-wrap form label{display:none!important}.wishes-form-wrap form label.wish-field-active{display:block!important;max-width:820px;margin:0 auto}.wishes-form-wrap .field-trio,.wishes-form-wrap .field-two{display:block!important}.wishes-form-wrap textarea{min-height:135px}.wish-form-steps{display:flex;gap:18px;align-items:center;justify-content:center;padding:20px 0}.wish-form-steps span{font-weight:700;color:#9c5f7b}.wishes-form-wrap .submit-line{display:none}.wishes-form-wrap.wizard-complete .submit-line{display:flex}.wishes-form-wrap.wizard-complete .wish-form-steps{display:none}.wishes-form-wrap.wizard-complete form label{display:block!important}.wishes-form-wrap.wizard-complete form label textarea{min-height:80px}.wishes-form-wrap.wizard-complete .field-trio{display:grid!important}.wishes-form-wrap.wizard-complete .field-two{display:grid!important}
 
@@ -128,8 +258,8 @@ body.chapter-mode .section:before{opacity:.45}.scene-announce{position:fixed;lef
 @media(max-width:950px){.chapter-progress{width:65px}.chapter-ui{padding:9px 12px}.chapter-right button{padding:10px}.midnight-story,.cert-layout{grid-template-columns:1fr}.cert-types{flex-direction:row;overflow-x:auto}.cert-types button{white-space:nowrap}.cert-paper{padding:30px 25px}}
 @media(prefers-reduced-motion:reduce){.chapter-active .entrance-item{animation:none!important}.quiet-reveal{opacity:1!important;transform:none!important}.chapter-active{animation:none!important}}
 
-/* Footer is shown only as part of the final chapter, never above the first scene. */
-body.chapter-mode #experience > footer.footer{display:none!important}
+/* Footer in document flow */
+#experience > footer.footer{display:block!important}
 [hidden]{display:none!important}
 
 /* REACT V3 • dreamy cursor, rich interactions and performance-aware particle effects */
@@ -150,18 +280,13 @@ body.chapter-mode #experience > footer.footer{display:none!important}
 @media(pointer:coarse){#react-cursor-garden,#react-cursor-glow,.cursor-garden-toggle{display:none!important}}
 @media(prefers-reduced-motion:reduce){.ammu-cursor-particle,#react-cursor-glow{display:none!important}.page-mode .section.chapter-active .section-top h2,.page-mode .section.chapter-active .eyebrow,.page-mode .section.chapter-active .hero-photo-wrap .polaroid{animation:none!important}}
 
-/* v4 • True page-turn navigation. The wheel no longer scrolls each full-screen scene. */
+/* Native natural scroll: sections stay in normal document flow */
 body.chapter-mode.page-turn-mode #experience > section.section{
-  overflow-y:hidden!important;scrollbar-width:none!important;scroll-behavior:auto!important;
-  overscroll-behavior:none!important;touch-action:pan-x;
-  padding-bottom:95px;
+  overflow:visible!important;
+  height:auto!important;
+  min-height:70vh!important;
+  padding-bottom:75px;
 }
-body.chapter-mode.page-turn-mode #experience > section.section::-webkit-scrollbar{display:none}
-body.chapter-mode.page-turn-mode .chapter-ui{min-height:72px;padding:12px clamp(14px,3vw,44px);z-index:116}
-body.chapter-mode.page-turn-mode .chapter-left{flex:1;letter-spacing:.08em}
-body.chapter-mode.page-turn-mode .chapter-right{min-width:275px;justify-content:flex-end}
-body.chapter-mode.page-turn-mode .chapter-right button{white-space:nowrap;transition:transform .25s ease,background .25s ease,box-shadow .25s ease}
-body.chapter-mode.page-turn-mode .chapter-right button:not(:disabled):hover{transform:translateY(-3px);box-shadow:0 8px 18px #71304b2b}
 .chapter-page-dots{display:flex;align-items:center;justify-content:center;gap:7px;flex:1;min-width:80px;max-width:240px}
 .chapter-page-dots button{background:#e6b7ca;border:0;min-width:6px;width:6px;height:6px;padding:0;border-radius:99px;cursor:pointer;transition:width .25s,background .25s,transform .25s}
 .chapter-page-dots button.is-current{width:23px;background:#aa4d76}
@@ -212,30 +337,19 @@ body.chapter-mode .section.chapter-active.liquid-hover::after{animation:fluidBre
 #gallery-prev:disabled{opacity:.38;cursor:not-allowed}
 
 /* ═══════════ V5 / FROM ASHU, WITH LOVE ═══════════ */
-/* Quiet site chrome: a single animated dedication, no page counters or footer bar. */
-body.chapter-mode .site-nav{height:76px!important;display:flex!important;justify-content:center!important;align-items:center!important;background:linear-gradient(105deg,#fff6f5,#fff3e9,#ffe7f0)!important;border-bottom:1px solid #edc8d2;box-shadow:0 5px 22px #8a3b5a16;}
-.site-nav .brand,.site-nav nav,.site-nav .nav-actions{display:none!important}
-.v5-love-banner{width:100%;height:100%;display:flex;justify-content:center;align-items:center;gap:clamp(5px,2vw,24px);padding:8px 12px;text-align:center;color:#9f426b;font:700 clamp(10px,1.2vw,20px)/1.2 'Fraunces',Georgia,serif;letter-spacing:.025em;position:relative}
-.v5-love-banner strong{font-weight:700;animation:v5BannerRise 1.15s ease both}
-.v5-love-banner strong:nth-of-type(2){color:#c55c8a;animation-delay:.4s}
-.v5-banner-heart{color:#d86e99;font-size:clamp(24px,2.4vw,37px);animation:v5Heartbeat 2s ease-in-out infinite;display:inline-block}
-.v5-banner-divider{font-size:25px;color:#dca3bb;animation:v5FlowerRotate 7s ease-in-out infinite}
-@keyframes v5Heartbeat{50%{transform:scale(1.24) rotate(5deg)}}
-@keyframes v5FlowerRotate{50%{transform:rotate(42deg) scale(1.22)}}
-@keyframes v5BannerRise{from{transform:translateY(-15px);opacity:0;filter:blur(4px)}to{transform:translateY(0);opacity:1;filter:blur(0)}}
-body.chapter-mode #experience{padding-top:76px!important}
-body.chapter-mode #preview-ribbon{display:none!important}
-body.chapter-mode #experience > section.section{height:calc(100dvh - 76px)!important;padding-bottom:45px!important}
-body.chapter-mode.page-turn-mode #experience > section.section{padding-bottom:45px!important;touch-action:auto}
-/* The previous/next buttons remain accessible as small floating SIDE controls. No bottom book footer. */
-body.chapter-mode.page-turn-mode .chapter-ui{position:fixed!important;inset:auto!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;min-height:0!important;height:0!important;pointer-events:none!important;z-index:145!important}
-.chapter-ui .chapter-left,.chapter-ui .chapter-page-dots{display:none!important}
-.chapter-ui .chapter-right{display:contents!important}
-body.chapter-mode.page-turn-mode #chapter-previous,body.chapter-mode.page-turn-mode #chapter-next{position:fixed;top:50%;transform:translateY(-50%);min-width:45px;max-width:125px;z-index:150;pointer-events:auto;border:1px solid #edbed0;background:#fff8f3db;color:#9e496c;padding:15px 8px;border-radius:18px;box-shadow:0 10px 28px #914a6427;font:700 10px/1.2 'DM Sans',sans-serif;backdrop-filter:blur(12px)}
-body.chapter-mode.page-turn-mode #chapter-previous{left:5px}
-body.chapter-mode.page-turn-mode #chapter-next{right:5px;background:#99395f;color:white}
-body.chapter-mode.page-turn-mode #chapter-previous:not(:disabled):hover,body.chapter-mode.page-turn-mode #chapter-next:not(:disabled):hover{transform:translateY(-50%) scale(1.05)}
-body.chapter-mode.page-turn-mode #chapter-previous:disabled,body.chapter-mode.page-turn-mode #chapter-next:disabled{opacity:0;pointer-events:none}
+/* Site navigation in normal document flow */
+.site-nav {
+  height: 83px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+.site-nav .brand, .site-nav nav, .site-nav .nav-actions {
+  display: flex !important;
+}
+#chapter-previous, #chapter-next {
+  display: none !important;
+}
 .cursor-garden-toggle{display:none!important}
 .hero .scroll-guide{display:none!important}
 /* Global background liquid photo stays optically subtle behind text; no on/off UI. */
@@ -277,7 +391,20 @@ body.chapter-mode .section.chapter-active.liquid-hover::after{opacity:.39!import
 .playlist-cover-caption{position:absolute;bottom:15px;left:15px;right:15px;display:flex;justify-content:space-between;align-items:center;background:#fff9f2e9;padding:18px;color:#9c426f;font:700 13px Georgia,serif}
 .playlist-tracks{background:#fffbf7f0;padding:32px;border-radius:24px;border:1px solid #f0bfd1;box-shadow:0 10px 45px #8034581d}
 .playlist-tracks h3{font:600 clamp(28px,3vw,45px)/1.17 'Fraunces',Georgia,serif;color:#6b3250;margin:15px 0 4px}.playlist-tracks p{color:#a2708a}
-.playlist-controls{display:flex;justify-content:center;align-items:center;gap:22px;margin:18px 0}.playlist-controls button{width:55px;height:55px;border-radius:50%;border:1px solid #e2abc4;color:#963e68;background:#fff;cursor:pointer;font-size:19px}.playlist-controls .play-btn{width:70px;height:70px;background:#a84671;color:#fff;font-size:26px;box-shadow:0 9px 25px #973d6a55}
+.playlist-controls{display:flex;justify-content:center;align-items:center;gap:22px;margin:18px 0}.playlist-controls button{width:55px;height:55px;border-radius:50%;border:1px solid #e2abc4;color:#963e68;background:#fff;cursor:pointer;font-size:19px;transition:transform .2s,box-shadow .2s;display:grid;place-items:center}.playlist-controls button:hover{transform:scale(1.06);box-shadow:0 6px 16px #973d6a33}.playlist-controls .play-btn{width:70px;height:70px;background:linear-gradient(135deg,#c45785,#9e3c67);color:#fff;font-size:26px;box-shadow:0 9px 25px #973d6a55}
+.playlist-scrubber-wrap{display:flex;flex-direction:column;gap:6px;margin:16px 0 10px}
+.playlist-scrubber{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:99px;background:#eccad6;outline:none;cursor:pointer;transition:background .2s}
+.playlist-scrubber::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:#9e3c67;border:2px solid #fff;box-shadow:0 2px 6px #7d3f5f66;cursor:pointer;transition:transform .15s}
+.playlist-scrubber::-webkit-slider-thumb:hover{transform:scale(1.2)}
+.playlist-scrubber::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#9e3c67;border:2px solid #fff;box-shadow:0 2px 6px #7d3f5f66;cursor:pointer}
+.playlist-time-row{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:#a55a79;font-variant-numeric:tabular-nums}
+.playlist-extra-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:12px;padding-top:12px;border-top:1px dashed #f0bfd1}
+.playlist-volume-wrap{display:flex;align-items:center;gap:8px;font-size:14px;color:#9c426f}
+.playlist-volume-slider{width:80px;-webkit-appearance:none;appearance:none;height:4px;border-radius:99px;background:#eccad6;outline:none;cursor:pointer}
+.playlist-volume-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;border-radius:50%;background:#9e3c67;cursor:pointer}
+.playlist-volume-slider::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:#9e3c67;cursor:pointer;border:none}
+.playlist-repeat-btn{background:none;border:1px solid #e2abc4;border-radius:20px;padding:6px 14px;font-size:11px;font-weight:700;color:#9c426f;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.playlist-repeat-btn.active{background:#9e3c67;color:#fff;border-color:#9e3c67}
 .playlist-songlist{overflow:auto;max-height:265px;display:grid;gap:6px;padding:5px}.playlist-songlist button{display:flex;gap:12px;align-items:center;text-align:left;background:#fff4f3;border:1px solid transparent;padding:12px 14px;border-radius:10px;color:#85405d;cursor:pointer}.playlist-songlist button.is-playing{background:#fce2eb;border-color:#e9a1c1}.playlist-songlist button b{flex:1}.playlist-songlist button small{font-size:10px}.playlist-error{font-size:11px;color:#a5224b!important}
 /* Exactly two balanced cards for gifts: Gift 01 (Dreams) and Gift 02 (Promises) */
 .gift-trio, .gift-duo{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:32px!important;max-width:980px!important;margin:0 auto!important;align-items:stretch!important}
@@ -357,9 +484,14 @@ body.chapter-mode .section.chapter-active.liquid-hover::after{opacity:.39!import
 @media(max-width:920px){.v8-floating-pic{display:none}.v8-cd{right:0}}
 @media(prefers-reduced-motion:reduce){.v8-letter-reveal,.v8-cd,.v8-floating-pic{animation:none!important}}
 
-/* V8 native inside-chapter scrolling: no content may be cropped by old page-sized storyboard mode. */
-body.chapter-mode #experience>section.section.chapter-active{overflow-y:auto!important;scrollbar-width:thin!important;touch-action:pan-y!important;scroll-behavior:auto!important;padding-bottom:52px!important}
-body.chapter-mode .chapter-ui{display:none!important}
+/* Smooth document scroll for all sections */
+#experience > section.section {
+  display: block !important;
+  min-height: 70vh !important;
+  height: auto !important;
+  overflow: visible !important;
+  scroll-margin-top: 85px;
+}
 
 
 /* v9: finished physical movie-poster collection. No unrelated stock poster images. */

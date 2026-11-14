@@ -172,7 +172,10 @@ const MIME = {
   '.webp': 'image/webp',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
-  '.mp3': 'audio/mpeg'
+  '.mp3': 'audio/mpeg',
+  '.mp4': 'video/mp4',
+  '.woff2': 'font/woff2',
+  '.woff': 'font/woff'
 };
 
 function send(res, status, data) {
@@ -898,7 +901,7 @@ function file(req, res, pathname) {
   if (p.includes('..') || p.startsWith('/data/') || p.startsWith('/src/') || p.includes('config.local')) {
     return send(res, 403, { error: 'Forbidden' });
   }
-  if ((p.startsWith('/assets/photos/') || p.startsWith('/assets/dream-gifts/') || p.startsWith('/assets/products/') || p.startsWith('/assets/music/') || p.startsWith('/assets/uploads/')) && !isOpen(req)) {
+  if ((p.startsWith('/assets/photos/') || p.startsWith('/assets/dream-gifts/') || p.startsWith('/assets/products/') || p.startsWith('/assets/music/') || p.startsWith('/assets/cinema/') || p.startsWith('/assets/uploads/')) && !isOpen(req)) {
     return send(res, 403, { error: 'Locked until birthday' });
   }
 
@@ -912,12 +915,46 @@ function file(req, res, pathname) {
     return send(res, 404, { error: 'Not found. Run npm run build for the React website.' });
   }
 
-  res.writeHead(200, {
-    'Content-Type': MIME[path.extname(filePath)] || 'application/octet-stream',
-    'Cache-Control': p.startsWith('/assets/') ? 'public,max-age=3600' : 'no-cache',
-    'X-Content-Type-Options': 'nosniff'
-  });
-  fs.createReadStream(filePath).pipe(res);
+  const stat = fs.statSync(filePath);
+  const total = stat.size;
+  const ext = path.extname(filePath).toLowerCase();
+  const mimeType = MIME[ext] || 'application/octet-stream';
+  const range = req.headers.range;
+
+  if (range) {
+    const parts = range.replace(/bytes=/, '').split('-');
+    const start = parseInt(parts[0], 10);
+    const end = parts[1] ? parseInt(parts[1], 10) : total - 1;
+
+    if (isNaN(start) || start >= total || (parts[1] && isNaN(end)) || start > end) {
+      res.writeHead(416, {
+        'Content-Range': `bytes */${total}`
+      });
+      return res.end();
+    }
+
+    const chunksize = (end - start) + 1;
+    res.writeHead(206, {
+      'Content-Range': `bytes ${start}-${end}/${total}`,
+      'Accept-Ranges': 'bytes',
+      'Content-Length': chunksize,
+      'Content-Type': mimeType,
+      'Cache-Control': p.startsWith('/assets/') ? 'public,max-age=3600' : 'no-cache',
+      'X-Content-Type-Options': 'nosniff'
+    });
+    if (req.method === 'HEAD') return res.end();
+    fs.createReadStream(filePath, { start, end }).pipe(res);
+  } else {
+    res.writeHead(200, {
+      'Content-Length': total,
+      'Content-Type': mimeType,
+      'Accept-Ranges': 'bytes',
+      'Cache-Control': p.startsWith('/assets/') ? 'public,max-age=3600' : 'no-cache',
+      'X-Content-Type-Options': 'nosniff'
+    });
+    if (req.method === 'HEAD') return res.end();
+    fs.createReadStream(filePath).pipe(res);
+  }
 }
 
 const server = http.createServer(async (req, res) => {

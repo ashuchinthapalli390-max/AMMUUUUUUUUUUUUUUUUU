@@ -37,7 +37,141 @@ function IntroCurtain({onOpen}){return <motion.div className="ad-opening" initia
   </div>
   <span className="ad-butterfly ad-float-one">🦋</span><span className="ad-butterfly ad-float-two">✿</span>
 </motion.div>}
-function Poster({remaining,close}){const canvasDownload=async()=>{const can=document.createElement('canvas');can.width=1080;can.height=1350;const c=can.getContext('2d');let bg=c.createLinearGradient(0,0,1080,1350);bg.addColorStop(0,'#fffaf4');bg.addColorStop(.55,'#f9dbe6');bg.addColorStop(1,'#f4a8c9');c.fillStyle=bg;c.fillRect(0,0,1080,1350);c.lineWidth=5;c.strokeStyle='#c37b99';c.strokeRect(47,47,986,1256);c.fillStyle='#8e3155';c.textAlign='center';c.font='bold 29px Arial';c.fillText('FROM ASHU • THE BIRTHDAY COUNTDOWN',540,130);let img=new Image();img.crossOrigin='anonymous';img.src=PHOTO;try{await img.decode();const r=Math.max(660/img.width,760/img.height),w=img.width*r,h=img.height*r;c.save();c.beginPath();c.roundRect(200,175,680,775,25);c.clip();c.drawImage(img,540-w/2,560-h/2,w,h);c.restore()}catch{};c.fillStyle='#fff7fa';c.fillRect(115,947,850,278);c.fillStyle='#8d2d56';c.font='bold 83px Georgia';c.fillText(`${remaining} DAYS TO GO`,540,1048);c.font='italic 48px Georgia';c.fillText('Ammuuuuuu 💗',540,1120);c.font='25px Arial';c.fillText('Every day is one little flower closer to your special day.',540,1178);const a=document.createElement('a');a.href=can.toDataURL('image/png');a.download=`Ammu_${remaining}_Days_To_Go.png`;a.click()};return <div className="ad-modal-backdrop" role="presentation" onClick={close}><motion.div className="ad-poster" role="dialog" aria-modal="true" aria-label="Today's birthday countdown poster" initial={{opacity:0,scale:.88,rotate:-3}} animate={{opacity:1,scale:1,rotate:0}} onClick={e=>e.stopPropagation()}><button className="ad-close" onClick={close} aria-label="Close poster">×</button><span className="ad-kicker">A LIMITED BIRTHDAY EDITION · MADE BY ASHU</span><div className="ad-poster-side-label">THE AMMU EDITION ♡</div><div className="ad-poster-photo"><img src={PHOTO} alt="Ammu in her black embroidered dress and sunglasses"/><span>✿</span></div><div className="ad-poster-count"><strong>{remaining}</strong><span>DAYS<br/>TO GO</span></div><h2>For My Lovely Pottiiiiiiii ♡</h2><p>Every new sunrise makes the sweetest birthday a little closer. Keep smiling, Ammuuu!</p><div className="ad-poster-footer">With love, From Ashu ♡</div><button className="ad-button" onClick={canvasDownload}>Save My Birthday Poster ↓</button></motion.div></div>}
+function Poster({remaining,close}){
+  const [posterData, setPosterData] = useState(null);
+  const [fullscreen, setFullscreen] = useState(false);
+
+  useEffect(() => {
+    fetch('/assets/countdown/manifest.json')
+      .then(r => r.json())
+      .then(manifest => {
+        if (Array.isArray(manifest.posters)) {
+          let match = manifest.posters.find(p => p.daysRemaining === remaining);
+          if (!match && remaining <= 1) {
+            match = manifest.posters.find(p => p.daysRemaining === 1);
+          }
+          if (!match) {
+            match = manifest.posters[manifest.posters.length - 1];
+          }
+          setPosterData(match);
+        }
+      })
+      .catch(e => console.warn('Could not load countdown manifest:', e));
+  }, [remaining]);
+
+  const imageSrc = posterData?.image || PHOTO;
+  const label = posterData?.label || `${remaining} DAYS LEFT`;
+  const filename = posterData?.filename || `Ammu_Countdown_${remaining}_Days.png`;
+
+  return (
+    <div className="ad-modal-backdrop" role="presentation" onClick={close}>
+      <motion.div
+        className="ad-poster"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Today's birthday countdown poster"
+        initial={{ opacity: 0, scale: 0.88, rotate: -2 }}
+        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+        onClick={e => e.stopPropagation()}
+        style={{ maxWidth: '520px', padding: '24px 20px 28px' }}
+      >
+        <button className="ad-close" onClick={close} aria-label="Close poster">×</button>
+        <span className="ad-kicker">A LIMITED BIRTHDAY EDITION · MADE BY ASHU</span>
+        <div className="ad-poster-side-label">{label} ♡</div>
+        
+        <div
+          className="ad-poster-real-frame"
+          style={{
+            margin: '16px 0',
+            borderRadius: '16px',
+            overflow: 'hidden',
+            border: '6px solid white',
+            boxShadow: '0 12px 35px rgba(110,45,76,0.25)',
+            background: '#fff0f5',
+            position: 'relative',
+            cursor: 'zoom-in'
+          }}
+          onClick={() => setFullscreen(true)}
+          title="Click to view full size"
+        >
+          <img
+            src={imageSrc}
+            alt={`Countdown poster: ${label}`}
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        </div>
+
+        <h2>{label}</h2>
+        <p>Every new sunrise makes your sweetest birthday a little closer, Pottiiiiiiii! 💗</p>
+        
+        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '18px', flexWrap: 'wrap' }}>
+          <a
+            href={imageSrc}
+            download={filename}
+            className="ad-button"
+            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+          >
+            Save Poster as PNG ↓
+          </a>
+          <button
+            type="button"
+            className="ad-outline"
+            onClick={() => setFullscreen(true)}
+          >
+            Full Size ⤢
+          </button>
+        </div>
+
+        {fullscreen && (
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.92)',
+              zIndex: 10000002,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '20px',
+              cursor: 'zoom-out'
+            }}
+            onClick={() => setFullscreen(false)}
+          >
+            <img
+              src={imageSrc}
+              alt={label}
+              style={{
+                maxWidth: '95vw',
+                maxHeight: '95vh',
+                objectFit: 'contain',
+                borderRadius: '8px',
+                boxShadow: '0 10px 40px rgba(0,0,0,0.8)'
+              }}
+            />
+            <button
+              onClick={() => setFullscreen(false)}
+              style={{
+                position: 'absolute',
+                top: '20px',
+                right: '25px',
+                background: 'rgba(255,255,255,0.2)',
+                border: 'none',
+                color: '#fff',
+                fontSize: '32px',
+                width: '46px',
+                height: '46px',
+                borderRadius: '50%',
+                cursor: 'pointer'
+              }}
+            >
+              ×
+            </button>
+          </div>
+        )}
+      </motion.div>
+    </div>
+  );
+}
 function GoddessCalendar({info,checking,onCheck,onCountdown,poster}){let today=info.today||istDate(Date.now()),complete=info.checkedDates||[];let remaining=Math.max(0,Math.ceil((TARGET-Date.now())/86400000));return <motion.main className="ad-calendar" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0,x:-50}}>
   <span className="ad-season">✧ DEVI'S MOONLIT DAYS ✧</span><h1>THE GODDESS OF <em>LITTLE JOYS</em></h1><p className="ad-subtitle">A little countdown to Ammuuu's special day · 17 November</p>
   <div className="ad-calendar-layout"><div className="ad-calendar-person"><div className="ad-portrait"><img src={PHOTO} alt="Ammu in her black embroidered dress with sunglasses"/><span>MY LOVELYYYY POTTIIII ♡</span></div><blockquote>“To my dearest Ammuuu… every sunrise is another little flower in our story. Let's collect them together.” <b>From Ashu ♡</b></blockquote><button className="ad-button" disabled={!!info.checkedToday||checking||today>'2026-11-17'} onClick={onCheck}>{checking?'Collecting today’s flower…':info.checkedToday?'Today’s Flower Collected ✓':'Check In For Today 🌸'}</button><button className="ad-outline" onClick={onCountdown}>Visit The Velvet Countdown 🎀</button></div>

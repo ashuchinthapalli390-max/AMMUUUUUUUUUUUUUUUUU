@@ -425,7 +425,7 @@
       "title": "Irumudi",
       "description": "Our first movie together; the first-half seat beside you made it special.",
       "icon": "🎟️",
-      "poster": "",
+      "poster": "/assets/cinema/irumudi.jpg",
       "status": "Watched Together",
       "theme": "burgundy"
     },
@@ -433,7 +433,7 @@
       "title": "Paradise",
       "description": "Another little movie memory.",
       "icon": "🍿",
-      "poster": "",
+      "poster": "/assets/cinema/paradise.jpg",
       "status": "Watched Together",
       "theme": "violet"
     },
@@ -441,7 +441,7 @@
       "title": "Doraemon",
       "description": "A recent movie outing full of nostalgia.",
       "icon": "🪄",
-      "poster": "",
+      "poster": "/assets/cinema/doraemon.jpg",
       "status": "Watched Together",
       "theme": "sky"
     },
@@ -449,7 +449,7 @@
       "title": "418",
       "description": "Another cinema adventure for the scrapbook.",
       "icon": "🎬",
-      "poster": "",
+      "poster": "/assets/cinema/418.jpg",
       "status": "Watched Together",
       "theme": "rose"
     },
@@ -457,7 +457,7 @@
       "title": "Ranabali",
       "description": "The movie plan that did not work out.",
       "icon": "💌",
-      "poster": "",
+      "poster": "/assets/cinema/ranabali.jpg",
       "status": "Planned",
       "theme": "gold"
     },
@@ -465,7 +465,7 @@
       "title": "Spider-Man Plans",
       "description": "The 9:30 PM ticket drama and the cute scolding.",
       "icon": "🕷️",
-      "poster": "",
+      "poster": "/assets/cinema/spider-man-plans.jpg",
       "status": "Planned",
       "theme": "indigo"
     }
@@ -618,46 +618,58 @@
   ],
   "playlist": [
     {
-      "id": "track1",
-      "title": "Our first song",
-      "artist": "From Ashu ♡",
-      "src": "/assets/music/song-01.mp3",
-      "cover": "/assets/photos/original_black.jpg"
+      "id": "samjhawan",
+      "title": "Samjhawan",
+      "artist": "Arijit Singh & Shreya Ghoshal",
+      "src": "/assets/music/01-samjhawan.mp3",
+      "cover": "/assets/music/covers/official-samjhawan.webp",
+      "caption": "A quiet little feeling",
+      "number": 1
     },
     {
-      "id": "track2",
-      "title": "One more midnight memory",
-      "artist": "From Ashu ♡",
-      "src": "/assets/music/song-02.mp3",
-      "cover": "/assets/photos/original_black.jpg"
+      "id": "baarish",
+      "title": "Baarish",
+      "artist": "Ash King & Shashaa Tirupati",
+      "src": "/assets/music/02-baarish.mp3",
+      "cover": "/assets/music/covers/02-baarish.webp",
+      "caption": "A sky full of memories",
+      "number": 2
     },
     {
-      "id": "track3",
-      "title": "A song for Pottiiiiiiii",
-      "artist": "From Ashu ♡",
-      "src": "/assets/music/song-03.mp3",
-      "cover": "/assets/photos/original_black.jpg"
+      "id": "tum-hi-ho",
+      "title": "Tum Hi Ho",
+      "artist": "Arijit Singh",
+      "src": "/assets/music/03-tum-hi-ho.mp3",
+      "cover": "/assets/music/covers/official-tum-hi-ho.webp",
+      "caption": "An unforgettable melody",
+      "number": 3
     },
     {
-      "id": "track4",
-      "title": "Movie-night favourite",
-      "artist": "From Ashu ♡",
-      "src": "/assets/music/song-04.mp3",
-      "cover": "/assets/photos/original_black.jpg"
+      "id": "gehra-hua",
+      "title": "Gehra Hua",
+      "artist": "Arijit Singh",
+      "src": "/assets/music/04-gehra-hua.mp3",
+      "cover": "/assets/music/covers/official-gehra-hua.webp",
+      "caption": "In a world of little moments",
+      "number": 4
     },
     {
-      "id": "track5",
-      "title": "The birthday song",
-      "artist": "From Ashu ♡",
-      "src": "/assets/music/song-05.mp3",
-      "cover": "/assets/photos/original_black.jpg"
+      "id": "channa-mereya",
+      "title": "Channa Mereya",
+      "artist": "Arijit Singh",
+      "src": "/assets/music/05-channa-mereya.mp3",
+      "cover": "/assets/music/covers/05-channa-mereya.webp",
+      "caption": "For all the stories we keep",
+      "number": 5
     },
     {
-      "id": "track6",
-      "title": "Our forever playlist",
-      "artist": "From Ashu ♡",
-      "src": "/assets/music/song-06.mp3",
-      "cover": "/assets/photos/original_black.jpg"
+      "id": "ye-tune-kya-kiya",
+      "title": "Ye Tune Kya Kiya",
+      "artist": "Pritam · Javed Bashir",
+      "src": "/assets/music/06-ye-tune-kya-kiya.mp3",
+      "cover": "/assets/music/covers/official-ye-tune-kya-kiya.webp",
+      "caption": "Another favourite chapter",
+      "number": 6
     }
   ],
   "flyingNotes": [
@@ -858,5 +870,10 @@
       "category": "gift",
       "text": "A lifetime gift for the sweetest buddy in the universe. Never forget how loved you are!"
     }
-  ]
+  ],
+  "countdown": {
+    "manifest": "/assets/countdown/manifest.json",
+    "images": 21,
+    "timezone": "Asia/Kolkata"
+  }
 }

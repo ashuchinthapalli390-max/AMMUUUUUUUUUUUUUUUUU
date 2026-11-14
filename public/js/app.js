@@ -12,8 +12,23 @@ function closeModal(){$('#modal-backdrop').hidden=true;document.body.classList.r
 $('#modal-close').onclick=closeModal;$('#modal-backdrop').addEventListener('click',e=>{if(e.target.id==='modal-backdrop')closeModal()});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();$('#gallery-lightbox').hidden=true}});
 function createPetals(x,y,n=9){const layer=$('#petal-layer');for(let i=0;i<n;i++){let el=document.createElement('span');el.className='petal';el.textContent=['✿','♡','✧','🌸'][Math.floor(Math.random()*4)];el.style.left=x+'px';el.style.top=y+'px';el.style.setProperty('--tx',(Math.random()*180-90)+'px');el.style.setProperty('--ty',(Math.random()*-190-20)+'px');el.style.color=['#ef9eb6','#f3d4df','#c26b9b'][i%3];layer.append(el);setTimeout(()=>el.remove(),1550)}}
 document.addEventListener('click',e=>{if(e.target.closest('button,.btn,.gallery-card,.gift-box-card')&&Math.random()>.66)createPetals(e.clientX,e.clientY,4)});
-let sound=false,audio;function playMusic(){let p='/assets/music/your-song.mp3';if(!audio){audio=new Audio(p);audio.loop=true;audio.volume=.28;audio.addEventListener('error',()=>toast('Add your song at public/assets/music/your-song.mp3 🎵'))}if(sound){audio.pause();sound=false;$('#music-toggle').textContent='♫'}else{audio.play().then(()=>{sound=true;$('#music-toggle').textContent='❚❚'}).catch(()=>toast('Use a local MP3 in assets/music for background music.'))}}
-$('#music-toggle').onclick=playMusic;$('#replay-intro').onclick=()=>modal('One more surprise?', 'Replay our birthday opening from the beginning?', '🎀',[['Replay Intro',()=>{closeModal();$('#experience').hidden=true;document.body.classList.remove('chapter-mode');$('#gate').hidden=false;$('#open-present').hidden=false;window.scrollTo(0,0)}],['Keep Exploring',closeModal]]);
+function playMusic(){
+  if (window.ammuToggleMusic) {
+    window.ammuToggleMusic();
+  } else {
+    document.dispatchEvent(new CustomEvent('ammu:toggle-music'));
+  }
+}
+$('#music-toggle').onclick=playMusic;
+window.addEventListener('ammu:music-state', (e) => {
+  const isPlaying = e.detail?.playing;
+  const btn = $('#music-toggle');
+  if (btn) {
+    btn.textContent = isPlaying ? '❚❚' : '♫';
+    btn.classList.toggle('playing', !!isPlaying);
+    btn.setAttribute('aria-label', isPlaying ? 'Pause music' : 'Play music');
+  }
+});$('#replay-intro').onclick=()=>modal('One more surprise?', 'Replay our birthday opening from the beginning?', '🎀',[['Replay Intro',()=>{closeModal();$('#experience').hidden=true;document.body.classList.remove('chapter-mode');$('#gate').hidden=false;$('#open-present').hidden=false;window.scrollTo(0,0)}],['Keep Exploring',closeModal]]);
 $('#mobile-menu').onclick=()=>$('.site-nav nav').classList.toggle('open');$$('.site-nav nav a').forEach(a=>a.onclick=()=>$('.site-nav nav').classList.remove('open'));
 const relTime=()=>Date.parse(state.site?.birthdayDate||'2026-11-17T00:00:00+05:30')-Date.now();
 function tick(){let diff=Math.max(0,relTime());let s=Math.floor(diff/1000);['days','hours','minutes','seconds'].forEach((id,i)=>{$('#'+id).textContent=String([Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60][i]).padStart(2,'0')});if(diff<=0){$('#open-present').hidden=false;$('#preview-open').hidden=true;$('#gate-date').textContent='Your birthday surprise is unlocked 🎁'}}

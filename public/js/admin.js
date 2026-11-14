@@ -302,6 +302,8 @@ async function renderMailStudioAdmin() {
   try {
     const statusData = await req('/api/countdown/status');
     const milestones = statusData.milestones || [];
+    const manifest = await fetch('/assets/countdown/manifest.json').then(r => r.json()).catch(() => ({ posters: [] }));
+    const manifestPosters = manifest.posters || [];
 
     $('#admin-content').innerHTML = `
       <div class="panel">
@@ -342,6 +344,23 @@ async function renderMailStudioAdmin() {
         </div>
         <div id="email-preview-container" style="border:1px solid #e5b9cc;border-radius:14px;padding:20px;background:#fff;min-height:280px;overflow:auto;">
           <p style="color:#882a52;">Select a milestone above and click "Preview Email HTML".</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>All 21 Daily Countdown Posters (Manifest Gallery)</h2>
+        <p>Full 1080×1350 genuine countdown artwork from 21 days down to 24 hours left. Click any poster to view full-resolution, or download directly:</p>
+        <div id="manifest-posters-gallery" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:16px;margin-top:16px;">
+          ${manifestPosters.map(p => `
+            <div style="background:#fff4f8;border:1px solid #eabacb;border-radius:12px;padding:12px;text-align:center;box-shadow:0 4px 14px rgba(105,45,75,0.08);">
+              <div style="border-radius:8px;overflow:hidden;border:2px solid #fff;margin-bottom:8px;aspect-ratio:1080/1350;background:#fce8ef;cursor:pointer;" onclick="window.open('${esc(p.image)}', '_blank')">
+                <img src="${esc(p.image)}" alt="${esc(p.label)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+              </div>
+              <div style="font-size:12px;font-weight:bold;color:#781d45;">${esc(p.label)}</div>
+              <div style="font-size:10px;color:#9e486c;margin-bottom:8px;">${esc(p.theme || '')}</div>
+              <a href="${esc(p.image)}" download="${esc(p.filename)}" class="btn outline" style="font-size:11px;padding:5px 8px;display:block;text-decoration:none;">Download PNG ↓</a>
+            </div>
+          `).join('')}
         </div>
       </div>
 

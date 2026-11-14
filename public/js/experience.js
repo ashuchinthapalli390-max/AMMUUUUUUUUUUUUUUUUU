@@ -59,79 +59,48 @@ function step(dir){
  goTo(scenes[Math.max(0,current-1)],false,true)
 }
 function prepareChapters(){
- if(started)return;started=true;document.body.classList.add('chapter-mode');$('#experience').classList.add('page-mode');$('#chapter-ui').hidden=false;
- scenes.forEach(id=>{let e=document.getElementById(id);if(e){e.classList.remove('chapter-active');$('#experience').appendChild(e)}});
+ if(started)return;started=true;
+ scenes.forEach(id=>{let e=document.getElementById(id);if(e){e.hidden=false;e.style.display='block';e.classList.remove('chapter-active');e.classList.add('chapter-active');}});
+ const cui=$('#chapter-ui');if(cui)cui.hidden=true;
+ const wipe=$('#chapter-page-wipe');if(wipe)wipe.hidden=true;
  document.querySelectorAll('.site-nav a[href^="#"]').forEach(a=>{let id=a.getAttribute('href').slice(1);if(['shop','cart','tracking'].includes(id))id='gifts';if(scenes.includes(id))a.addEventListener('click',ev=>{ev.preventDefault();goTo(id)})});
  document.body.addEventListener('click',ev=>{const a=ev.target.closest('#experience a[href^="#"]');if(!a)return;let id=a.getAttribute('href').slice(1);if(['shop','cart','tracking'].includes(id))id='gifts';if(scenes.includes(id)){ev.preventDefault();goTo(id)}});
  window.addEventListener('hashchange',()=>{let h=location.hash.slice(1);if(['shop','cart','tracking'].includes(h)){goTo('gifts')}else if(scenes.includes(h)){goTo(h)}});
- $('#chapter-previous').onclick=()=>step(-1);$('#chapter-next').onclick=()=>step(1);
- window.addEventListener('keydown',e=>{if(!document.body.classList.contains('page-turn-mode')||!$('#intro-stage').hidden)return;
-  if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)||document.querySelector('#gallery-lightbox:not([hidden]),#modal-backdrop:not([hidden])'))return;
-  if(e.key==='PageDown'){e.preventDefault();step(1)}else if(e.key==='PageUp'){e.preventDefault();step(-1)}
- });
- // V8: scroll current chapter naturally before moving to another chapter.
- // A fresh wheel gesture at a real scroll edge changes the chapter, not leftover momentum.
- let edge=null,edgeAt=0,lastWheel=0,navigationCooldown=0;
- document.getElementById('experience').addEventListener('wheel',e=>{
-  if(!document.body.classList.contains('chapter-mode')||moving)return;
-  if(e.target.closest('canvas,textarea,input,select,.night-chat-log,.magazine-book,.modal-box,.guide-rail,[data-allow-scroll]'))return;
-  if(document.querySelector('#modal-backdrop:not([hidden])')||!$('#intro-stage').hidden)return;
-  const section=document.getElementById(actualScene());if(!section)return;
-  const now=performance.now();const dir=e.deltaY>0?1:-1;
-  const max=Math.max(0,section.scrollHeight-section.clientHeight);
-  const atEnd=dir>0&&section.scrollTop>=max-3;
-  const atStart=dir<0&&section.scrollTop<=3;
-  if(!(atEnd||atStart)){edge=null;return} // Let this same wheel gesture finish scrolling naturally.
-  e.preventDefault();
-  const requested=dir>0?'bottom':'top';
-  if(now<navigationCooldown)return;
-  if(edge!==requested||now-lastWheel>1200){edge=requested;edgeAt=now;lastWheel=now;return}
-  // Wait for momentum to stop, then require a second deliberate gesture.
-  if(now-edgeAt<330){lastWheel=now;return}
-  if(now-lastWheel<170){lastWheel=now;return}
-  edge=null;lastWheel=now;navigationCooldown=now+1300;
-  if(dir>0&&current<scenes.length-1)goTo(scenes[current+1]);
-  if(dir<0&&current>0)goTo(scenes[current-1],false,true);
- },{passive:false,capture:true});
- window.addEventListener('resize',()=>refreshPageUI());
+ const navLinks=document.querySelectorAll('.site-nav nav a');
+ const sectionObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+   if(entry.isIntersecting){
+    entry.target.classList.add('is-inview');
+    const id=entry.target.id;
+    navLinks.forEach(a=>{a.classList.toggle('active-link',a.getAttribute('href')==='#'+id)});
+    if(history.replaceState){history.replaceState(null,'','#'+id)}
+    animateContent(entry.target);
+   }
+  });
+ },{rootMargin:'-10% 0px -40% 0px',threshold:[0.05,0.2]});
+ scenes.forEach(id=>{let el=document.getElementById(id);if(el)sectionObserver.observe(el)});
  window.ammuGo=goTo;window.ammuAdvance=()=>step(1);
- window.ammuRefreshPage=id=>{const elem=document.getElementById(id);if(!elem)return;pageState.set(id,0);elem.scrollTop=0;requestAnimationFrame(refreshPageUI)};
- window.ammuShowElement=el=>{const section=el?.closest('section.section');if(!section)return;if(section.id!==actualScene())return goTo(section.id);
-  const stop=pageStops(section);const absY=section.scrollTop+el.getBoundingClientRect().top-section.getBoundingClientRect().top-80;const index=stop.reduce((best,v,i)=>Math.abs(v-absY)<Math.abs(stop[best]-absY)?i:best,0);showPage(index)
- };
+ window.ammuRefreshPage=id=>{const elem=document.getElementById(id);if(!elem)return;animateContent(elem)};
+ window.ammuShowElement=el=>{if(!el)return;el.scrollIntoView({behavior:'smooth',block:'center'})};
  let initScene = 'home';
  if (location.hash) {
   let h = location.hash.slice(1);
   if (['shop', 'cart', 'tracking'].includes(h)) h = 'gifts';
   if (scenes.includes(h)) initScene = h;
  }
- setupWishes();setupNight();setupCertificates();setupBonusGames();goTo(initScene,true);
+ setupWishes();setupNight();setupCertificates();setupBonusGames();
+ if(initScene !== 'home'){setTimeout(()=>goTo(initScene,true),100);}
 }
 function goTo(id,immediate=false,lastPage=false){
  if(['shop','cart','tracking'].includes(id))id='gifts';
- if(!scenes.includes(id)||moving)return;
- const target=scenes.indexOf(id),old=document.getElementById(scenes[current]);
- if(target===current&&old?.classList.contains('chapter-active'))return showPage(0,immediate);
- const enter=()=>{
-  old?.classList.remove('chapter-active');current=target;
-  const next=document.getElementById(id);next.hidden=false;next.classList.add('chapter-active');
-  next.scrollTop=0;pageState.set(id,0);
-  document.querySelectorAll('.site-nav nav a').forEach(a=>a.classList.toggle('active-link',a.getAttribute('href')==='#'+id));
-  history.replaceState(null,'','#'+id);animateContent(next);
-  requestAnimationFrame(()=>{if(lastPage){const stops=pageStops(next);pageState.set(id,stops.length-1);next.scrollTop=stops[stops.length-1]}refreshPageUI()});
-  document.dispatchEvent(new CustomEvent('ammu:chapter-change',{detail:{id,index:current,total:scenes.length}}));
- };
- if(!old?.classList.contains('chapter-active')||immediate||prefersReduced){enter();moving=false;return}
- moving=true;const gs=window.gsap,wipe=$('#scene-transition');
- if(gs&&wipe){gs.timeline({onComplete:()=>{wipe.style.visibility='hidden';wipe.style.transform='';moving=false;refreshPageUI()}})
-  .set(wipe,{visibility:'visible',yPercent:105,rotate:2})
-  .to(wipe,{yPercent:0,rotate:0,duration:.54,ease:'power4.inOut'})
-  .add(()=>enter())
-  .to(wipe,{yPercent:-106,rotate:-2,duration:.74,ease:'power3.inOut'})
-  .set(wipe,{clearProps:'all'})
- }else{
-   if(wipe)wipe.classList.add('turning');setTimeout(()=>{enter();setTimeout(()=>{wipe?.classList.remove('turning');moving=false;refreshPageUI()},470)},420)
- }
+ if(!scenes.includes(id))return;
+ const target=document.getElementById(id);
+ if(!target)return;
+ current=scenes.indexOf(id);
+ target.scrollIntoView({behavior:(immediate||prefersReduced)?'auto':'smooth',block:'start'});
+ document.querySelectorAll('.site-nav nav a').forEach(a=>{a.classList.toggle('active-link',a.getAttribute('href')==='#'+id)});
+ history.replaceState(null,'','#'+id);
+ document.dispatchEvent(new CustomEvent('ammu:chapter-change',{detail:{id,index:current,total:scenes.length}}));
 }
 window.ammuGo=goTo;
 function animateContent(section){
