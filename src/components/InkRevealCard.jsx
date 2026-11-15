@@ -14,16 +14,18 @@ const FRAGMENT_SHADER = `
 precision highp float;
 varying vec2 vUv;
 
-uniform sampler2D u_texA;       // Ammu original photo
-uniform sampler2D u_texB;       // Current song artwork
-uniform vec2 u_cursor;          // Normalized pointer coords [0, 1]
-uniform float u_radius;         // Localized reveal radius (0.0 to ~0.15)
+uniform sampler2D u_texA;       // Ammu original photo (upright)
+uniform sampler2D u_texB;       // Selected song artwork (upright)
+uniform sampler2D u_texMask;    // Real high-contrast organic ink texture
+uniform vec2 u_cursor;          // Normalized pointer entry position [0, 1]
+uniform float u_radius;         // Full-card cinematic ink reveal radius [0.0, 1.85]
+uniform float u_progress;       // Full-card reveal progress [0.0, 1.0]
 uniform float u_time;           // Elapsed animation time
 uniform vec2 u_resolution;      // Canvas dimensions [width, height]
 uniform float u_aspectA;        // Texture A aspect ratio
 uniform float u_aspectB;        // Texture B aspect ratio
 
-// Simplex 2D noise implementation
+// 2D Simplex Noise Implementation
 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec3 permute(vec3 x) { return mod289(((x * 34.0) + 1.0) * x); }
@@ -65,17 +67,17 @@ float fbm(vec2 p) {
   return total;
 }
 
-// Object-fit: cover mapping
+// Mathematical object-fit: cover mapping without edge smearing or distortion
 vec2 getCoverUV(vec2 uv, float texAspect, float screenAspect) {
   vec2 st = uv;
   if (screenAspect > texAspect) {
-    float scale = screenAspect / texAspect;
-    st.y = (st.y - 0.5) * scale + 0.5;
+    float s = texAspect / screenAspect;
+    st.y = (uv.y - 0.5) * s + 0.5;
   } else {
-    float scale = texAspect / screenAspect;
-    st.x = (st.x - 0.5) * scale + 0.5;
+    float s = screenAspect / texAspect;
+    st.x = (uv.x - 0.5) * s + 0.5;
   }
-  return clamp(st, 0.0, 1.0);
+  return st;
 }
 
 void main() {
@@ -86,41 +88,51 @@ void main() {
   vec4 colA = texture2D(u_texA, uvA);
   vec4 colB = texture2D(u_texB, uvB);
 
-  // State 1 & State 5: If radius is zero, render 100% Ammu's photograph
-  if (u_radius <= 0.0001) {
+  // STATE A & STATE D: Default or fully restored state -> 100% Ammu photograph
+  if (u_progress <= 0.0001) {
     gl_FragColor = colA;
     return;
   }
 
-  // Calculate distance in screen-aspect-corrected coordinates (perfect circle in screen pixels)
+  // STATE C: Fully revealed state -> 100% Selected Song artwork
+  if (u_progress >= 0.9999) {
+    gl_FragColor = colB;
+    return;
+  }
+
+  // Screen-aspect-corrected vector from pointer entry position
   vec2 diff = vUv - u_cursor;
   diff.x *= screenAspect;
   float dist = length(diff);
 
-  // Multi-harmonic angular spikes for fine outward ink fingers
+  // Angular harmonics for organic ink tendrils and dendritic branching
   float angle = atan(diff.y, diff.x);
-  float spikes = sin(angle * 6.0 + u_time * 0.5) * 0.065
-               + sin(angle * 11.0 - u_time * 0.7) * 0.04
-               + sin(angle * 19.0 + u_time * 1.1) * 0.025;
+  float spikes = sin(angle * 5.0 + u_time * 0.35) * 0.12
+               + sin(angle * 9.0 - u_time * 0.55) * 0.07
+               + sin(angle * 17.0 + u_time * 0.75) * 0.035;
 
-  // Organic noise displacement field
-  vec2 noiseCoord = vUv * 9.0 + vec2(cos(u_time * 0.18), sin(u_time * 0.18)) * 0.4;
+  // Multi-frequency noise displacement
+  vec2 noiseCoord = vUv * 7.0 + vec2(cos(u_time * 0.12), sin(u_time * 0.12)) * 0.3;
   float n = fbm(noiseCoord);
 
-  // Tiny delicate ink droplets
-  float speckles = max(0.0, snoise(vUv * 30.0 + u_time * 0.1) - 0.68) * 0.14;
+  // High-contrast ink texture bleed from user reference mask
+  // (1.0 - r) represents physical ink concentration
+  float inkBleed = (1.0 - texture2D(u_texMask, vUv).r) * 0.32;
 
-  // Distort the distance field organically around current cursor position
-  float displacement = (spikes * 0.45 + n * 0.35 + speckles) * u_radius;
-  float distortedDist = dist - displacement;
+  // Organic distortion field
+  float distortion = spikes + (n - 0.5) * 0.55 + inkBleed;
 
-  // Controlled narrow anti-aliasing feathering (approx 3-5 pixels)
-  float feather = 4.0 / u_resolution.y;
-  float mask = 1.0 - smoothstep(u_radius - feather, u_radius, distortedDist);
+  // Effective expansion radius: blooms to 1.85 to reach every corner of the card
+  float currentRadius = u_radius;
 
-  // Outside mask: 100% Texture A (Ammu Photo)
-  // Inside mask: 100% Texture B (Song Poster)
-  // Pure opaque composite with narrow anti-aliased edge
+  float distortedDist = dist - distortion;
+
+  // Crisp, organic anti-aliasing feathering (approx 3-5 pixels)
+  float feather = 0.04;
+  float mask = 1.0 - smoothstep(currentRadius - feather, currentRadius + feather, distortedDist);
+  mask = clamp(mask, 0.0, 1.0);
+
+  // Pure replacement: 0% blend inside revealed ink, narrow AA edge
   gl_FragColor = mix(colA, colB, mask);
 }
 `;
@@ -169,7 +181,8 @@ function loadTexture(gl, url, onLoad) {
   img.src = url;
   img.onload = () => {
     gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+    // CRITICAL: flipY=true ensures images render UPRIGHT (head/face at top, text readable)
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -186,6 +199,17 @@ function loadTexture(gl, url, onLoad) {
   return texture;
 }
 
+// All 6 playlist cover URLs to pre-cache
+const ALL_COVER_URLS = [
+  '/assets/music/covers/official-samjhawan.webp',
+  '/assets/music/covers/01-samjhawan.webp',
+  '/assets/music/covers/02-baarish.webp',
+  '/assets/music/covers/official-tum-hi-ho.webp',
+  '/assets/music/covers/official-gehra-hua.webp',
+  '/assets/music/covers/05-channa-mereya.webp',
+  '/assets/music/covers/official-ye-tune-kya-kiya.webp',
+];
+
 export default function InkRevealCard({ currentSong }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
@@ -195,15 +219,19 @@ export default function InkRevealCard({ currentSong }) {
   const programRef = useRef(null);
   const texARef = useRef(null);
   const texBRef = useRef(null);
+  const texMaskRef = useRef(null);
+  const textureCacheRef = useRef(new Map());
   const aspectARef = useRef(0.77);
   const aspectBRef = useRef(1.0);
 
-  // Localized Pointer Physics & Restoration Refs
-  const targetPointer = useRef({ x: 0.5, y: 0.5 });
-  const currentPointer = useRef({ x: 0.5, y: 0.5 });
-  const targetRadius = useRef(0.0);
-  const currentRadius = useRef(0.0);
-  const isHovered = useRef(false);
+  // Full-card Cinematic Reveal State Machine
+  const entryPointRef = useRef({ x: 0.5, y: 0.5 });
+  const isHoveredRef = useRef(false);
+  const progressRef = useRef(0.0);
+
+  // Transition durations (tuneable within 0.9-1.5s forward, 0.7-1.2s reverse)
+  const FORWARD_DURATION = 1.15; // 1.15s forward spread
+  const REVERSE_DURATION = 0.85; // 0.85s reverse restoration
 
   // Initialize WebGL Scene
   useEffect(() => {
@@ -224,7 +252,7 @@ export default function InkRevealCard({ currentSong }) {
     if (!program) return;
     programRef.current = program;
 
-    // Quad geometry covering the canvas
+    // Full-screen Quad geometry covering the canvas
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.bufferData(
@@ -244,12 +272,22 @@ export default function InkRevealCard({ currentSong }) {
     gl.enableVertexAttribArray(aPos);
     gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
 
-    // Load Texture A (Ammu's original photograph)
+    // Load Texture A: Ammu's original photograph (upright)
     texARef.current = loadTexture(gl, '/assets/photos/original_black.jpg', (tex, aspect) => {
       aspectARef.current = aspect;
     });
 
-    // Resize canvas to match display size
+    // Load Texture Mask: Real organic ink bleed reference image
+    texMaskRef.current = loadTexture(gl, '/assets/effects/ink_mask.jpg');
+
+    // Pre-cache all 6 song covers for zero-lag instant track switching
+    ALL_COVER_URLS.forEach((url) => {
+      loadTexture(gl, url, (tex, aspect) => {
+        textureCacheRef.current.set(url, { texture: tex, aspect });
+      });
+    });
+
+    // Resize canvas to match display container
     const resize = () => {
       const container = containerRef.current;
       if (!container || !canvas) return;
@@ -270,8 +308,10 @@ export default function InkRevealCard({ currentSong }) {
     // Uniform locations
     const uTexA = gl.getUniformLocation(program, 'u_texA');
     const uTexB = gl.getUniformLocation(program, 'u_texB');
+    const uTexMask = gl.getUniformLocation(program, 'u_texMask');
     const uCursor = gl.getUniformLocation(program, 'u_cursor');
     const uRadius = gl.getUniformLocation(program, 'u_radius');
+    const uProgress = gl.getUniformLocation(program, 'u_progress');
     const uTime = gl.getUniformLocation(program, 'u_time');
     const uResolution = gl.getUniformLocation(program, 'u_resolution');
     const uAspectA = gl.getUniformLocation(program, 'u_aspectA');
@@ -279,39 +319,49 @@ export default function InkRevealCard({ currentSong }) {
 
     let animId;
     let startTime = performance.now();
+    let lastTime = performance.now();
 
-    // 60FPS Render Loop
+    // 60FPS Continuous Render Loop
     const render = (now) => {
       animId = requestAnimationFrame(render);
       const elapsed = (now - startTime) * 0.001;
+      const dt = Math.min((now - lastTime) * 0.001, 0.1);
+      lastTime = now;
 
-      // Smooth pointer position interpolation (State 3: Cursor moves)
-      const pLerp = 0.22;
-      currentPointer.current.x += (targetPointer.current.x - currentPointer.current.x) * pLerp;
-      currentPointer.current.y += (targetPointer.current.y - currentPointer.current.y) * pLerp;
-
-      // Smooth radius interpolation (State 2 & State 5: Open & Automatic restoration)
-      const rLerp = targetRadius.current > currentRadius.current ? 0.16 : 0.12;
-      currentRadius.current += (targetRadius.current - currentRadius.current) * rLerp;
-      if (currentRadius.current < 0.0002) {
-        currentRadius.current = 0.0;
+      // Smooth Full-Card Ink Expansion / Reversal Physics
+      if (isHoveredRef.current) {
+        // STATE B -> STATE C: Advance towards 100% full song cover reveal
+        progressRef.current = Math.min(1.0, progressRef.current + dt / FORWARD_DURATION);
+      } else {
+        // STATE D -> STATE A: Reverse organically back to 100% Ammu photograph
+        progressRef.current = Math.max(0.0, progressRef.current - dt / REVERSE_DURATION);
       }
+
+      // Smoothstep easing for organic ink bloom acceleration and deceleration
+      const p = progressRef.current;
+      const easedProgress = p * p * (3.0 - 2.0 * p);
 
       gl.useProgram(program);
 
-      // Bind Texture A (unit 0)
+      // Bind Texture A (unit 0) - Ammu Photo
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, texARef.current);
       gl.uniform1i(uTexA, 0);
 
-      // Bind Texture B (unit 1)
+      // Bind Texture B (unit 1) - Current Song Artwork
       gl.activeTexture(gl.TEXTURE1);
       gl.bindTexture(gl.TEXTURE_2D, texBRef.current || texARef.current);
       gl.uniform1i(uTexB, 1);
 
-      // Uniforms
-      gl.uniform2f(uCursor, currentPointer.current.x, currentPointer.current.y);
-      gl.uniform1f(uRadius, currentRadius.current);
+      // Bind Texture Mask (unit 2) - Organic Ink Texture
+      gl.activeTexture(gl.TEXTURE2);
+      gl.bindTexture(gl.TEXTURE_2D, texMaskRef.current);
+      gl.uniform1i(uTexMask, 2);
+
+      // Set Uniforms
+      gl.uniform2f(uCursor, entryPointRef.current.x, entryPointRef.current.y);
+      gl.uniform1f(uRadius, easedProgress * 1.85);
+      gl.uniform1f(uProgress, easedProgress);
       gl.uniform1f(uTime, elapsed);
       gl.uniform2f(uResolution, canvas.width, canvas.height);
       gl.uniform1f(uAspectA, aspectARef.current);
@@ -327,6 +377,10 @@ export default function InkRevealCard({ currentSong }) {
       window.removeEventListener('resize', resize);
       if (texARef.current) gl.deleteTexture(texARef.current);
       if (texBRef.current) gl.deleteTexture(texBRef.current);
+      if (texMaskRef.current) gl.deleteTexture(texMaskRef.current);
+      textureCacheRef.current.forEach(({ texture }) => {
+        try { gl.deleteTexture(texture); } catch {}
+      });
       gl.deleteBuffer(positionBuffer);
       gl.deleteProgram(program);
     };
@@ -337,63 +391,90 @@ export default function InkRevealCard({ currentSong }) {
     const gl = glRef.current;
     if (!gl) return;
 
-    const coverUrl = currentSong?.cover || '/assets/photos/original_black.jpg';
-    if (texBRef.current) {
-      gl.deleteTexture(texBRef.current);
+    const coverUrl = currentSong?.cover || '/assets/music/covers/01-samjhawan.webp';
+
+    // Check pre-cache first for instantaneous swap
+    const cached = textureCacheRef.current.get(coverUrl);
+    if (cached) {
+      texBRef.current = cached.texture;
+      aspectBRef.current = cached.aspect;
+      return;
     }
 
+    // Otherwise load dynamically
     texBRef.current = loadTexture(gl, coverUrl, (tex, aspect) => {
       aspectBRef.current = aspect;
+      textureCacheRef.current.set(coverUrl, { texture: tex, aspect });
     });
   }, [currentSong]);
 
-  // Pointer event handlers
-  const updatePointer = useCallback((clientX, clientY) => {
+  // Compute normalized coordinates: (0,0) at bottom-left, (1,1) at top-right
+  const computeCoords = useCallback((clientX, clientY) => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || clientX === undefined || clientY === undefined || isNaN(clientX) || isNaN(clientY)) {
+      return { x: 0.5, y: 0.5 };
+    }
     const rect = container.getBoundingClientRect();
-    const x = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    // Invert Y to match GL coordinate system (top = 1.0, bottom = 0.0)
-    const y = Math.max(0, Math.min(1, 1.0 - (clientY - rect.top) / rect.height));
-
-    targetPointer.current = { x, y };
+    const x = Math.max(0, Math.min(1, (clientX - rect.left) / (rect.width || 1)));
+    const y = Math.max(0, Math.min(1, 1.0 - (clientY - rect.top) / (rect.height || 1)));
+    return { x: isNaN(x) ? 0.5 : x, y: isNaN(y) ? 0.5 : y };
   }, []);
 
+  // Expose global state bridge for testing, verification & synchronization
+  useEffect(() => {
+    window.ammuPlaylistInkState = {
+      getProgress: () => progressRef.current,
+      getHovered: () => isHoveredRef.current,
+      getEntryPoint: () => ({ ...entryPointRef.current }),
+      setHovered: (hovered, clientX, clientY) => {
+        if (hovered) {
+          if (clientX !== undefined && clientY !== undefined) {
+            entryPointRef.current = computeCoords(clientX, clientY);
+          }
+          isHoveredRef.current = true;
+        } else {
+          isHoveredRef.current = false;
+        }
+      },
+      setProgress: (p) => {
+        progressRef.current = Math.max(0, Math.min(1, p));
+      }
+    };
+    return () => {
+      delete window.ammuPlaylistInkState;
+    };
+  }, [computeCoords]);
+
+  // Pointer & Mouse event handlers
   const handlePointerEnter = useCallback((e) => {
-    isHovered.current = true;
-    updatePointer(e.clientX, e.clientY);
-    // Instant snap on entry for the first coordinate, then smooth follow
-    currentPointer.current = { ...targetPointer.current };
-    // Localized reveal radius (~100-140px diameter on desktop)
-    targetRadius.current = 0.135;
-  }, [updatePointer]);
+    const clientX = e?.clientX ?? e?.pageX;
+    const clientY = e?.clientY ?? e?.pageY;
+    if (clientX !== undefined && clientY !== undefined) {
+      const coords = computeCoords(clientX, clientY);
+      if (progressRef.current <= 0.05) {
+        entryPointRef.current = coords;
+      }
+    }
+    // STATE B: Start forward ink spread
+    isHoveredRef.current = true;
+  }, [computeCoords]);
 
   const handlePointerMove = useCallback((e) => {
-    isHovered.current = true;
-    updatePointer(e.clientX, e.clientY);
-    targetRadius.current = 0.135;
-  }, [updatePointer]);
+    // Keep isHovered active; DO NOT restart animation on mouse move
+    isHoveredRef.current = true;
+  }, []);
 
   const handlePointerLeave = useCallback(() => {
-    isHovered.current = false;
-    // State 5: Cursor leaves -> shrink radius naturally to zero at last position
-    targetRadius.current = 0.0;
+    // STATE D: Reverse ink spread back to 100% Ammu photograph
+    isHoveredRef.current = false;
   }, []);
 
   // Touch device support
   const handleTouchStart = useCallback((e) => {
     if (e.touches && e.touches[0]) {
-      const touch = e.touches[0];
-      handlePointerEnter(touch);
+      handlePointerEnter(e.touches[0]);
     }
   }, [handlePointerEnter]);
-
-  const handleTouchMove = useCallback((e) => {
-    if (e.touches && e.touches[0]) {
-      const touch = e.touches[0];
-      handlePointerMove(touch);
-    }
-  }, [handlePointerMove]);
 
   const handleTouchEnd = useCallback(() => {
     handlePointerLeave();
@@ -406,8 +487,10 @@ export default function InkRevealCard({ currentSong }) {
       onPointerEnter={handlePointerEnter}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
+      onMouseEnter={handlePointerEnter}
+      onMouseMove={handlePointerMove}
+      onMouseLeave={handlePointerLeave}
       onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchEnd}
       style={{
@@ -419,7 +502,7 @@ export default function InkRevealCard({ currentSong }) {
         borderRadius: '18px',
         overflow: 'hidden',
         boxShadow: '0 20px 48px rgba(120, 29, 69, 0.22)',
-        cursor: 'crosshair',
+        cursor: 'pointer',
         userSelect: 'none',
         WebkitUserSelect: 'none',
         touchAction: 'none',
@@ -427,17 +510,16 @@ export default function InkRevealCard({ currentSong }) {
     >
       <canvas
         ref={canvasRef}
-        aria-label="Ammu's photo with interactive localized ink reveal of current song poster"
+        aria-label="Ammu's photo with cinematic organic ink reveal of current song poster"
         style={{
           display: 'block',
           width: '100%',
           height: '100%',
-          objectFit: 'cover',
           borderRadius: '18px',
         }}
       />
 
-      {/* Album Card Lower Caption */}
+      {/* Album Card Lower Caption - Preserved Polaroid Styling */}
       <div
         className="playlist-cover-caption"
         style={{
