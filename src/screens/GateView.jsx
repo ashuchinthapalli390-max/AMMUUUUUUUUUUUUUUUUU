@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function GateView({ isPreview = false }) {
+export default function GateView() {
   const [optInOpen, setOptInOpen] = useState(false);
   const [optInEmail, setOptInEmail] = useState("");
   const [optInTier, setOptInTier] = useState("all_hourly_and_minute");
@@ -18,35 +18,6 @@ export default function GateView({ isPreview = false }) {
       })
       .catch(() => {});
   }, []);
-
-  // Expose global simulation function for Admin preview & testing
-  useEffect(() => {
-    window.ammuSimulateMidnightUnlock = () => {
-      triggerMidnightUnlockSequence();
-    };
-    return () => {
-      delete window.ammuSimulateMidnightUnlock;
-    };
-  }, []);
-
-  const triggerMidnightUnlockSequence = () => {
-    setIsUnlocked(true);
-    const gate = document.getElementById("gate");
-    if (gate) {
-      gate.hidden = false;
-      gate.style.opacity = "1";
-    }
-    const gateCopy = document.querySelector(".gate-copy");
-    if (gateCopy) {
-      gateCopy.classList.add("unlocked-stage");
-    }
-    const openBtn = document.getElementById("open-present");
-    if (openBtn) {
-      openBtn.hidden = false;
-      openBtn.style.display = "inline-flex";
-    }
-    // Web Audio chime removed per V17 specifications (zero UI sound effects)
-  };
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -93,10 +64,8 @@ export default function GateView({ isPreview = false }) {
     }
   };
 
-  const isGateHidden = isPreview || (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin/preview'));
-
   return (
-    <section id={"gate"} hidden={isGateHidden} className={`gate ${isUnlocked ? "is-unlocked" : ""}`} aria-label={"Birthday entrance"}>
+    <section id={"gate"} className={`gate ${isUnlocked ? "is-unlocked" : ""}`} aria-label={"Birthday entrance"}>
       <div className={"gate-stars"}></div>
 
       {/* VELVET CURTAINS & GOLDEN GLOW FOR MIDNIGHT UNLOCK */}
@@ -146,44 +115,6 @@ export default function GateView({ isPreview = false }) {
             }}
           >
             {"OPEN YOUR BIRTHDAY UNIVERSE 💗 "}<span>{"↗"}</span>
-          </button>
-
-          {!isUnlocked && (
-            <button
-              type="button"
-              className={"btn btn-pink"}
-              onClick={triggerMidnightUnlockSequence}
-              style={{
-                fontSize: "15px",
-                padding: "14px 28px",
-                background: "linear-gradient(135deg, #B83A6D, #7E1E46)",
-                boxShadow: "0 6px 20px rgba(184, 58, 109, 0.4)",
-              }}
-            >
-              {"Simulate Midnight Unlock ✨"}
-            </button>
-          )}
-
-          {/* Private Preview Button for Ashu */}
-          <button
-            id={"preview-open"}
-            type="button"
-            className={"btn btn-outline"}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              borderColor: "rgba(255, 200, 220, 0.4)",
-              color: "#ffd5e6",
-              fontSize: "14px",
-              padding: "14px 26px",
-              borderRadius: "30px",
-              background: "rgba(255, 255, 255, 0.08)",
-              backdropFilter: "blur(8px)",
-              cursor: "pointer"
-            }}
-          >
-            {"👑 Private Preview Option (Ashu)"}
           </button>
         </div>
 
@@ -295,19 +226,6 @@ export default function GateView({ isPreview = false }) {
             )}
           </div>
         )}
-
-        {/* Private Preview Form */}
-        <div className={"gate-preview-form"} id={"gate-preview-form"} hidden={true} style={{ marginTop: "20px", padding: "18px 24px", background: "rgba(255,255,255,0.12)", borderRadius: "18px", border: "1px solid rgba(255,200,220,0.3)", maxWidth: "480px", margin: "20px auto 0" }}>
-          <p style={{ color: "#ffe7f1", fontSize: "13px", margin: "0 0 12px" }}>Enter private preview code or admin password:</p>
-          <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
-            <input id={"preview-code"} placeholder={"Enter preview code or password"} type={"password"} autoComplete={"off"} style={{ padding: "11px 18px", borderRadius: "25px", border: "1.5px solid #d889aa", background: "#fff", color: "#692842", outline: "none", fontSize: "14px" }} />
-            <button className={"btn btn-pink"} id={"preview-submit"} type="button" style={{ padding: "11px 22px", borderRadius: "25px", fontWeight: "bold" }}>{"Unlock Preview ↗"}</button>
-          </div>
-          <p className={"tiny"} id={"preview-error"} style={{ color: "#ff8dae", marginTop: "10px", fontWeight: "bold" }}></p>
-          <div style={{ marginTop: "12px", borderTop: "1px dashed rgba(255,200,220,0.3)", paddingTop: "10px" }}>
-            <a href="/admin" style={{ color: "#ffcbe0", fontSize: "12px", textDecoration: "underline" }}>Or go to Ashu's Admin Studio (/admin) ↗</a>
-          </div>
-        </div>
       </div>
 
       <div className={"gate-art"}>

@@ -1,7 +1,7 @@
 import {setupKeepsakes} from './keepsakes.js';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let state={site:null,preview:false,story:0,filter:'All',galleryPage:0,galleryPageSize:8,filtered:[],galleryIndex:0,letter:0,claims:[],magPage:0,cakeStage:0,cake:null,cakeRecipient:null,cakeCut:0,cakeLit:false,cakeBlown:false,selectedCake:'pink'};
+let state={site:null,story:0,filter:'All',galleryPage:0,galleryPageSize:8,filtered:[],galleryIndex:0,letter:0,claims:[],magPage:0,cakeStage:0,cake:null,cakeRecipient:null,cakeCut:0,cakeLit:false,cakeBlown:false,selectedCake:'pink'};
 try{state.claims=JSON.parse(localStorage.getItem('ammu_claims')||'[]')}catch{}
 try{localStorage.removeItem('ammu_cart');localStorage.removeItem('ammu_decisions');localStorage.removeItem('ammu_coupon_copied');sessionStorage.removeItem('ammu_order')}catch{}
 let toastTimer;function toast(msg){let el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3900)}
@@ -31,23 +31,14 @@ window.addEventListener('ammu:music-state', (e) => {
 });$('#replay-intro').onclick=()=>modal('One more surprise?', 'Replay our birthday opening from the beginning?', '🎀',[['Replay Intro',()=>{closeModal();$('#experience').hidden=true;document.body.classList.remove('chapter-mode');$('#gate').hidden=false;$('#open-present').hidden=false;window.scrollTo(0,0)}],['Keep Exploring',closeModal]]);
 $('#mobile-menu').onclick=()=>$('.site-nav nav').classList.toggle('open');$$('.site-nav nav a').forEach(a=>a.onclick=()=>$('.site-nav nav').classList.remove('open'));
 const relTime=()=>Date.parse(state.site?.birthdayDate||'2026-11-17T00:00:00+05:30')-Date.now();
-function tick(){let diff=Math.max(0,relTime());let s=Math.floor(diff/1000);['days','hours','minutes','seconds'].forEach((id,i)=>{$('#'+id).textContent=String([Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60][i]).padStart(2,'0')});if(diff<=0){$('#open-present').hidden=false;$('#preview-open').hidden=true;$('#gate-date').textContent='Your birthday surprise is unlocked 🎁'}}
+function tick(){let diff=Math.max(0,relTime());let s=Math.floor(diff/1000);['days','hours','minutes','seconds'].forEach((id,i)=>{$('#'+id).textContent=String([Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60][i]).padStart(2,'0')});if(diff<=0){$('#open-present').hidden=false;$('#gate-date').textContent='Your birthday surprise is unlocked 🎁'}}
 function unlock(){
-  const isPreview = window.location.pathname.startsWith('/admin/preview') || state.site?.isAdminPreview;
-  if(!state.site?.open && !isPreview){toast('The birthday countdown is still running 💗');return}
+  if(!state.site?.open){toast('The birthday countdown is still running 💗');return}
   $('#gate').hidden=true;
   $('#experience').hidden=false;
   document.dispatchEvent(new Event('ammu:open'));
-  if(isPreview){
-    $('#intro-stage').hidden=true;
-  }else{
-    $('#intro-stage').hidden=false;
-    $('#intro-stage').classList.remove('opening');
-  }
-  if(Date.now()<Date.parse(state.site?.birthdayDate||'2026-11-17T00:00:00+05:30')){
-    $('#preview-ribbon').hidden=false;
-    state.preview=true;
-  }
+  $('#intro-stage').hidden=false;
+  $('#intro-stage').classList.remove('opening');
   requestAnimationFrame(()=>{renderCakeStage();startCake()});
   if(location.hash){
     let h=location.hash.slice(1);
@@ -57,9 +48,8 @@ function unlock(){
   createPetals(window.innerWidth/2,window.innerHeight/3,35);
 }
 window.ammuUnlock=unlock;$('#open-present').onclick=unlock;
-$('#intro-unwrap').onclick=()=>{let overlay=$('#intro-stage');overlay.classList.add('opening');createPetals(window.innerWidth/2,window.innerHeight/2,28);setTimeout(()=>overlay.hidden=true,1250)};const previewBtn=$('#preview-open');if(previewBtn){previewBtn.onclick=()=>{const f=$('#gate-preview-form');if(f){f.hidden=!f.hidden;if(!f.hidden)$('#preview-code')?.focus()}};}
-const previewSubmit=$('#preview-submit');if(previewSubmit){previewSubmit.onclick=async()=>{const val=($('#preview-code')?.value||'').trim();if(!val){const err=$('#preview-error');if(err)err.textContent='Please enter preview code';return;}try{await request('/api/preview',{method:'POST',body:JSON.stringify({code:val})});await init();unlock()}catch(e){const err=$('#preview-error');if(err)err.textContent=e.message||'Incorrect preview code';}};}
-async function init(){try{const params=new URLSearchParams(window.location.search);const pCode=params.get('preview')||params.get('code');if(pCode){try{await request('/api/preview',{method:'POST',body:JSON.stringify({code:pCode.trim()})})}catch(e){console.warn('Preview code bypass:',e)}}let data=await request('/api/bootstrap');const isPreview=window.location.pathname.startsWith('/admin/preview')||data.isAdminPreview;if(data.open||isPreview){state.site=data;$('#open-present').hidden=false;$('#gate-date').textContent='Birthday website is ready to open';renderAll();if(pCode||params.has('bypass')||isPreview){unlock();return}}else{$('#open-present').hidden=true}tick()}catch(e){toast('Could not reach birthday server: '+e.message)}}
+$('#intro-unwrap').onclick=()=>{let overlay=$('#intro-stage');overlay.classList.add('opening');createPetals(window.innerWidth/2,window.innerHeight/2,28);setTimeout(()=>overlay.hidden=true,1250)};
+async function init(){try{let data=await request('/api/bootstrap');state.site=data;if(data.open){$('#open-present').hidden=false;$('#gate-date').textContent='Birthday website is ready to open';renderAll()}else{$('#open-present').hidden=true}tick()}catch(e){toast('Could not reach birthday server: '+e.message)}}
 window.ammuReinitialize=init;
 setInterval(tick,1000);init();
 function renderAll(){window.ammuBirthdayConfig=state.site;if(state.site.heroImage)$('#home .photo-big img').src=state.site.heroImage;renderTimeline();renderGallery();renderLetters();renderWishes();renderPranks();renderVouchers();renderExtras();setupKeepsakes(state.site);wireGlobal();document.dispatchEvent(new Event('ammu:ready'));}

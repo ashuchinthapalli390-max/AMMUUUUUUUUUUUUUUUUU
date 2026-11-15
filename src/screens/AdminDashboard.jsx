@@ -9,7 +9,6 @@ export default function AdminDashboard() {
           <small>{"💗 AMMUUU BIRTHDAY PROJECT"}</small>
         </div>
         <button data-section={"overview"} className={"active"}>{"◈   Overview"}</button>
-        <button data-section={"previewuniverse"}>{"👑   Preview Birthday Universe"}</button>
         <button data-section={"flyingnotes"}>{"🦋   Flying Love Notes"}</button>
         <button data-section={"mailstudio"}>{"💌   Countdown Mail Studio"}</button>
         <button data-section={"story"}>{"✎   Our Journey"}</button>
@@ -24,7 +23,7 @@ export default function AdminDashboard() {
         <button data-section={"settings"}>{"⚙   Website Settings"}</button>
         <button data-section={"notifications"}>{"♫   Email Log"}</button>
         <div className={"sidebar-bottom"}>
-          <a href={"/admin/preview"} target={"_blank"}>{"👑   Preview Website"}</a>
+          <a href={"/"} target={"_blank"}>{"✦   Public Countdown Gate"}</a>
           <button id={"logout"}>{"Log Out"}</button>
         </div>
       </aside>
@@ -35,9 +34,9 @@ export default function AdminDashboard() {
             <h1 id={"page-title"}>{"Overview"}</h1>
           </div>
           <div className={"header-actions"}>
-            <span className={"pill"}>{"Desktop birthday world"}</span>
-            <a href={"/admin/preview"} target={"_blank"} className={"primary btn-preview-full"} style={{fontWeight: 'bold', padding: '8px 18px', background: 'linear-gradient(135deg, #781d45, #b83d6a)', color: '#fff', textDecoration: 'none', borderRadius: '20px', display: 'inline-flex', alignItems: 'center', gap: '6px'}}>
-              {"👑 Preview Full Birthday Website"}
+            <span className={"pill"}>{"Birthday Locked: 17 Nov 00:00 IST"}</span>
+            <a href={"/"} target={"_blank"} className={"primary"} style={{fontWeight: 'bold', padding: '8px 18px', background: 'linear-gradient(135deg, #781d45, #b83d6a)', color: '#fff', textDecoration: 'none', borderRadius: '20px', display: 'inline-flex', alignItems: 'center', gap: '6px'}}>
+              {"✦ View Countdown Gate ↗"}
             </a>
           </div>
         </header>

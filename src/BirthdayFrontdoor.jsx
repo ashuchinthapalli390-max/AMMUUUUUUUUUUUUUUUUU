@@ -14,7 +14,7 @@ const ORBIT_PHOTOS=[
 const flowers=['✿','✦','♡','❀','🦋','✧'];
 const istDate=t=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(t));
 const dates=Array.from({length:23},(_,i)=>{let d=new Date(Date.UTC(2026,9,26+i));return {id:d.toISOString().slice(0,10),day:d.getUTCDate(),mon:d.getUTCMonth()===9?'OCT':'NOV',index:i+1}});
-function IntroCurtain({onOpen, onPreview}){return <motion.div className="ad-opening" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0,scale:1.05}} transition={{duration:.7}}>
+function IntroCurtain({onOpen}){return <motion.div className="ad-opening" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0,scale:1.05}} transition={{duration:.7}}>
   <div className="ad-curtain ad-left"/><div className="ad-curtain ad-right"/><div className="ad-spotlight"/>
   <div className="ad-bg-orbit-container" aria-hidden="true">
     <div className="ad-bg-orbit-ring">
@@ -35,27 +35,6 @@ function IntroCurtain({onOpen, onPreview}){return <motion.div className="ad-open
     <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:.75}}>Every little day brings us closer to celebrating you. 💗</motion.p>
     <button className="ad-button" onClick={onOpen}>Open Our Little Calendar ✿</button>
   </div>
-  <button
-    type="button"
-    onClick={onPreview}
-    style={{
-      position: 'absolute',
-      bottom: '22px',
-      right: '25px',
-      zIndex: 25,
-      background: 'rgba(255,255,255,0.12)',
-      border: '1px solid rgba(255,200,220,0.3)',
-      color: '#ffe5f0',
-      padding: '7px 16px',
-      borderRadius: '20px',
-      fontSize: '11px',
-      fontWeight: 'bold',
-      cursor: 'pointer',
-      backdropFilter: 'blur(8px)'
-    }}
-  >
-    👑 Preview Option
-  </button>
   <span className="ad-butterfly ad-float-one">🦋</span><span className="ad-butterfly ad-float-two">✿</span>
 </motion.div>}
 function Poster({remaining,close}){
@@ -193,149 +172,39 @@ function Poster({remaining,close}){
     </div>
   );
 }
-function PreviewModal({ close, onSuccess }) {
-  const [code, setCode] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState('');
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!code.trim()) {
-      setErr('Please enter preview code or admin password');
-      return;
-    }
-    setLoading(true);
-    setErr('');
-    try {
-      const res = await fetch('/api/preview', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'same-origin',
-        body: JSON.stringify({ code: code.trim() })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Incorrect preview code or password');
-      }
-      onSuccess();
-    } catch (error) {
-      setErr(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="ad-modal-backdrop" role="presentation" onClick={close}>
-      <motion.div
-        className="ad-poster"
-        role="dialog"
-        aria-modal="true"
-        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        onClick={e => e.stopPropagation()}
-        style={{ maxWidth: '460px', padding: '32px 26px', textAlign: 'center' }}
-      >
-        <button className="ad-close" onClick={close} aria-label="Close">×</button>
-        <span style={{ fontSize: '42px', display: 'block', marginBottom: '8px' }}>👑</span>
-        <span className="ad-kicker">ASHU'S PRIVATE ACCESS</span>
-        <h2 style={{ fontSize: '26px', margin: '8px 0 10px', color: '#7a2046' }}>Private Website Preview</h2>
-        <p style={{ fontSize: '13px', color: '#78465d', lineHeight: '1.6', margin: '0 0 20px' }}>
-          Enter your private preview code or admin password to immediately explore Ammu's complete 18-chapter birthday website.
-        </p>
-
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <input
-            type="password"
-            placeholder="Enter preview code or admin password"
-            value={code}
-            onChange={e => setCode(e.target.value)}
-            autoFocus
-            style={{
-              padding: '12px 16px',
-              borderRadius: '25px',
-              border: '1.5px solid #d889aa',
-              outline: 'none',
-              fontSize: '14px',
-              textAlign: 'center',
-              background: '#fff'
-            }}
-          />
-          {err && <div style={{ color: '#b32252', fontSize: '12px', fontWeight: 'bold' }}>{err}</div>}
-          <button
-            type="submit"
-            className="ad-button"
-            disabled={loading}
-            style={{ width: '100%', margin: '6px 0 0' }}
-          >
-            {loading ? 'Verifying access…' : '👑 Unlock Full Preview ↗'}
-          </button>
-        </form>
-
-        <div style={{ marginTop: '18px', paddingTop: '14px', borderTop: '1px dashed #e8adbf', fontSize: '12px', color: '#884b68' }}>
-          <span>Or sign in with full management controls: </span>
-          <a href="/admin" style={{ color: '#a83564', fontWeight: 'bold', textDecoration: 'underline' }}>
-            Open Ashu's Studio (/admin) ↗
-          </a>
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
-function GoddessCalendar({info,checking,onCheck,onCountdown,onPreview,poster}){let today=info.today||istDate(Date.now()),complete=info.checkedDates||[];let remaining=Math.max(0,Math.ceil((TARGET-Date.now())/86400000));return <motion.main className="ad-calendar" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0,x:-50}}>
+function GoddessCalendar({info,checking,onCheck,onCountdown,poster}){let today=info.today||istDate(Date.now()),complete=info.checkedDates||[];let remaining=Math.max(0,Math.ceil((TARGET-Date.now())/86400000));return <motion.main className="ad-calendar" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0,x:-50}}>
   <span className="ad-season">✧ DEVI'S MOONLIT DAYS ✧</span><h1>THE GODDESS OF <em>LITTLE JOYS</em></h1><p className="ad-subtitle">A little countdown to Ammuuu's special day · 17 November</p>
-  <div className="ad-calendar-layout"><div className="ad-calendar-person"><div className="ad-portrait"><img src={PHOTO} alt="Ammu in her black embroidered dress with sunglasses"/><span>MY LOVELYYYY POTTIIII ♡</span></div><blockquote>“To my dearest Ammuuu… every sunrise is another little flower in our story. Let's collect them together.” <b>From Ashu ♡</b></blockquote><button className="ad-button" disabled={!!info.checkedToday||checking||today>'2026-11-17'} onClick={onCheck}>{checking?'Collecting today’s flower…':info.checkedToday?'Today’s Flower Collected ✓':'Check In For Today 🌸'}</button><button className="ad-outline" onClick={onCountdown}>Visit The Velvet Countdown 🎀</button><button className="ad-outline" onClick={onPreview} style={{marginTop:'6px',fontSize:'12px',padding:'9px 16px',borderColor:'#d892ad',color:'#842c52'}}>👑 Private Preview Option</button></div>
+  <div className="ad-calendar-layout"><div className="ad-calendar-person"><div className="ad-portrait"><img src={PHOTO} alt="Ammu in her black embroidered dress with sunglasses"/><span>MY LOVELYYYY POTTIIII ♡</span></div><blockquote>“To my dearest Ammuuu… every sunrise is another little flower in our story. Let's collect them together.” <b>From Ashu ♡</b></blockquote><button className="ad-button" disabled={!!info.checkedToday||checking||today>'2026-11-17'} onClick={onCheck}>{checking?'Collecting today’s flower…':info.checkedToday?'Today’s Flower Collected ✓':'Check In For Today 🌸'}</button><button className="ad-outline" onClick={onCountdown}>Visit The Velvet Countdown 🎀</button></div>
   <div className="ad-diary"><div className="ad-diary-top"><h2>A Little Diary of 23 Days</h2><span>{complete.length} / 23 flowers collected</span></div><div className="ad-date-grid">{dates.map(d=>{const checked=complete.includes(d.id),current=d.id===today,birthday=d.id==='2026-11-17';const past=d.id<today;return <div key={d.id} className={'ad-day'+(checked?' checked':'')+(current?' current':'')+(birthday?' birthday':'')+(past?' past':'')} aria-label={`${d.day} ${d.mon}: ${checked?'checked in':current?'today':past?'missed':'upcoming'}`}>
     <small>{birthday?'GRAND DAY ✨':`DAY ${String(d.index).padStart(2,'0')}`}</small><strong>{d.day}</strong><small>{d.mon}</small><div className="ad-day-flower">{checked?'✿':birthday?'♛':current?'🌷':'❀'}</div>{checked&&<svg className="ad-day-cross" viewBox="0 0 100 100" aria-hidden="true"><path d="M13 50 L42 76 L87 22"/></svg>}{current&&checking&&<div className="ad-paper-burn"/>}</div>})}</div><p className="ad-diary-note">Only today's flower can be collected. Every other date is part of our unfolding story. ♡</p></div></div>
   <div className="ad-corner-flower top">✿</div><div className="ad-corner-flower bottom">🌸</div></motion.main>}
 
-function CurtainCountdown({info,onBack,onEnter,onPreview}){const [remaining,setRemaining]=useState(Math.max(0,TARGET-Date.now()));const [serverOffset,setServerOffset]=useState(0);useEffect(()=>{if(info.serverTime)setServerOffset(Date.parse(info.serverTime)-Date.now())},[info.serverTime]);useEffect(()=>{let raf=0;let last=0;const run=(ts)=>{if(ts-last>38){last=ts;setRemaining(Math.max(0,TARGET-(Date.now()+serverOffset)))}raf=requestAnimationFrame(run)};raf=requestAnimationFrame(run);return()=>cancelAnimationFrame(raf)},[serverOffset]);const d=Math.floor(remaining/86400000),h=Math.floor(remaining%86400000/3600000),m=Math.floor(remaining%3600000/60000),s=Math.floor(remaining%60000/1000),ms=remaining%1000;
-const canEnter = remaining<=0 || info.open || info.isAdminPreview;
-return <motion.main className="ad-countdown" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}><div className="ad-curtain ad-left"/><div className="ad-curtain ad-right"/><div className="ad-stage-light"/><div className="ad-stage-centre"><span className="ad-kicker">FROM ASHU • JUST FOR AMMUUUUUU ♡</span><h1>One Little Present…<br/><em>For One Very Special Ammuuuuuu 💗</em></h1><p>Pottiiiiiiii, your birthday universe is almost ready!</p><div className="ad-clock" aria-label="Birthday countdown"><div>{[d,h,m,s,ms].map((v,i)=><React.Fragment key={i}>{i>0&&<span className="ad-colon">:</span>}<span className="ad-clock-unit"><strong>{String(v).padStart(i===4?3:2,'0')}</strong><small>{['DAYS','HOURS','MINUTES','SECONDS','MILLISECONDS'][i]}</small></span></React.Fragment>)}</div></div>{canEnter?<button className="ad-button" onClick={onEnter}>{info.isAdminPreview?'ENTER BIRTHDAY UNIVERSE (ADMIN PREVIEW) 👑':'UNTIE YOUR BIRTHDAY RIBBON 🎀'}</button>:(
+function CurtainCountdown({info,onBack,onEnter}){const [remaining,setRemaining]=useState(Math.max(0,TARGET-Date.now()));const [serverOffset,setServerOffset]=useState(0);useEffect(()=>{if(info.serverTime)setServerOffset(Date.parse(info.serverTime)-Date.now())},[info.serverTime]);useEffect(()=>{let raf=0;let last=0;const run=(ts)=>{if(ts-last>38){last=ts;setRemaining(Math.max(0,TARGET-(Date.now()+serverOffset)))}raf=requestAnimationFrame(run)};raf=requestAnimationFrame(run);return()=>cancelAnimationFrame(raf)},[serverOffset]);const d=Math.floor(remaining/86400000),h=Math.floor(remaining%86400000/3600000),m=Math.floor(remaining%3600000/60000),s=Math.floor(remaining%60000/1000),ms=remaining%1000;
+const canEnter = remaining<=0 || (info?.open ?? false);
+return <motion.main className="ad-countdown" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}><div className="ad-curtain ad-left"/><div className="ad-curtain ad-right"/><div className="ad-stage-light"/><div className="ad-stage-centre"><span className="ad-kicker">FROM ASHU • JUST FOR AMMUUUUUU ♡</span><h1>One Little Present…<br/><em>For One Very Special Ammuuuuuu 💗</em></h1><p>Pottiiiiiiii, your birthday universe is almost ready!</p><div className="ad-clock" aria-label="Birthday countdown"><div>{[d,h,m,s,ms].map((v,i)=><React.Fragment key={i}>{i>0&&<span className="ad-colon">:</span>}<span className="ad-clock-unit"><strong>{String(v).padStart(i===4?3:2,'0')}</strong><small>{['DAYS','HOURS','MINUTES','SECONDS','MILLISECONDS'][i]}</small></span></React.Fragment>)}</div></div>{canEnter?<button className="ad-button" onClick={onEnter}>UNTIE YOUR BIRTHDAY RIBBON 🎀</button>:(
   <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'8px'}}>
     <span className="ad-lock-caption">The curtains open on 17 November, 12:00 AM IST ✨</span>
-    <button
-      type="button"
-      className="ad-outline"
-      onClick={onPreview}
-      style={{
-        marginTop:'6px',
-        borderColor:'#ffadc8',
-        color:'#ffebf2',
-        background:'rgba(255,255,255,0.1)',
-        backdropFilter:'blur(8px)',
-        display:'inline-flex',
-        alignItems:'center',
-        gap:'8px',
-        padding:'11px 24px',
-        fontSize:'13px'
-      }}
-    >
-      👑 Private Preview Option (Ashu)
-    </button>
   </div>
 )}<button className="ad-back" onClick={onBack}>← Back to our little calendar</button></div><span className="ad-butterfly ad-float-one">🦋</span><span className="ad-butterfly ad-float-two">✧</span></motion.main>}
 
 export default function BirthdayFrontdoor({skip=false}){
-if(skip||(typeof window!=='undefined'&&window.location.pathname.startsWith('/admin/preview')))return null;
+if(skip)return null;
 const [phase,setPhase]=useState('opening');
-const [info,setInfo]=useState({today:istDate(Date.now()),checkedDates:[],checkedToday:false,serverTime:new Date().toISOString(),open:false,isAdminPreview:false});
+const [info,setInfo]=useState({today:istDate(Date.now()),checkedDates:[],checkedToday:false,serverTime:new Date().toISOString(),open:false});
 const [checking,setChecking]=useState(false);
 const [poster,setPoster]=useState(false);
 const [notice,setNotice]=useState('');
-const [showPreviewModal,setShowPreviewModal]=useState(false);
 const reduced=useReducedMotion();
 const infoRef=useRef(info);
 useEffect(()=>{infoRef.current=info},[info]);
-const refresh=useCallback(async()=>{try{let r=await fetch('/api/checkin/status',{credentials:'same-origin'});if(r.ok){const j=await r.json();setInfo(prev=>({...prev,...j}))}let b=await fetch('/api/bootstrap',{credentials:'same-origin'}).then(x=>x.json()).catch(()=>({}));if(b.open||b.isAdminPreview){setInfo(prev=>({...prev,open:!!b.open,isAdminPreview:!!b.isAdminPreview}))}}catch{}},[]);
+const refresh=useCallback(async()=>{try{let r=await fetch('/api/checkin/status',{credentials:'same-origin'});if(r.ok){const j=await r.json();setInfo(prev=>({...prev,...j}))}let b=await fetch('/api/bootstrap',{credentials:'same-origin'}).then(x=>x.json()).catch(()=>({}));if(b.open){setInfo(prev=>({...prev,open:!!b.open}))}}catch{}},[]);
 useEffect(()=>{refresh()},[refresh]);
 
 const check=async()=>{if(checking||info.checkedToday)return;setChecking(true);try{let r=await fetch('/api/checkin',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'});let j=await r.json();if(!r.ok)throw new Error(j.error||'Could not save check-in');await refresh();setNotice('Yayyyy Pottiiiiiiii! Today’s little flower is collected! 🌸');window.ammuTriggerMagicalBurst?.(window.innerWidth/2,window.innerHeight*0.45);setTimeout(()=>{setPoster(true);setNotice('')},reduced?200:1200)}catch(e){setNotice(e.message)}finally{setChecking(false)}};
 
 const enter=async()=>{
   const b=await fetch('/api/bootstrap',{credentials:'same-origin'}).then(x=>x.json()).catch(()=>({}));
-  if(!b.open&&!b.isAdminPreview){setNotice('Birthday universe unlocks on 17 November 💗');return}
+  if(!b.open){setNotice('Birthday universe unlocks on 17 November 💗');return}
   window.ammuTriggerMagicalBurst?.(window.innerWidth/2,window.innerHeight/2);
   await window.ammuReinitialize?.();
   window.ammuUnlock?.();
@@ -344,28 +213,17 @@ const enter=async()=>{
   setPhase('done');
 };
 
-const handlePreviewSuccess=async()=>{
-  setShowPreviewModal(false);
-  setNotice('Preview access verified! Welcome to Ashu’s private preview 👑');
-  window.ammuTriggerMagicalBurst?.(window.innerWidth/2,window.innerHeight/2);
-  await refresh();
-  await window.ammuReinitialize?.();
-  window.ammuUnlock?.();
-  enter();
-};
-
 if(phase==='done')return null;
 
 return (
   <div className="ad-frontdoor">
     <div className="ad-floating" aria-hidden="true">{flowers.map((x,i)=><span key={i} style={{left:`${9+i*15}%`,animationDelay:`${i*.7}s`}}>{x}</span>)}</div>
     <AnimatePresence mode="wait">
-      {phase==='opening'&&<IntroCurtain key="intro" onOpen={()=>setPhase('calendar')} onPreview={()=>setShowPreviewModal(true)}/>}
-      {phase==='calendar'&&<GoddessCalendar key="calendar" info={info} checking={checking} onCheck={check} onCountdown={()=>setPhase('countdown')} onPreview={()=>setShowPreviewModal(true)}/>}
-      {phase==='countdown'&&<CurtainCountdown key="curtain" info={info} onBack={()=>setPhase('calendar')} onEnter={enter} onPreview={()=>setShowPreviewModal(true)}/>}
+      {phase==='opening'&&<IntroCurtain key="intro" onOpen={()=>setPhase('calendar')}/>}
+      {phase==='calendar'&&<GoddessCalendar key="calendar" info={info} checking={checking} onCheck={check} onCountdown={()=>setPhase('countdown')}/>}
+      {phase==='countdown'&&<CurtainCountdown key="curtain" info={info} onBack={()=>setPhase('calendar')} onEnter={enter}/>}
     </AnimatePresence>
     {poster&&<Poster remaining={Math.max(0,Math.ceil((TARGET-Date.now())/86400000))} close={()=>setPoster(false)}/>}
-    {showPreviewModal&&<PreviewModal close={()=>setShowPreviewModal(false)} onSuccess={handlePreviewSuccess}/>}
     {notice&&<div className="ad-notice" role="status">{notice}</div>}
   </div>
 );

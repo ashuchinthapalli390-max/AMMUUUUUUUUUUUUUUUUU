@@ -4,9 +4,8 @@ Desktop design size 1440 × 900, with secondary responsive mobile layout. One co
 
 | Order | Page / Interaction Screen | Exact labels and flow |
 |---:|---|---|
-| 01 | Birthday countdown | Days, Hours, Minutes, Seconds, Private Preview, Open My Surprise (after 17-11 00:00 IST) |
-| 02 | Private preview | Private Preview → Enter code → Unlock Preview |
-| 03 | Cinematic gift reveal | One little present for Ammuuuu → Untie Your Ribbon |
+| 01 | Birthday countdown | Days, Hours, Minutes, Seconds, Open My Surprise (after 17-11 00:00 IST) |
+| 02 | Cinematic gift reveal | One little present for Ammuuuu → Untie Your Ribbon |
 | 04 | Pink curtains | Curtains slide apart, petals appear, hero revealed |
 | 05 | Hero | Happiest Birthday Ammuuuu → Start Our Journey / Cut Your Cake |
 | 06 | Chapter 1 | CodeXa Girls → Next chapter |
@@ -95,7 +94,6 @@ Desktop design size 1440 × 900, with secondary responsive mobile layout. One co
 | Method | Path | Purpose |
 |---|---|---|
 | GET | `/api/bootstrap` | Current server time, birthday lock and editable public content only when unlocked |
-| POST | `/api/preview` | Private preview code; sets HttpOnly cookie |
 | POST | `/api/wishes` | Privately save wish form and notify Ashu if configured |
 | POST | `/api/membership` | Save voucher claim |
 | POST | `/api/orders` | Save personal gift request, validate coupon server-side |

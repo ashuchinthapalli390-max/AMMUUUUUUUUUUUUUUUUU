@@ -38,13 +38,11 @@ try {
 } catch {
   fileConfig = {
     ADMIN_PASSWORD: crypto.randomBytes(18).toString('base64url'),
-    PREVIEW_CODE: crypto.randomBytes(9).toString('base64url'),
     SESSION_SECRET: crypto.randomBytes(32).toString('hex'),
     ASHU_EMAIL: '',
     AMMU_EMAIL: '',
     EMAIL_FROM: '',
     RESEND_API_KEY: '',
-    DEMO_MODE: '0',
     COOKIE_SECURE: '0'
   };
   fs.writeFileSync(ENVFILE, JSON.stringify(fileConfig, null, 2), { mode: 0o600 });
@@ -54,7 +52,6 @@ const env = (k, def = '') => process.env[k] || fileConfig[k] || def;
 
 // Environment variables with fallback support
 const ADMIN_PASSWORD = env('ADMIN_PASSWORD');
-const PREVIEW_CODE = env('PREVIEW_CODE');
 const SECRET = env('ADMIN_SESSION_SECRET') || env('SESSION_SECRET', crypto.randomBytes(32).toString('hex'));
 
 const ASHU_EMAIL = env('ASHU_NOTIFICATION_EMAIL') || env('ASHU_EMAIL');
@@ -73,9 +70,6 @@ let COUNTDOWN_EMAILS_ENABLED = env('COUNTDOWN_EMAILS_ENABLED', 'false') === 'tru
 const EMAIL_DRY_RUN = env('EMAIL_DRY_RUN', 'true') === 'true' || env('EMAIL_DRY_RUN') === '1';
 const SCHEDULER_SECRET = env('EMAIL_SCHEDULER_SECRET') || env('CRON_SECRET');
 const LIVE_SHARING_ENABLED = env('LIVE_SHARING_ENABLED', 'true') === 'true' || env('LIVE_SHARING_ENABLED') === '1';
-const PREVIEW_ENABLED = env('PREVIEW_ENABLED', 'true') === 'true' || env('PREVIEW_ENABLED') === '1';
-
-const LOCAL_DEMO = env('DEMO_MODE', '0') === '1' && (HOST === '127.0.0.1' || HOST === 'localhost');
 
 const readJson = p => JSON.parse(fs.readFileSync(p, 'utf8'));
 let site = readJson(SITEPATH);
@@ -247,13 +241,11 @@ function attachSession(res, role) {
 }
 
 function isOpen(req) {
-  const unlockInstant = Date.parse(BIRTHDAY_UNLOCK_AT || site.birthdayDate);
+  const unlockInstant = Date.parse(BIRTHDAY_UNLOCK_AT || site.birthdayDate || '2026-11-17T00:00:00+05:30');
   const now = Date.now();
-  // Server-verified automatic unlock at midnight (Nov 17, 00:00 Asia/Kolkata)
-  if (now >= unlockInstant) return true;
-  // Authenticated admin or preview session can access preview
-  if (['admin', 'preview'].includes(session(req)?.role)) return true;
-  return false;
+  // Server-verified automatic unlock at midnight (Nov 17, 00:00 Asia/Kolkata).
+  // No preview bypass, admin session bypass, query param, or token can unlock early.
+  return now >= unlockInstant;
 }
 
 function admin(req) {
@@ -264,7 +256,7 @@ const error = (status, message) => Object.assign(new Error(message), { status })
 const attempts = new Map();
 function throttle(req, key, limit = 25, interval = 60000) {
   const ip = req.socket.remoteAddress || 'anon';
-  const isLocal = LOCAL_DEMO || ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
+  const isLocal = ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
   if (isLocal) {
     limit = Math.max(limit, 500);
   }
@@ -313,7 +305,6 @@ function limitedData() {
     birthdayDate: BIRTHDAY_UNLOCK_AT || site.birthdayDate,
     serverTime: new Date().toISOString(),
     open: false,
-    localDemo: LOCAL_DEMO,
     heroImage: null
   };
 }
@@ -515,7 +506,7 @@ async function api(req, res, pathname, url) {
     return send(res, 200, { ok: true, processed: true });
   }
 
-  // 3. PUBLIC BOOTSTRAP (Server-verified unlock + admin preview status)
+  // 3. PUBLIC BOOTSTRAP (Server-verified unlock timestamp)
   if (pathname === '/api/bootstrap' && method === 'GET') {
     const open = isOpen(req);
     const isAdmin = admin(req);
@@ -524,9 +515,7 @@ async function api(req, res, pathname, url) {
       open: true,
       serverTime: new Date().toISOString(),
       birthdayUnlockAt: BIRTHDAY_UNLOCK_AT,
-      localDemo: LOCAL_DEMO,
       isAdmin,
-      isAdminPreview: isAdmin,
       adminConfigured: !!ADMIN_PASSWORD,
       recipientConfigured: !!AMMU_EMAIL,
       emailConfigured: !!RESEND_API_KEY,
@@ -536,9 +525,9 @@ async function api(req, res, pathname, url) {
       countdownEnabled: COUNTDOWN_EMAILS_ENABLED
     } : {
       ...limitedData(),
+      open: false,
       adminConfigured: !!ADMIN_PASSWORD,
-      isAdmin,
-      isAdminPreview: isAdmin
+      isAdmin
     });
   }
 
@@ -604,38 +593,6 @@ async function api(req, res, pathname, url) {
   }
 
   // 7. COUNTDOWN OPT-IN & UNSUBSCRIBE
-  if (pathname === '/api/preview' && method === 'POST') {
-    throttle(req, 'preview', 20, 60000);
-    const codeVal = cleanStr(body.code, 100);
-    if (ADMIN_PASSWORD && codeVal === ADMIN_PASSWORD) {
-      attachSession(res, 'admin');
-      logEvent('admin.preview.unlocked');
-      return send(res, 200, { ok: true, open: true, role: 'admin' });
-    }
-    if (!PREVIEW_CODE || !codeVal || codeVal !== PREVIEW_CODE) {
-      throw error(404, 'Incorrect preview code or password');
-    }
-    attachSession(res, 'preview');
-    logEvent('preview.unlocked');
-    return send(res, 200, { ok: true, open: true, role: 'preview' });
-  }
-
-  if (pathname === '/api/preview' && method === 'GET') {
-    const codeVal = cleanStr(url.searchParams.get('code') || url.searchParams.get('preview'), 100);
-    if (ADMIN_PASSWORD && codeVal === ADMIN_PASSWORD) {
-      attachSession(res, 'admin');
-      logEvent('admin.preview.unlocked');
-      res.writeHead(302, { Location: '/admin/preview' });
-      return res.end();
-    }
-    if (!PREVIEW_CODE || !codeVal || codeVal !== PREVIEW_CODE) {
-      throw error(404, 'Incorrect preview code or password');
-    }
-    attachSession(res, 'preview');
-    logEvent('preview.unlocked');
-    res.writeHead(302, { Location: '/admin/preview' });
-    return res.end();
-  }
 
   if (pathname === '/api/countdown/status' && method === 'GET') {
     const visitorEmail = AMMU_EMAIL || '';
@@ -728,8 +685,7 @@ async function api(req, res, pathname, url) {
   if (pathname === '/api/admin/session' && method === 'GET') {
     return send(res, 200, {
       authenticated: admin(req),
-      adminConfigured: !!ADMIN_PASSWORD,
-      previewEnabled: PREVIEW_ENABLED
+      adminConfigured: !!ADMIN_PASSWORD
     });
   }
 
@@ -862,16 +818,6 @@ async function api(req, res, pathname, url) {
     throttle(req, 'wishes', 6, 60 * 60000);
     const values = [body.wish1, body.wish2, body.wish3, body.change, body.improve].map(v => cleanStr(v, 1200));
     if (!values.some(Boolean)) throw error(400, 'Write at least one answer');
-    const isPreview = admin(req) || req.headers['x-admin-preview'] === '1' || body.preview === true;
-    if (isPreview) {
-      return send(res, 201, {
-        ok: true,
-        id: 'preview-' + shortId(),
-        saved: true,
-        previewMode: true,
-        emailStatus: 'preview_simulated'
-      });
-    }
     const w = { id: shortId(), answers: values, createdAt: new Date().toISOString() };
     db.wishes.unshift(w);
     logEvent('wishes.submitted', { id: w.id });
@@ -888,10 +834,6 @@ async function api(req, res, pathname, url) {
     throttle(req, 'membership', 30);
     const id = cleanStr(body.id, 80);
     if (!site.vouchers.some(v => v.id === id)) throw error(400, 'Unknown voucher');
-    const isPreview = admin(req) || req.headers['x-admin-preview'] === '1' || body.preview === true;
-    if (isPreview) {
-      return send(res, 201, { ok: true, previewMode: true });
-    }
     db.memberships.push({ id: shortId(), voucher: id, claimedAt: new Date().toISOString() });
     await mail(ASHU_EMAIL, '💗 Pottiiiiiiii claimed a voucher', emailHtml('Voucher claimed!', `<p>${escapeHtml(id)}</p>`));
     saveDB();
@@ -904,12 +846,7 @@ async function api(req, res, pathname, url) {
 function file(req, res, pathname) {
   let p = decodeURIComponent(pathname);
   if (p === '/admin/preview' || p === '/admin/preview/') {
-    // Unauthenticated preview URL visitors cannot access private preview before birthday
-    if (!admin(req) && !isOpen(req)) {
-      res.writeHead(302, { Location: '/admin?unauthorized=1' });
-      return res.end();
-    }
-    p = '/index.html';
+    return send(res, 404, { error: 'Not found' });
   } else if (p === '/' || p === '/index.html' || p === '/admin' || p === '/admin/' || p === '/my-lovely-ammu' || p === '/my-lovely-ammu/' || p === '/for-ammu' || p === '/for-ammu/') {
     p = '/index.html';
   }
@@ -998,7 +935,7 @@ setInterval(() => {
 
 server.listen(PORT, HOST, () => {
   console.log(`Ammu's Birthday Universe running at http://${HOST}:${PORT}`);
-  console.log(`Local demo: ${LOCAL_DEMO ? 'enabled' : 'disabled'} | Admin: ${ADMIN_PASSWORD ? 'configured' : 'not configured'} | Unlock: ${BIRTHDAY_UNLOCK_AT}`);
+  console.log(`Production Release: strictly locked until ${BIRTHDAY_UNLOCK_AT} | Admin: ${ADMIN_PASSWORD ? 'configured' : 'not configured'}`);
 });
 
 export { server, api };

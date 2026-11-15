@@ -5,7 +5,6 @@ import MotionSceneFX from "./MotionSceneFX.jsx";
 import SectionChapterUi from "./screens/SectionChapterUi.jsx";
 import SectionSceneTransition from "./screens/SectionSceneTransition.jsx";
 import SectionOther2 from "./screens/SectionOther2.jsx";
-import SectionPreviewRibbon from "./screens/SectionPreviewRibbon.jsx";
 import SectionHome from "./screens/SectionHome.jsx";
 import SectionJourney from "./screens/SectionJourney.jsx";
 import SectionMemories from "./screens/SectionMemories.jsx";
@@ -40,7 +39,6 @@ import AdminEditor from "./screens/AdminEditor.jsx";
 import CelebrationOverlay from "./components/CelebrationOverlay.jsx";
 import FlyingLoveLetters from "./components/FlyingLoveLetters.jsx";
 import HiddenCompliments from "./components/HiddenCompliments.jsx";
-import AdminPreviewToolbar from "./components/AdminPreviewToolbar.jsx";
 
 const dynamicImport = (path) => new Function('p', 'return import(p)')(path);
 let guestBooted = false;
@@ -76,7 +74,7 @@ function AdminBootstrap() {
   return null;
 }
 
-export function BirthdayWebsite({ isPreview = false }) {
+export function BirthdayWebsite() {
   const [celebrationOpen, setCelebrationOpen] = useState(false);
 
   useEffect(() => {
@@ -88,44 +86,17 @@ export function BirthdayWebsite({ isPreview = false }) {
     };
   }, []);
 
-  // When opening in admin preview mode, verify admin authentication and prepare the experience immediately
-  useEffect(() => {
-    if (isPreview) {
-      fetch('/api/admin/session', { credentials: 'same-origin' })
-        .then((r) => r.json())
-        .then((data) => {
-          if (!data.authenticated) {
-            window.location.href = '/admin?unauthorized=1';
-            return;
-          }
-          // Reveal experience and bypass lock views
-          const exp = document.getElementById('experience');
-          if (exp) exp.hidden = false;
-          const gate = document.getElementById('gate');
-          if (gate) gate.hidden = true;
-          const intro = document.getElementById('intro-stage');
-          if (intro) intro.hidden = true;
-          const ribbon = document.getElementById('preview-ribbon');
-          if (ribbon) ribbon.hidden = false;
-        })
-        .catch(() => {
-          window.location.href = '/admin?unauthorized=1';
-        });
-    }
-  }, [isPreview]);
-
   return (
     <>
-      <BirthdayFrontdoor skip={isPreview} />
+      <BirthdayFrontdoor />
       <PetalLayer />
       <ToasterView />
-      <GateView isPreview={isPreview} />
+      <GateView />
       <IntroView />
-      <div id="experience" hidden={!isPreview ? true : false}>
+      <div id="experience" hidden={true}>
         <SectionChapterUi />
         <SectionSceneTransition />
         <SectionOther2 />
-        <SectionPreviewRibbon />
         <SectionHome />
         <SectionJourney />
         <SectionMemories />
@@ -161,9 +132,6 @@ export function BirthdayWebsite({ isPreview = false }) {
         onClose={() => setCelebrationOpen(false)}
         onCompleted={() => {}}
       />
-
-      {/* Private Admin Preview Toolbar (Visible only when authenticated as Ashu) */}
-      <AdminPreviewToolbar isPreview={isPreview} />
 
       <GuestBootstrap />
     </>

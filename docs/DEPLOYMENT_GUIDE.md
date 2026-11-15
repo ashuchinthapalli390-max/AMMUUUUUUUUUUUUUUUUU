@@ -31,7 +31,6 @@ Configure the following environment variables in your Vercel project settings or
 | `SUPABASE_SERVICE_ROLE_KEY` | Optional | `eyJhb...` | Supabase private service key (server-side ONLY) |
 | `ADMIN_PASSWORD` | Yes | *(Strong secret)* | Password for Ashu's Studio (`/admin`) |
 | `ADMIN_SESSION_SECRET` | Yes | *(64-char hex)* | HMAC secret for signing admin session cookies |
-| `PREVIEW_ENABLED` | Yes | `true` | Allows authenticated admin preview |
 | `RESEND_API_KEY` | Yes | `re_...` | Resend API key for automated countdown emails |
 | `RESEND_FROM_EMAIL` | Yes | `Ashu <birthday@yourdomain.com>` | Verified sender address in Resend |
 | `AMMU_RECIPIENT_EMAIL` | Optional | `ammu@example.com` | Verified Ammu email (recipient) |
@@ -84,7 +83,7 @@ Add a cron job in `vercel.json` hitting `/api/cron/countdown`:
 
 ## 5. Security & Isolation Guidelines
 
-- **Public Gate**: Prior to `2026-11-17T00:00:00+05:30`, all public visitors see the locked GateView with the live countdown clock.
-- **Admin Preview**: Accessible strictly by logging into `/admin` with the configured `ADMIN_PASSWORD`. Validated server-side with `HttpOnly`, `SameSite=Lax` encrypted session cookies.
+- **Public Gate**: Prior to `2026-11-17T00:00:00+05:30`, all visitors (including unauthenticated visitors and logged-in admins) see the locked GateView with the live countdown clock. Protected assets return 403 until the exact server timestamp arrives.
+- **Admin Studio**: Accessible strictly by logging into `/admin` with the configured `ADMIN_PASSWORD`. Validated server-side with `HttpOnly`, `SameSite=Lax` encrypted session cookies to manage content, settings, and monitor countdown emails.
 - **Shopping Disabled**: All checkout, cart, payment, and product APIs are permanently disabled and return 404/403.
 - **Consent Enforcement**: Emails are only sent if the recipient opted in to countdown milestones. Unsubscribe links take immediate effect.

@@ -11,7 +11,6 @@ window.gsap=gsap;
 window.ammuMakeQR=url=>QRCode.toDataURL(url,{width:250,margin:2,color:{dark:'#692842',light:'#ffffff'}});
 const path = window.location.pathname.replace(/\/$/, '');
 const isAdmin = path === '/admin';
-const isAdminPreview = path === '/admin/preview';
 
 const stylesheet = document.createElement('link');
 stylesheet.rel = 'stylesheet';
@@ -20,8 +19,6 @@ document.head.append(stylesheet);
 
 document.title = isAdmin
   ? "Ashu's Studio | Ammu Birthday Admin"
-  : isAdminPreview
-  ? "Ashu's Studio Preview | Ammu Birthday Universe 👑"
   : 'A Little Universe for Ammuuuu • From Ashu';
 
 createRoot(document.getElementById('root')).render(
@@ -29,5 +26,5 @@ createRoot(document.getElementById('root')).render(
     ? <LoveReveal />
     : isAdmin
     ? <AdminWebsite />
-    : <BirthdayWebsite isPreview={isAdminPreview} />
+    : <BirthdayWebsite />
 );

@@ -144,15 +144,16 @@ const key2 = getJobIdempotencyKey('24-hours', 'AMMU@EXAMPLE.COM');
 assert(key1 === key2, 'Idempotency key is case-insensitive for recipient email');
 
 // -------------------------------------------------------------
-// TEST 9: ADMIN STUDIO CAPABILITIES
+// TEST 9: ADMIN STUDIO CAPABILITIES & STRICT PREVIEW REMOVAL
 // -------------------------------------------------------------
 const adminJsx = fs.readFileSync(path.join(screensDir, 'AdminDashboard.jsx'), 'utf8');
-assert(adminJsx.includes('data-section={"previewuniverse"}'), 'Admin navigation contains Preview Birthday Universe');
+assert(!adminJsx.includes('data-section={"previewuniverse"}'), 'Preview Birthday Universe removed from AdminDashboard navigation');
+assert(!adminJsx.includes('/admin/preview'), '/admin/preview links removed from AdminDashboard');
 assert(adminJsx.includes('data-section={"flyingnotes"}'), 'Admin navigation contains Flying Love Notes');
 assert(adminJsx.includes('data-section={"mailstudio"}'), 'Admin navigation contains Countdown Mail Studio');
 
 const adminJs = fs.readFileSync(path.join(ROOT, 'public/js/admin.js'), 'utf8');
-assert(adminJs.includes('renderPreviewUniverse'), 'renderPreviewUniverse handler in admin.js');
+assert(!adminJs.includes('renderPreviewUniverse'), 'renderPreviewUniverse handler completely removed from admin.js');
 assert(adminJs.includes('renderFlyingNotesAdmin'), 'renderFlyingNotesAdmin handler in admin.js');
 assert(adminJs.includes('renderMailStudioAdmin'), 'renderMailStudioAdmin handler in admin.js');
 

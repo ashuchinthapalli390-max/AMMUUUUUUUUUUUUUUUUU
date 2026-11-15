@@ -73,7 +73,6 @@ $$('[data-section]').forEach(b => b.onclick = () => {
 
 const headers = {
   overview: 'Overview',
-  previewuniverse: 'Preview Birthday Universe 👑',
   flyingnotes: 'Flying Love Notes 🦋',
   mailstudio: 'Birthday Countdown Mail Studio 💌',
   story: 'Our Friendship Journey',
@@ -96,7 +95,6 @@ function render() {
 
   const map = {
     overview: renderOverview,
-    previewuniverse: renderPreviewUniverse,
     flyingnotes: renderFlyingNotesAdmin,
     mailstudio: renderMailStudioAdmin,
     story: renderStory,
@@ -129,116 +127,28 @@ function renderOverview() {
       ${card('Wishes Received', db.wishes?.length || 0)}
     </div>
     <div class="panel" style="background: linear-gradient(135deg, #fff2f6, #ffe6f0); border: 2px solid #e597b4; padding: 24px; border-radius: 16px;">
-      <h2 style="color: #781d45; margin-top: 0;">👑 Ashu's Full Birthday Universe Preview</h2>
+      <h2 style="color: #781d45; margin-top: 0;">🔒 Birthday Release Security & Status</h2>
       <p style="color: #692842; font-size: 14.5px; line-height: 1.6; margin-bottom: 20px;">
-        As the website owner, you can inspect the complete birthday website immediately with all 18 chapters, music, photos, magazine, playlist, letters, games, and 3D celebration, while public visitors remain safely locked until November 17, 2026.
+        The official birthday website is locked until November 17, 2026, 00:00:00 Asia/Kolkata. All early preview bypasses and preview routes have been eliminated for production security. Use this dashboard to manage Flying Love Notes, monitor Countdown Emails, edit memoirs, and configure settings.
       </p>
       <div class="bar-actions" style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <a href="/admin/preview" target="_blank" class="primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; font-size: 15px; font-weight: bold; text-decoration: none; border-radius: 24px; background: linear-gradient(135deg, #781d45, #b83d6a); color: #fff; box-shadow: 0 6px 20px rgba(120,29,69,0.25);">
-          👑 Preview Full Birthday Website
+        <a href="/" target="_blank" class="primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; font-size: 15px; font-weight: bold; text-decoration: none; border-radius: 24px; background: linear-gradient(135deg, #781d45, #b83d6a); color: #fff; box-shadow: 0 6px 20px rgba(120,29,69,0.25);">
+          ✦ Public Countdown Gate ↗
         </a>
-        <button class="primary" data-go="previewuniverse">Preview Center & Chapters ↗</button>
         <button class="outline" data-go="flyingnotes">🦋 Flying Love Notes</button>
         <button class="outline" data-go="mailstudio">💌 Countdown Mail Studio</button>
       </div>
     </div>
     <div class="panel">
       <h2>Birthday Release Target</h2>
-      <p><b>${esc(site.birthdayDate || '2026-11-17T00:00:00+05:30')}</b></p>
-      <p>Public visitors see the locked countdown gate until server time crosses this instant. In Ashu's private session, you have full preview access.</p>
+      <p><b>${esc(site.birthdayDate || '2026-11-17T00:00:00+05:30')} (Asia/Kolkata)</b></p>
+      <p>Public visitors see only the locked countdown gate until server time reaches midnight. Media assets and personal content remain strictly protected.</p>
     </div>`;
 
   $$('[data-go]').forEach(b => b.onclick = () => {
     section = b.dataset.go;
     render();
   });
-}
-
-// -------------------------------------------------------------
-// PHASE 3: PREVIEW BIRTHDAY UNIVERSE 👑
-// -------------------------------------------------------------
-function renderPreviewUniverse() {
-  const chapters = [
-    { id: 'home', name: '01 · Our Little Universe' },
-    { id: 'journey', name: '02 · Our Journey' },
-    { id: 'memories', name: '03 · Photographs & Memories' },
-    { id: 'magazine', name: '04 · The Birthday Magazine' },
-    { id: 'bestie-id', name: '05 · Bestie ID Card' },
-    { id: 'letters', name: '06 · Letters From Ashu' },
-    { id: 'playlist', name: '07 · Birthday Playlist' },
-    { id: 'movies', name: '08 · Our Cinema Archive' },
-    { id: 'midnight', name: '09 · The Midnight Universe' },
-    { id: 'games', name: '10 · Cute Games' },
-    { id: 'little-things', name: '11 · Tiny Beautiful Things' },
-    { id: 'certificates', name: '12 · Certificate Gallery' },
-    { id: 'wishes', name: '13 · Three Birthday Wishes' },
-    { id: 'cake', name: '14 · 3D Birthday Cake' },
-    { id: 'gifts', name: '15 · Two Special Gifts' },
-    { id: 'pranks', name: '16 · Dream Gift Showroom' },
-    { id: 'memberships', name: '17 · Lifetime Vouchers' },
-    { id: 'finale', name: '18 · After Everything, Still Us' }
-  ];
-
-  $('#admin-content').innerHTML = `
-    <div class="panel">
-      <h2>Ashu's Private Preview Center 👑</h2>
-      <p>As the owner, you can inspect the complete birthday website before November 17 without releasing the public birthday lock. Choose what you want to preview below:</p>
-
-      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:16px;margin:24px 0;">
-        <div style="background:#fff4f7;border:1.5px solid #eaa4be;border-radius:14px;padding:20px;text-align:center;">
-          <span style="font-size:36px;display:block;margin-bottom:8px;">🌍</span>
-          <h3 style="margin:0 0 8px;color:#781d45;">Preview Full Website</h3>
-          <p style="font-size:13px;color:#6b2947;margin-bottom:14px;">Open the entire birthday universe in a private window with the floating toolbar.</p>
-          <a href="/admin/preview" target="_blank" class="btn btn-pink" style="display:inline-block;padding:10px 22px;border-radius:20px;text-decoration:none;font-weight:bold;background:#9e3460;color:#fff;">
-            Launch Full Preview ↗
-          </a>
-        </div>
-
-        <div style="background:#fff4f7;border:1.5px solid #eaa4be;border-radius:14px;padding:20px;text-align:center;">
-          <span style="font-size:36px;display:block;margin-bottom:8px;">📖</span>
-          <h3 style="margin:0 0 8px;color:#781d45;">Preview Specific Chapter</h3>
-          <p style="font-size:13px;color:#6b2947;margin-bottom:14px;">Jump directly into any of the 18 chapters.</p>
-          <select id="jump-chapter-select" style="padding:8px 12px;border-radius:10px;border:1px solid #d996ae;margin-bottom:10px;width:100%;max-width:200px;">
-            ${chapters.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
-          </select>
-          <br>
-          <button id="btn-jump-chapter" class="primary" style="margin-top:4px;">Jump To Chapter ↗</button>
-        </div>
-
-        <div style="background:#fff4f7;border:1.5px solid #eaa4be;border-radius:14px;padding:20px;text-align:center;">
-          <span style="font-size:36px;display:block;margin-bottom:8px;">🎂</span>
-          <h3 style="margin:0 0 8px;color:#781d45;">Preview 3D Celebration</h3>
-          <p style="font-size:13px;color:#6b2947;margin-bottom:14px;">Test the embedded fullscreen celebration experience.</p>
-          <button id="btn-preview-celebration" class="primary">Open 3D Celebration ↗</button>
-        </div>
-
-        <div style="background:#fff4f7;border:1.5px solid #eaa4be;border-radius:14px;padding:20px;text-align:center;">
-          <span style="font-size:36px;display:block;margin-bottom:8px;">✨</span>
-          <h3 style="margin:0 0 8px;color:#781d45;">Simulate Midnight Unlock</h3>
-          <p style="font-size:13px;color:#6b2947;margin-bottom:14px;">Test the countdown reaching zero, velvet curtains parting, and golden lights emerging.</p>
-          <a href="/admin/preview#simulate-unlock" target="_blank" class="outline" style="display:inline-block;padding:8px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">
-            Test Gate Unlock ↗
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2>Embedded Live Preview Screen</h2>
-      <p>Simulating live desktop rendering within Ashu's Studio:</p>
-      <div style="width:100%;height:580px;border-radius:16px;overflow:hidden;border:2px solid #ecd0dc;box-shadow:0 8px 30px rgba(0,0,0,0.12);background:#fff;">
-        <iframe id="preview-frame" src="/admin/preview" style="width:100%;height:100%;border:none;"></iframe>
-      </div>
-    </div>`;
-
-  $('#btn-jump-chapter').onclick = () => {
-    const ch = $('#jump-chapter-select').value;
-    window.open(`/admin/preview#${ch}`, '_blank');
-  };
-
-  $('#btn-preview-celebration').onclick = () => {
-    window.open('/admin/preview#cake', '_blank');
-  };
 }
 
 // -------------------------------------------------------------
@@ -456,7 +366,6 @@ function renderMagazineAdmin() {
     <div class="panel">
       <h2>Interactive Magazine Book</h2>
       <p>Every two pages form a desktop spread. Edit the heading, editorial story, and photo for each page.</p>
-      <a class="outline" href="/#magazine" target="_blank">↗ Preview Book</a>
     </div>` +
     table(['Page', 'Photo', 'Page Type', 'Title', 'Actions'], pages.map((pg, i) => `
       <tr>
@@ -485,7 +394,6 @@ function renderBestieCardAdmin() {
       </div>
       <div class="bar-actions">
         <button class="primary" id="save-bestie-card">Save Birthday ID ✓</button>
-        <a class="outline" href="/#bestie-id" target="_blank">Preview ID ↗</a>
       </div>
     </div>`;
 
@@ -683,7 +591,7 @@ function renderSettings() {
       </div>
       <div class="bar-actions">
         <button class="primary" id="save-settings">Save Website Settings</button>
-        <a class="outline" href="/" target="_blank">Open Preview ↗</a>
+        <a class="outline" href="/" target="_blank">View Countdown Gate ↗</a>
       </div>
     </div>`;
 
