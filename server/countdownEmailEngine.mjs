@@ -481,7 +481,7 @@ export function renderEmailHtml({
     ? milestone.photoAsset
     : `${safeBaseUrl}${milestone.photoAsset}`;
   const actionUrl = `${safeBaseUrl}/`;
-  const unsubUrl = `${safeBaseUrl}/api/countdown/unsubscribe?token=${encodeURIComponent(unsubscribeToken || 'demo')}`;
+  const unsubUrl = `${safeBaseUrl}/api/countdown/unsubscribe?token=${encodeURIComponent(unsubscribeToken || 'member')}`;
 
   return `<!DOCTYPE html>
 <html lang="en">
