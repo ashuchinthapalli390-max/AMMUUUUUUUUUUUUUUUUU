@@ -61,11 +61,26 @@ export default function SlapAshuGame({ onClose }) {
   const [currentExpression, setCurrentExpression] = useState(EXPRESSIONS[0]);
   const [impactBursts, setImpactBursts] = useState([]);
   const [unlockedMilestone, setUnlockedMilestone] = useState(null);
+  const [webGlSupported, setWebGlSupported] = useState(true);
 
   // Setup Three.js Chibi Ashu Scene
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
+
+    // Check WebGL availability
+    let hasGl = false;
+    try {
+      const testCanvas = document.createElement('canvas');
+      hasGl = !!(window.WebGLRenderingContext && (testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl')));
+    } catch {
+      hasGl = false;
+    }
+
+    if (!hasGl) {
+      setWebGlSupported(false);
+      return;
+    }
 
     const width = container.clientWidth || 360;
     const height = 340;
@@ -79,6 +94,7 @@ export default function SlapAshuGame({ onClose }) {
     try {
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     } catch {
+      setWebGlSupported(false);
       return;
     }
 
@@ -347,30 +363,29 @@ export default function SlapAshuGame({ onClose }) {
   // Update Props based on Milestones
   useEffect(() => {
     const props = propsRef.current;
-    if (!props.sign) return;
 
     if (slapCount >= 30) {
-      props.crown.visible = true;
-      props.flower.visible = true;
-      props.chocolate.visible = true;
-      props.stars.visible = true;
+      if (props.crown) props.crown.visible = true;
+      if (props.flower) props.flower.visible = true;
+      if (props.chocolate) props.chocolate.visible = true;
+      if (props.stars) props.stars.visible = true;
       setUnlockedMilestone('Crown Unlocked: Official Potti Punching Bag 🏆');
     } else if (slapCount >= 20) {
-      props.flower.visible = true;
-      props.chocolate.visible = true;
-      props.stars.visible = true;
+      if (props.flower) props.flower.visible = true;
+      if (props.chocolate) props.chocolate.visible = true;
+      if (props.stars) props.stars.visible = true;
       setUnlockedMilestone('Flower Bouquet Unlocked 💐');
     } else if (slapCount >= 10) {
-      props.chocolate.visible = true;
-      props.stars.visible = true;
+      if (props.chocolate) props.chocolate.visible = true;
+      if (props.stars) props.stars.visible = true;
       setUnlockedMilestone('Chocolates Offered 🍫');
     } else if (slapCount >= 5) {
-      props.sign.visible = true;
+      if (props.sign) props.sign.visible = true;
       setUnlockedMilestone('Sorry Sign Raised 🥺');
     }
   }, [slapCount]);
 
-  // Handle Harmless Slap
+  // Handle Harmless Slap (Unlimited Playful Taps)
   const handleSlap = useCallback(() => {
     const nextCount = slapCount + 1;
     setSlapCount(nextCount);
@@ -393,14 +408,14 @@ export default function SlapAshuGame({ onClose }) {
     st.rotZ = dir * 0.42;
     st.rotX = -0.15;
 
-    // Visual comic slap impact burst
+    // Visual comic slap impact burst (limit to last 3 to avoid memory buildup)
     const burstId = Date.now() + Math.random();
     const burstTexts = ['💥 SLAP!', '💫 POUF!', '✨ OUCH!', '💗 TEASE!', '🌸 BONK!'];
     const chosenText = burstTexts[nextCount % burstTexts.length];
-    setImpactBursts((prev) => [...prev.slice(-3), { id: burstId, text: chosenText, dir }]);
+    setImpactBursts((prev) => [...prev.slice(-2), { id: burstId, text: chosenText, dir }]);
     setTimeout(() => {
       setImpactBursts((prev) => prev.filter((b) => b.id !== burstId));
-    }, 900);
+    }, 850);
   }, [slapCount]);
 
   // Play Again / Reset
@@ -470,7 +485,7 @@ export default function SlapAshuGame({ onClose }) {
         </div>
       </div>
 
-      {/* 3D CHIBI ASHU STAGE */}
+      {/* 3D CHIBI ASHU STAGE (WITH INTERACTIVE 2D FALLBACK IF WEBGL IS UNAVAILABLE) */}
       <div
         className="slap-stage-wrapper"
         style={{
@@ -485,11 +500,42 @@ export default function SlapAshuGame({ onClose }) {
           boxShadow: '0 12px 36px rgba(120, 29, 69, 0.08)',
           overflow: 'hidden',
           cursor: 'pointer',
+          userSelect: 'none',
         }}
         onClick={handleSlap}
+        id="slap-stage-interactive"
         title="Tap or click Ashu to slap! 😤"
       >
-        <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
+        {webGlSupported ? (
+          <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
+        ) : (
+          <div
+            className="slap-fallback-stage"
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <div
+              style={{
+                fontSize: '95px',
+                transform: `rotate(${slapCount % 2 === 0 ? '12deg' : '-12deg'})`,
+                transition: 'transform 0.15s ease',
+              }}
+            >
+              {currentExpression.emoji}
+            </div>
+            <div style={{ fontSize: '38px', marginTop: '-12px' }}>🧸</div>
+            {slapCount >= 5 && <span style={{ fontSize: '12px', background: '#fff', border: '1px solid #ecc9d6', borderRadius: '10px', padding: '2px 8px', color: '#781d45', marginTop: '6px' }}>Sorry Potti 🥺</span>}
+            {slapCount >= 10 && <span style={{ fontSize: '24px' }}>🍫</span>}
+            {slapCount >= 20 && <span style={{ fontSize: '24px' }}>💐</span>}
+            {slapCount >= 30 && <span style={{ fontSize: '28px', marginTop: '-140px' }}>👑</span>}
+          </div>
+        )}
 
         {/* Floating Comic Impact Bursts */}
         {impactBursts.map((burst) => (
@@ -520,7 +566,7 @@ export default function SlapAshuGame({ onClose }) {
             bottom: '12px',
             left: '50%',
             transform: 'translateX(-50%)',
-            background: 'rgba(255, 255, 255, 0.85)',
+            background: 'rgba(255, 255, 255, 0.88)',
             backdropFilter: 'blur(4px)',
             borderRadius: '20px',
             padding: '4px 14px',
@@ -538,6 +584,7 @@ export default function SlapAshuGame({ onClose }) {
       {/* ANIMATED TENGLISH SPEECH BUBBLE */}
       <div
         className="slap-dialogue-bubble"
+        id="slap-speech-bubble"
         style={{
           marginTop: '16px',
           background: '#FFFFFF',
@@ -557,7 +604,7 @@ export default function SlapAshuGame({ onClose }) {
           <div style={{ fontSize: '10px', color: '#A85A7E', fontWeight: 700, letterSpacing: '1px' }}>
             ASHU SAYS:
           </div>
-          <div style={{ fontSize: '15px', color: '#6A193E', fontWeight: 600, marginTop: '2px' }}>
+          <div style={{ fontSize: '15px', color: '#6A193E', fontWeight: 600, marginTop: '2px' }} id="slap-dialogue-text">
             “{currentDialogue}”
           </div>
         </div>
@@ -565,7 +612,7 @@ export default function SlapAshuGame({ onClose }) {
 
       {/* MILESTONE BANNER */}
       {unlockedMilestone && (
-        <div style={{ marginTop: '10px', fontSize: '12px', color: '#C04D76', fontWeight: 700 }}>
+        <div style={{ marginTop: '10px', fontSize: '12px', color: '#C04D76', fontWeight: 700 }} id="slap-milestone-text">
           ✨ Milestone: {unlockedMilestone}
         </div>
       )}
@@ -573,6 +620,8 @@ export default function SlapAshuGame({ onClose }) {
       {/* VICTORY BANNER AT 0% ANGER */}
       {angerMeter === 0 && (
         <div
+          className="slap-victory-box"
+          id="slap-victory-box"
           style={{
             marginTop: '18px',
             background: 'linear-gradient(135deg, #FFF0F5, #E8F5E9)',
@@ -583,7 +632,7 @@ export default function SlapAshuGame({ onClose }) {
           }}
         >
           <div style={{ fontSize: '36px', marginBottom: '6px' }}>🎉 💐 💗</div>
-          <h4 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: '22px', color: '#2D8A68', margin: '4px 0' }}>
+          <h4 style={{ fontFamily: "'Fraunces', Georgia, serif", fontSize: '22px', color: '#2D8A68', margin: '4px 0' }} id="slap-victory-title">
             YAYYYY! POTTIIII'S KOPAM TAGGINDHI! 💗
           </h4>
           <p style={{ fontSize: '14px', color: '#4B6B58', margin: '4px 0 14px' }}>
@@ -593,6 +642,7 @@ export default function SlapAshuGame({ onClose }) {
             type="button"
             className="btn btn-pink"
             onClick={handleReset}
+            id="slap-play-again-victory-btn"
             style={{ padding: '8px 22px', fontSize: '13px', borderRadius: '25px' }}
           >
             Play Again ↻
@@ -606,6 +656,7 @@ export default function SlapAshuGame({ onClose }) {
           type="button"
           className="btn btn-pink"
           onClick={handleSlap}
+          id="slap-ashu-trigger-btn"
           style={{
             padding: '12px 28px',
             fontSize: '15px',
@@ -616,25 +667,25 @@ export default function SlapAshuGame({ onClose }) {
           Slap Ashu 😤 ({slapCount} Slaps)
         </button>
 
-        {slapCount > 0 && angerMeter > 0 && (
-          <button
-            type="button"
-            className="btn btn-soft"
-            onClick={handleReset}
-            style={{ padding: '10px 20px', fontSize: '13px', borderRadius: '30px' }}
-          >
-            Reset Meter ↻
-          </button>
-        )}
+        <button
+          type="button"
+          className="btn btn-soft"
+          onClick={handleReset}
+          id="slap-play-again-btn"
+          style={{ padding: '10px 20px', fontSize: '13px', borderRadius: '30px' }}
+        >
+          Play Again ↻
+        </button>
 
         {onClose && (
           <button
             type="button"
             className="btn btn-outline"
             onClick={onClose}
+            id="slap-exit-game-btn"
             style={{ padding: '10px 20px', fontSize: '13px', borderRadius: '30px' }}
           >
-            Close Game ✕
+            Exit Game ✕
           </button>
         )}
       </div>

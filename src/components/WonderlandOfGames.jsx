@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import SlapAshuGame from './games/SlapAshuGame.jsx';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+
+const SlapAshuGame = lazy(() => import('./games/SlapAshuGame.jsx'));
 
 // Approved photos from public/assets/photos/
 const AMMU_PHOTOS = [
@@ -13,11 +14,19 @@ const AMMU_PHOTOS = [
   '/assets/photos/ammu_10.jpg',
 ];
 
-export default function WonderlandOfGames() {
-  const [activeTab, setActiveTab] = useState('slapAshu');
+export default function WonderlandOfGames({ onOpenSlapAshu }) {
+  const [activeTab, setActiveTab] = useState('butterflies');
 
   // Decorative UI sound effects silenced per V17 specifications
   const playSound = () => {};
+
+  const handleSlapTabClick = () => {
+    if (onOpenSlapAshu) {
+      onOpenSlapAshu();
+    } else {
+      setActiveTab('slapAshu');
+    }
+  };
 
   return (
     <div className="wonderland-games-container" style={{ width: '100%' }}>
@@ -35,7 +44,7 @@ export default function WonderlandOfGames() {
       <div className="game-tabs" style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '25px' }}>
         <button
           className={activeTab === 'slapAshu' ? 'active' : ''}
-          onClick={() => setActiveTab('slapAshu')}
+          onClick={handleSlapTabClick}
           style={{
             background: activeTab === 'slapAshu' ? 'linear-gradient(135deg, #c44872, #781d45)' : '#FFF0F5',
             color: activeTab === 'slapAshu' ? '#FFFFFF' : '#781D45',
@@ -74,7 +83,11 @@ export default function WonderlandOfGames() {
 
       {/* GAME VIEWPORT */}
       <div id="game-board" className="game-board" style={{ minHeight: '440px', position: 'relative' }}>
-        {activeTab === 'slapAshu' && <SlapAshuGame onClose={() => setActiveTab('butterflies')} />}
+        {activeTab === 'slapAshu' && (
+          <Suspense fallback={<div className="slap-loading-state"><div className="slap-loading-spinner">🎀</div><p>Loading Ashu's 3D stage...</p></div>}>
+            <SlapAshuGame onClose={() => setActiveTab('butterflies')} />
+          </Suspense>
+        )}
         {activeTab === 'butterflies' && <GameButterflies playSound={playSound} />}
         {activeTab === 'memory' && <GameMemoryMatch playSound={playSound} />}
         {activeTab === 'stars' && <GameMidnightStars playSound={playSound} />}

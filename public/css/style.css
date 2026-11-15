@@ -759,3 +759,172 @@ body.gift-modal-active {
   transform: translateY(-2px) scale(1.02);
 }
 
+/* Slap Ashu Featured Card in SectionGames */
+.slap-ashu-featured-banner {
+  background: linear-gradient(135deg, #fff2f6 0%, #ffe0ec 50%, #ffd0e3 100%);
+  border: 2px dashed #e898b6;
+  border-radius: 28px;
+  padding: 32px 24px;
+  margin: 32px 0 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(184, 50, 86, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.slap-ashu-featured-banner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 48px rgba(184, 50, 86, 0.18);
+}
+
+.slap-featured-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.slap-featured-badge {
+  display: inline-block;
+  background: #c04d76;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 6px 16px;
+  border-radius: 30px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.slap-featured-icon {
+  font-size: 44px;
+  margin: 8px 0;
+  animation: floatBounce 2.5s ease-in-out infinite;
+}
+
+@keyframes floatBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.slap-featured-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(24px, 3.5vw, 36px);
+  color: #781d45;
+  margin: 8px 0 10px;
+  letter-spacing: -0.02em;
+}
+
+.slap-featured-subtitle {
+  font-size: 16px;
+  color: #8c3d60;
+  margin: 0 auto 20px;
+  font-style: italic;
+  max-width: 480px;
+}
+
+.slap-featured-btn {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  padding: 14px 34px !important;
+  border-radius: 35px !important;
+  background: linear-gradient(135deg, #d81159, #b83256) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 24px rgba(216, 17, 89, 0.35) !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s !important;
+}
+
+.slap-featured-btn:hover {
+  transform: translateY(-2px) scale(1.03) !important;
+  box-shadow: 0 14px 30px rgba(216, 17, 89, 0.45) !important;
+}
+
+/* Slap Ashu Fullscreen React Modal Overlay */
+.slap-ashu-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slap-ashu-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 8, 20, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.slap-ashu-modal-container {
+  position: relative;
+  z-index: 10;
+  background: #ffffff;
+  border: 2px solid #f3cfdd;
+  border-radius: 28px;
+  max-width: 740px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 36px 28px 28px;
+  box-shadow: 0 25px 60px rgba(120, 29, 69, 0.35);
+  animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+  from { transform: translateY(30px) scale(0.96); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.slap-modal-exit-btn {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  background: #fbf0f4;
+  border: 1px solid #ecc9d6;
+  border-radius: 20px;
+  color: #781d45;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 20;
+}
+
+.slap-modal-exit-btn:hover {
+  background: #781d45;
+  color: #ffffff;
+  border-color: #781d45;
+}
+
+.slap-loading-state {
+  padding: 60px 20px;
+  text-align: center;
+  color: #781d45;
+}
+
+.slap-loading-spinner {
+  font-size: 48px;
+  animation: spinSlow 3s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
