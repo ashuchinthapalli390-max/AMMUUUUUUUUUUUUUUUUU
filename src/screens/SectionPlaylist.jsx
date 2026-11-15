@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import InkRevealCard from '../components/InkRevealCard.jsx';
 
 const DEFAULT_TRACKS = [
   {
@@ -75,52 +76,6 @@ export default function SectionPlaylist() {
   const [repeatMode, setRepeatMode] = useState('all'); // 'all' or 'one'
   const [error, setError] = useState('');
   const audioRef = useRef(null);
-
-  // Exact Organic Ink-Spread Canvas Refs & State (Reference image: ink_mask.jpg)
-  const coverCardRef = useRef(null);
-  const inkCanvasRef = useRef(null);
-  const maskCanvasRef = useRef(null);
-  const targetScaleRef = useRef(0);
-  const currentScaleRef = useRef(0);
-  const pointerPosRef = useRef({ x: 200, y: 260 });
-  const songImageRef = useRef(null);
-
-  // Load and prepare the organic ink splatter mask texture
-  useEffect(() => {
-    const maskImg = new Image();
-    maskImg.crossOrigin = 'anonymous';
-    maskImg.src = '/assets/effects/ink_mask.jpg';
-    maskImg.onload = () => {
-      const offCanvas = document.createElement('canvas');
-      offCanvas.width = maskImg.naturalWidth || 800;
-      offCanvas.height = maskImg.naturalHeight || 800;
-      const offCtx = offCanvas.getContext('2d');
-      if (!offCtx) return;
-
-      offCtx.drawImage(maskImg, 0, 0, offCanvas.width, offCanvas.height);
-      try {
-        const imgData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height);
-        const data = imgData.data;
-
-        // Convert black ink wash on white paper to transparent alpha mask
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i];
-          const g = data[i + 1];
-          const b = data[i + 2];
-          const lightness = 0.299 * r + 0.587 * g + 0.114 * b;
-          const alpha = Math.max(0, Math.min(255, Math.round((245 - lightness) * 1.55)));
-          data[i] = 255;
-          data[i + 1] = 255;
-          data[i + 2] = 255;
-          data[i + 3] = alpha;
-        }
-        offCtx.putImageData(imgData, 0, 0);
-        maskCanvasRef.current = offCanvas;
-      } catch (err) {
-        console.warn('Ink mask processing error:', err);
-      }
-    };
-  }, []);
 
   // Sync playlist tracks from bootstrap config if available
   useEffect(() => {
@@ -235,109 +190,6 @@ export default function SectionPlaylist() {
     }
   };
 
-  // Preload song cover image whenever selected song changes
-  useEffect(() => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = currentSong.cover || '/assets/photos/original_black.jpg';
-    songImageRef.current = img;
-  }, [currentSong]);
-
-  // Animation frame loop for smooth organic ink blossoming
-  useEffect(() => {
-    let animId;
-    const canvas = inkCanvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const render = () => {
-      animId = requestAnimationFrame(render);
-      const mask = maskCanvasRef.current;
-      const songImg = songImageRef.current;
-      const w = canvas.width;
-      const h = canvas.height;
-
-      // Smooth lerp toward target scale
-      currentScaleRef.current += (targetScaleRef.current - currentScaleRef.current) * 0.12;
-      const scale = currentScaleRef.current;
-
-      if (scale <= 0.005) {
-        ctx.clearRect(0, 0, w, h);
-        return;
-      }
-
-      ctx.clearRect(0, 0, w, h);
-
-      if (mask && songImg && songImg.complete && songImg.naturalWidth > 0) {
-        ctx.save();
-
-        // 1. Draw current song cover image
-        ctx.drawImage(songImg, 0, 0, w, h);
-
-        // 2. Mask with dendritic ink splatter centered at pointer
-        ctx.globalCompositeOperation = 'destination-in';
-        const maskSize = Math.max(w, h) * scale * 1.8;
-        const px = pointerPosRef.current.x;
-        const py = pointerPosRef.current.y;
-        ctx.drawImage(mask, px - maskSize / 2, py - maskSize / 2, maskSize, maskSize);
-
-        // 3. Draw subtle song label badge on top of revealed cover
-        ctx.globalCompositeOperation = 'source-over';
-        if (scale > 0.35) {
-          const badgeAlpha = Math.min(1, (scale - 0.35) * 2.2);
-          ctx.save();
-          ctx.globalAlpha = badgeAlpha;
-          ctx.fillStyle = 'rgba(57, 19, 37, 0.85)';
-          ctx.beginPath();
-          if (ctx.roundRect) {
-            ctx.roundRect(w * 0.08, h - 56, w * 0.84, 40, 10);
-          } else {
-            ctx.rect(w * 0.08, h - 56, w * 0.84, 40);
-          }
-          ctx.fill();
-          ctx.fillStyle = '#ffffff';
-          ctx.font = 'bold 15px Georgia, serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(`♫ ${currentSong.title}`, w / 2, h - 36);
-          ctx.restore();
-        }
-
-        ctx.restore();
-      }
-    };
-
-    render();
-
-    return () => cancelAnimationFrame(animId);
-  }, [currentSong]);
-
-  const updatePointer = (e) => {
-    const card = coverCardRef.current;
-    const canvas = inkCanvasRef.current;
-    if (!card || !canvas) return;
-    const rect = card.getBoundingClientRect();
-    const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-    const y = (e.clientY - rect.top) * (canvas.height / rect.height);
-    pointerPosRef.current = { x, y };
-  };
-
-  const handlePointerEnter = (e) => {
-    targetScaleRef.current = 1.6;
-    updatePointer(e);
-  };
-
-  const handlePointerMove = (e) => {
-    targetScaleRef.current = Math.min(2.4, targetScaleRef.current + 0.08);
-    updatePointer(e);
-  };
-
-  const handlePointerLeave = () => {
-    targetScaleRef.current = 0;
-  };
-
   return (
     <section id="playlist" className="section ivory playlist-chapter">
       <div className="wrap playlist-v5">
@@ -348,35 +200,14 @@ export default function SectionPlaylist() {
         </div>
 
         <div className="playlist-studio">
-          {/* Vinyl CD & Album Cover with Exact Organic Ink Splatter Reveal */}
+          {/* Vinyl CD & Album Cover with Localized WebGL Ink Reveal */}
           <div className="v8-album-scene">
             <div className={`v8-cd ${playing ? 'spinning' : ''}`} aria-hidden="true">
               <span>{currentSong.title}<br />♡</span>
             </div>
 
-            <motion.div
-              className="playlist-cover v8-album-front ink-spread-card"
-              ref={coverCardRef}
-              onPointerEnter={handlePointerEnter}
-              onPointerMove={handlePointerMove}
-              onPointerLeave={handlePointerLeave}
-              layout
-            >
-              <img
-                src="/assets/photos/original_black.jpg"
-                alt="Ammu in black dress and sunglasses"
-                className="base-black-dress-photo"
-              />
-              <canvas
-                ref={inkCanvasRef}
-                width={400}
-                height={520}
-                className="ink-spread-canvas"
-                aria-label="Organic ink splatter reveal"
-              />
-              <div className="playlist-cover-caption">
-                FOR AMMUUUUU <span>♫ FROM ASHU</span>
-              </div>
+            <motion.div className="playlist-cover v8-album-front" layout>
+              <InkRevealCard currentSong={currentSong} />
             </motion.div>
           </div>
 

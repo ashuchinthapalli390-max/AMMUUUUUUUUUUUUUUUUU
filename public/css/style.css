@@ -478,7 +478,9 @@ body.chapter-mode .section.chapter-active.liquid-hover::after{opacity:.39!import
 .v8-letter-reveal{animation:v8letterUnfold .82s cubic-bezier(.2,.7,.2,1) both;transform-origin:top center}@keyframes v8letterUnfold{0%{opacity:.05;transform:rotateX(65deg) translateY(-25px) scale(.9)}60%{opacity:1;transform:rotateX(-6deg) translateY(7px)}100%{opacity:1;transform:rotateX(0) translateY(0)}}
 .letter-list>button,.letter-list .letter-btn{transition:transform .36s,box-shadow .36s}.letter-list>button:hover,.letter-list .letter-btn:hover{transform:translateY(-4px) rotate(-.5deg);box-shadow:0 15px 35px #b7537d24}
 .v8-album-scene{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;min-width:0}
-.v8-album-front{position:relative;z-index:3;width:min(100%,410px)}.v8-song-cover{position:absolute;inset:0 0 34px;opacity:0;transition:opacity .75s;overflow:hidden;clip-path:ellipse(0 0 at 50% 50%)}.v8-album-front:hover .v8-song-cover{opacity:1;animation:v8liquidReveal 1s ease forwards;clip-path:ellipse(100% 110% at 50% 50%)}.v8-song-cover img{height:100%;width:100%;object-fit:cover}.v8-song-cover-title{position:absolute;bottom:12px;left:8%;right:8%;background:#391325c4;color:white;padding:10px 13px;border-radius:8px;text-align:center;font:bold 21px Georgia}
+.v8-album-front{position:relative;z-index:3;width:min(100%,410px);overflow:visible}
+.v8-song-cover{display:none!important}
+.v8-album-front:hover .v8-song-cover{display:none!important;animation:none!important}
 @keyframes v8liquidReveal{0%{clip-path:ellipse(1% 6% at 65% 35%)}50%{clip-path:ellipse(57% 63% at 55% 50%)}100%{clip-path:ellipse(110% 110% at 50% 50%)}}
 .v8-cd{position:absolute;right:-5%;width:74%;aspect-ratio:1;border-radius:50%;background:repeating-conic-gradient(from -10deg,#ffd7e7 0deg 8deg,#b2b2d7 16deg 29deg,#fff7ed 33deg 47deg,#b37d9e 53deg 70deg,#fff1f6 80deg 90deg);border:5px solid #f8e8f1;box-shadow:0 9px 33px #632c4f55;display:flex;align-items:center;justify-content:center;animation:v8discTurn 6s linear infinite;animation-play-state:paused}.v8-cd:before{content:'';position:absolute;inset:30%;border-radius:50%;background:#e19ab9;box-shadow:0 0 0 8px #fff8f5b2}.v8-cd span{position:relative;color:#fff;z-index:2;font-size:13px;text-align:center;max-width:34%;overflow:hidden}.v8-cd.spinning{animation-play-state:running}@keyframes v8discTurn{to{transform:rotate(360deg)}}
 @media(max-width:920px){.v8-floating-pic{display:none}.v8-cd{right:0}}
@@ -697,31 +699,26 @@ body.gift-modal-active {
   z-index: 8 !important; /* Petals render strictly behind modal text */
 }
 
-/* Phase 5: Organic Ink Splatter Mask Transition */
-.ink-spread-card {
+/* Localized WebGL Ink Reveal Container */
+.ink-reveal-container {
   position: relative !important;
-  overflow: hidden !important;
+  width: 100% !important;
+  max-width: 410px !important;
+  height: clamp(380px, 48vw, 520px) !important;
+  margin: 0 auto !important;
   border-radius: 18px !important;
+  overflow: hidden !important;
+  box-shadow: 0 20px 48px rgba(120, 29, 69, 0.22) !important;
   cursor: crosshair !important;
-  box-shadow: 0 20px 48px rgba(120, 29, 69, 0.18) !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  touch-action: none !important;
 }
 
-.ink-spread-card .base-black-dress-photo {
+.ink-reveal-container canvas {
   display: block !important;
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important;
-  border-radius: 18px !important;
-  transition: transform 0.4s ease !important;
-}
-
-.ink-spread-canvas {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  pointer-events: none !important;
-  z-index: 4 !important;
   border-radius: 18px !important;
 }
 

@@ -79,10 +79,21 @@ async function runV17Tests() {
   assert.strictEqual(inkRoute.status, 200, 'ink_mask.jpg served over HTTP');
   pass('ink_mask.jpg successfully served over HTTP from local server');
 
+  // 4. Exact Localized WebGL Ink-Spread Mask (State 1-5 Requirements)
+  const inkCardPath = 'src/components/InkRevealCard.jsx';
+  assert.ok(fs.existsSync(inkCardPath), 'InkRevealCard.jsx component exists');
+  const inkCardFile = fs.readFileSync(inkCardPath, 'utf8');
+  assert.ok(inkCardFile.includes('u_texA'), 'Shader binds Texture A (Ammu photograph)');
+  assert.ok(inkCardFile.includes('u_texB'), 'Shader binds Texture B (Song artwork)');
+  assert.ok(inkCardFile.includes('u_cursor'), 'Shader uses u_cursor uniform for pointer tracking');
+  assert.ok(inkCardFile.includes('u_radius'), 'Shader uses u_radius uniform for localized reveal');
+  assert.ok(inkCardFile.includes('fbm') || inkCardFile.includes('snoise'), 'Shader uses procedural organic noise');
+  assert.ok(inkCardFile.includes('mix(colA, colB, mask)'), 'Shader performs true image replacement without global transparency');
+  pass('InkRevealCard implements custom WebGL fragment shader with localized pointer tracking');
+
   const playlistFile = fs.readFileSync('src/screens/SectionPlaylist.jsx', 'utf8');
-  assert.ok(playlistFile.includes('/assets/effects/ink_mask.jpg'), 'SectionPlaylist loads ink_mask.jpg');
-  assert.ok(playlistFile.includes('ink-spread-canvas'), 'Canvas element used for ink reveal');
-  assert.ok(playlistFile.includes('globalCompositeOperation'), 'Composite operation used for organic mask clipping');
+  assert.ok(playlistFile.includes('InkRevealCard'), 'SectionPlaylist uses InkRevealCard component');
+  pass('SectionPlaylist integrates InkRevealCard into album scene');
   pass('SectionPlaylist implements interactive organic dendritic ink-spread mask on hover');
 
   // 5. Slap Ashu 3D Mini-Game Verification
