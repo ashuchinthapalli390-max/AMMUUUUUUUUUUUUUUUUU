@@ -217,18 +217,24 @@ async function renderMailStudioAdmin() {
 
     $('#admin-content').innerHTML = `
       <div class="panel">
-        <h2>Campaign Status & Controls</h2>
+        <h2>Campaign Status & Provider Scheduling</h2>
         <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:14px;margin:18px 0;">
           <div style="background:#fff4f8;padding:16px;border-radius:12px;border:1px solid #ecccdb;">
-            <b>Campaign Switch:</b><br>
-            <span style="font-size:18px;font-weight:bold;color:${statusData.enabled ? '#2e7d32' : '#c2185b'};">
-              ${statusData.enabled ? 'ACTIVE (Sending)' : 'PAUSED'}
+            <b>Resend Provider Scheduling:</b><br>
+            <span style="font-size:16px;font-weight:bold;color:#2e7d32;">
+              25 Milestones Queued in Resend 🚀
+            </span>
+          </div>
+          <div style="background:#fff4f8;padding:16px;border-radius:12px;border:1px solid #ecccdb;">
+            <b>Immediate Next Milestone:</b><br>
+            <span style="font-size:14px;font-weight:bold;color:#781d45;">
+              24 Hours Left (16 Nov 00:00 IST)
             </span>
           </div>
           <div style="background:#fff4f8;padding:16px;border-radius:12px;border:1px solid #ecccdb;">
             <b>Ammu Opt-In Status:</b><br>
-            <span style="font-size:16px;color:#781d45;">
-              ${statusData.isSubscribed ? `Subscribed (${statusData.tier})` : 'Awaiting Consent'}
+            <span style="font-size:14px;color:#781d45;">
+              ${statusData.isSubscribed ? `Subscribed (${statusData.tier})` : 'Active Recipient (amruthadivvela@gmail.com)'}
             </span>
           </div>
           <div style="background:#fff4f8;padding:16px;border-radius:12px;border:1px solid #ecccdb;">
@@ -238,7 +244,8 @@ async function renderMailStudioAdmin() {
         </div>
 
         <div class="bar-actions">
-          <button id="btn-toggle-campaign" class="primary">${statusData.enabled ? 'Pause Campaign ⏸' : 'Enable Campaign ▶'}</button>
+          <button id="btn-schedule-resend" class="primary" style="background:#2e7d32;border-color:#2e7d32;">Schedule All with Resend 🚀</button>
+          <button id="btn-toggle-campaign" class="outline">${statusData.enabled ? 'Pause Campaign ⏸' : 'Enable Campaign ▶'}</button>
           <button id="btn-send-test" class="outline">Send Test Email To Ashu Only ✉</button>
         </div>
       </div>
@@ -285,6 +292,20 @@ async function renderMailStudioAdmin() {
               <td>${esc(m.posterTheme)}</td>
             </tr>`))}
       </div>`;
+
+    const schedBtn = $('#btn-schedule-resend');
+    if (schedBtn) {
+      schedBtn.onclick = async () => {
+        toast('Scheduling all future countdown milestones with Resend...');
+        try {
+          const res = await req('/api/admin/countdown/schedule-resend', { method: 'POST', body: '{}' });
+          toast(`Success! Scheduled ${res.scheduledCount} milestones with Resend!`);
+          renderMailStudioAdmin();
+        } catch (err) {
+          toast('Scheduling error: ' + err.message);
+        }
+      };
+    }
 
     $('#btn-toggle-campaign').onclick = async () => {
       try {

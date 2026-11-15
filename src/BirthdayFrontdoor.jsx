@@ -37,11 +37,44 @@ function IntroCurtain({onOpen}){return <motion.div className="ad-opening" initia
   </div>
   <span className="ad-butterfly ad-float-one">🦋</span><span className="ad-butterfly ad-float-two">✿</span>
 </motion.div>}
-function Poster({remaining,close}){
-  const [posterData, setPosterData] = useState(null);
+async function apiJSON(url, options = {}) {
+  const response = await fetch(url, {
+    credentials: 'same-origin',
+    ...options
+  });
+  const type = response.headers.get('content-type') || '';
+  const body = await response.text();
+
+  if (!type.includes('application/json')) {
+    console.error(`API error at ${url}: HTTP ${response.status}. Expected JSON, got:`, body.slice(0, 150));
+    throw new Error("Oops Pottiiii! Your little flower couldn't be saved. Please try again. 🌸");
+  }
+
+  let data;
+  try {
+    data = JSON.parse(body);
+  } catch (err) {
+    console.error(`Malformed JSON from ${url}:`, err);
+    throw new Error("Oops Pottiiii! Your little flower couldn't be saved. Please try again. 🌸");
+  }
+
+  if (!response.ok || data.ok === false) {
+    const msg = data.error?.message || data.error || "Oops Pottiiii! Your little flower couldn't be saved. Please try again. 🌸";
+    throw new Error(msg);
+  }
+
+  return data;
+}
+
+function Poster({remaining,close,initialPoster}){
+  const [posterData, setPosterData] = useState(initialPoster || null);
   const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
+    if (initialPoster) {
+      setPosterData(initialPoster);
+      return;
+    }
     fetch('/assets/countdown/manifest.json')
       .then(r => r.json())
       .then(manifest => {
@@ -57,11 +90,17 @@ function Poster({remaining,close}){
         }
       })
       .catch(e => console.warn('Could not load countdown manifest:', e));
-  }, [remaining]);
+  }, [remaining, initialPoster]);
 
-  const imageSrc = posterData?.image || PHOTO;
-  const label = posterData?.label || `${remaining} DAYS LEFT`;
-  const filename = posterData?.filename || `Ammu_Countdown_${remaining}_Days.png`;
+  const defaultImage = remaining <= 0
+    ? '/assets/countdown/posters/birthday_unlock_now.jpg'
+    : remaining === 1
+      ? '/assets/countdown/posters/24_hours_left.jpg'
+      : `/assets/countdown/posters/${String(remaining).padStart(2, '0')}_days_left.jpg`;
+
+  const imageSrc = posterData?.image || defaultImage;
+  const label = posterData?.label || (remaining <= 0 ? 'HAPPY BIRTHDAY AMMUUUU! 🎂' : remaining === 1 ? '24 HOURS / 1 DAY TO GO 🎀' : `${remaining} DAYS LEFT 🌸`);
+  const filename = posterData?.filename || (remaining <= 0 ? 'Ammu_Birthday_Unlock_Now.jpg' : `Ammu_Countdown_${remaining}_Days.jpg`);
 
   return (
     <div className="ad-modal-backdrop" role="presentation" onClick={close}>
@@ -172,10 +211,15 @@ function Poster({remaining,close}){
     </div>
   );
 }
-function GoddessCalendar({info,checking,onCheck,onCountdown,poster}){let today=info.today||istDate(Date.now()),complete=info.checkedDates||[];let remaining=Math.max(0,Math.ceil((TARGET-Date.now())/86400000));return <motion.main className="ad-calendar" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0,x:-50}}>
+function GoddessCalendar({info,checking,onCheck,onCountdown,poster}){
+  let today=info.today||istDate(Date.now()),complete=info.checkedDates||[];
+  let remaining=Math.max(0,Math.ceil((TARGET-Date.now())/86400000));
+  let totalCollected = typeof info.totalCheckins === 'number' ? info.totalCheckins : complete.length;
+  let currentStreak = typeof info.currentStreak === 'number' ? info.currentStreak : 0;
+  return <motion.main className="ad-calendar" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0,x:-50}}>
   <span className="ad-season">✧ DEVI'S MOONLIT DAYS ✧</span><h1>THE GODDESS OF <em>LITTLE JOYS</em></h1><p className="ad-subtitle">A little countdown to Ammuuu's special day · 17 November</p>
   <div className="ad-calendar-layout"><div className="ad-calendar-person"><div className="ad-portrait"><img src={PHOTO} alt="Ammu in her black embroidered dress with sunglasses"/><span>MY LOVELYYYY POTTIIII ♡</span></div><blockquote>“To my dearest Ammuuu… every sunrise is another little flower in our story. Let's collect them together.” <b>From Ashu ♡</b></blockquote><button className="ad-button" disabled={!!info.checkedToday||checking||today>'2026-11-17'} onClick={onCheck}>{checking?'Collecting today’s flower…':info.checkedToday?'Today’s Flower Collected ✓':'Check In For Today 🌸'}</button><button className="ad-outline" onClick={onCountdown}>Visit The Velvet Countdown 🎀</button></div>
-  <div className="ad-diary"><div className="ad-diary-top"><h2>A Little Diary of 23 Days</h2><span>{complete.length} / 23 flowers collected</span></div><div className="ad-date-grid">{dates.map(d=>{const checked=complete.includes(d.id),current=d.id===today,birthday=d.id==='2026-11-17';const past=d.id<today;return <div key={d.id} className={'ad-day'+(checked?' checked':'')+(current?' current':'')+(birthday?' birthday':'')+(past?' past':'')} aria-label={`${d.day} ${d.mon}: ${checked?'checked in':current?'today':past?'missed':'upcoming'}`}>
+  <div className="ad-diary"><div className="ad-diary-top"><h2>A Little Diary of 23 Days</h2><span>{totalCollected} / 23 flowers collected{currentStreak > 0 ? ` · Current Streak: ${currentStreak} Days ✨` : ''}</span></div><div className="ad-date-grid">{dates.map(d=>{const checked=complete.includes(d.id),current=d.id===today,birthday=d.id==='2026-11-17';const past=d.id<today;return <div key={d.id} className={'ad-day'+(checked?' checked':'')+(current?' current':'')+(birthday?' birthday':'')+(past?' past':'')} aria-label={`${d.day} ${d.mon}: ${checked?'checked in':current?'today':past?'missed':'upcoming'}`}>
     <small>{birthday?'GRAND DAY ✨':`DAY ${String(d.index).padStart(2,'0')}`}</small><strong>{d.day}</strong><small>{d.mon}</small><div className="ad-day-flower">{checked?'✿':birthday?'♛':current?'🌷':'❀'}</div>{checked&&<svg className="ad-day-cross" viewBox="0 0 100 100" aria-hidden="true"><path d="M13 50 L42 76 L87 22"/></svg>}{current&&checking&&<div className="ad-paper-burn"/>}</div>})}</div><p className="ad-diary-note">Only today's flower can be collected. Every other date is part of our unfolding story. ♡</p></div></div>
   <div className="ad-corner-flower top">✿</div><div className="ad-corner-flower bottom">🌸</div></motion.main>}
 
@@ -197,10 +241,52 @@ const [notice,setNotice]=useState('');
 const reduced=useReducedMotion();
 const infoRef=useRef(info);
 useEffect(()=>{infoRef.current=info},[info]);
-const refresh=useCallback(async()=>{try{let r=await fetch('/api/checkin/status',{credentials:'same-origin'});if(r.ok){const j=await r.json();setInfo(prev=>({...prev,...j}))}let b=await fetch('/api/bootstrap',{credentials:'same-origin'}).then(x=>x.json()).catch(()=>({}));if(b.open){setInfo(prev=>({...prev,open:!!b.open}))}}catch{}},[]);
+
+const refresh=useCallback(async()=>{
+  try {
+    const j = await apiJSON('/api/checkin/status');
+    if (j && j.ok) setInfo(prev=>({...prev,...j}));
+  } catch (err) {
+    console.warn('Could not refresh checkin status:', err.message);
+  }
+  try {
+    const b = await apiJSON('/api/bootstrap');
+    if (b && b.open) setInfo(prev=>({...prev,open:!!b.open}));
+  } catch {}
+},[]);
 useEffect(()=>{refresh()},[refresh]);
 
-const check=async()=>{if(checking||info.checkedToday)return;setChecking(true);try{let r=await fetch('/api/checkin',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'});let j=await r.json();if(!r.ok)throw new Error(j.error||'Could not save check-in');await refresh();setNotice('Yayyyy Pottiiiiiiii! Today’s little flower is collected! 🌸');window.ammuTriggerMagicalBurst?.(window.innerWidth/2,window.innerHeight*0.45);setTimeout(()=>{setPoster(true);setNotice('')},reduced?200:1200)}catch(e){setNotice(e.message)}finally{setChecking(false)}};
+const check=async()=>{
+  if(checking||info.checkedToday)return;
+  setChecking(true);
+  try {
+    const data = await apiJSON('/api/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: '{}'
+    });
+    setInfo(prev => ({
+      ...prev,
+      checkedToday: true,
+      checkedDates: Array.from(new Set([...(prev.checkedDates || []), data.day || info.today])),
+      totalCheckins: data.totalCheckins || ((prev.checkedDates?.length || 0) + 1),
+      currentStreak: data.currentStreak || 1,
+      poster: data.poster || prev.poster
+    }));
+    setNotice('Yayyyy Pottiiiiiiii! Today’s little flower is collected! 🌸');
+    window.ammuTriggerMagicalBurst?.(window.innerWidth/2,window.innerHeight*0.45);
+    setTimeout(()=>{
+      setPoster(true);
+      setNotice('');
+    }, reduced ? 200 : 1200);
+  } catch(e) {
+    console.error('Check-in failed:', e);
+    // Display required friendly error message - NEVER display raw JSON error or "Unexpected token T"
+    setNotice("Oops Pottiiii! Your little flower couldn't be saved. Please try again. 🌸");
+  } finally {
+    setChecking(false);
+  }
+};
 
 const enter=async()=>{
   const b=await fetch('/api/bootstrap',{credentials:'same-origin'}).then(x=>x.json()).catch(()=>({}));
@@ -223,7 +309,7 @@ return (
       {phase==='calendar'&&<GoddessCalendar key="calendar" info={info} checking={checking} onCheck={check} onCountdown={()=>setPhase('countdown')}/>}
       {phase==='countdown'&&<CurtainCountdown key="curtain" info={info} onBack={()=>setPhase('calendar')} onEnter={enter}/>}
     </AnimatePresence>
-    {poster&&<Poster remaining={Math.max(0,Math.ceil((TARGET-Date.now())/86400000))} close={()=>setPoster(false)}/>}
+    {poster&&<Poster remaining={Math.max(0,Math.ceil((TARGET-Date.now())/86400000))} initialPoster={info.poster} close={()=>setPoster(false)}/>}
     {notice&&<div className="ad-notice" role="status">{notice}</div>}
   </div>
 );
