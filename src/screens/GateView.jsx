@@ -43,24 +43,34 @@ export default function GateView() {
     }
   };
 
-  const handleEnterUniverse = () => {
-    if (window.ammuUnlock) {
-      window.ammuUnlock();
-      return;
+  const handleEnterUniverse = async () => {
+    try {
+      if (window.ammuOpenBirthday) {
+        await window.ammuOpenBirthday();
+        return;
+      }
+      if (window.ammuUnlock) {
+        await window.ammuUnlock();
+        return;
+      }
+    } catch (e) {
+      console.warn("GateView open handler error:", e);
     }
     const gate = document.getElementById("gate");
     if (gate) {
-      gate.style.transition = "opacity 0.8s ease, transform 0.8s ease";
-      gate.style.opacity = "0";
-      gate.style.transform = "scale(1.05)";
-      setTimeout(() => {
-        gate.hidden = true;
-        const exp = document.getElementById("experience");
-        if (exp) {
-          exp.hidden = false;
-          window.scrollTo({ top: 0, behavior: "instant" });
-        }
-      }, 800);
+      gate.hidden = true;
+      gate.style.display = "none";
+    }
+    const intro = document.getElementById("intro-stage");
+    if (intro) {
+      intro.hidden = true;
+      intro.style.display = "none";
+    }
+    const exp = document.getElementById("experience");
+    if (exp) {
+      exp.hidden = false;
+      exp.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "instant" });
     }
   };
 

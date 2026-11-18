@@ -31,27 +31,103 @@ window.addEventListener('ammu:music-state', (e) => {
 });$('#replay-intro').onclick=()=>modal('One more surprise?', 'Replay our birthday opening from the beginning?', '🎀',[['Replay Intro',()=>{closeModal();$('#experience').hidden=true;document.body.classList.remove('chapter-mode');$('#gate').hidden=false;$('#open-present').hidden=false;window.scrollTo(0,0)}],['Keep Exploring',closeModal]]);
 $('#mobile-menu').onclick=()=>$('.site-nav nav').classList.toggle('open');$$('.site-nav nav a').forEach(a=>a.onclick=()=>$('.site-nav nav').classList.remove('open'));
 const relTime=()=>Date.parse(state.site?.birthdayDate||'2026-11-17T00:00:00+05:30')-Date.now();
-function tick(){let diff=Math.max(0,relTime());let s=Math.floor(diff/1000);['days','hours','minutes','seconds'].forEach((id,i)=>{$('#'+id).textContent=String([Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60][i]).padStart(2,'0')});if(diff<=0){$('#open-present').hidden=false;$('#gate-date').textContent='Your birthday surprise is unlocked 🎁'}}
-function unlock(){
-  if(!state.site?.open){toast('The birthday countdown is still running 💗');return}
-  $('#gate').hidden=true;
-  $('#experience').hidden=false;
-  document.dispatchEvent(new Event('ammu:open'));
-  $('#intro-stage').hidden=false;
-  $('#intro-stage').classList.remove('opening');
-  requestAnimationFrame(()=>{renderCakeStage();startCake()});
-  if(location.hash){
-    let h=location.hash.slice(1);
-    if(['shop','cart','tracking'].includes(h))h='gifts';
-    setTimeout(()=>window.ammuGo?.(h),120);
-  }else window.ammuGo?.('home');
-  createPetals(window.innerWidth/2,window.innerHeight/3,35);
+function tick(){
+  let diff=Math.max(0,relTime());
+  let s=Math.floor(diff/1000);
+  ['days','hours','minutes','seconds'].forEach((id,i)=>{
+    const el=$('#'+id);
+    if(el)el.textContent=String([Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60][i]).padStart(2,'0');
+  });
+  if(diff<=0){
+    const btn=$('#open-present');
+    if(btn)btn.hidden=false;
+    const gd=$('#gate-date');
+    if(gd)gd.textContent='Your birthday surprise is unlocked 🎁';
+  }
 }
-window.ammuUnlock=unlock;$('#open-present').onclick=unlock;
-$('#intro-unwrap').onclick=()=>{let overlay=$('#intro-stage');overlay.classList.add('opening');createPetals(window.innerWidth/2,window.innerHeight/2,28);setTimeout(()=>overlay.hidden=true,1250)};
-async function init(){try{let data=await request('/api/bootstrap');state.site=data;if(data.open){$('#open-present').hidden=false;$('#gate-date').textContent='Birthday website is ready to open';renderAll()}else{$('#open-present').hidden=true}tick()}catch(e){toast('Could not reach birthday server: '+e.message)}}
+async function ammuOpenBirthday(freshData){
+  try{
+    let data=freshData;
+    if(!data||typeof data.open==='undefined'){
+      data=await request('/api/bootstrap');
+    }
+    if(!data||!data.open){
+      toast('Birthday universe unlocks on 17 November at 12:00 AM IST 💗');
+      return {ok:false,locked:true};
+    }
+    state.site={...(state.site||{}),...data,open:true};
+    window.ammuBirthdayConfig=state.site;
+    renderAll();
+
+    const gate=$('#gate');
+    if(gate){gate.hidden=true;gate.style.display='none';}
+
+    const introStage=$('#intro-stage');
+    if(introStage){introStage.hidden=true;introStage.style.display='none';}
+
+    const exp=$('#experience');
+    if(exp){exp.hidden=false;exp.style.display='block';exp.style.opacity='1';exp.style.pointerEvents='auto';}
+
+    document.dispatchEvent(new Event('ammu:open'));
+    document.dispatchEvent(new Event('ammu:ready'));
+
+    requestAnimationFrame(()=>{renderCakeStage();startCake()});
+
+    if(location.hash){
+      let h=location.hash.slice(1);
+      if(['shop','cart','tracking'].includes(h))h='gifts';
+      setTimeout(()=>window.ammuGo?.(h),120);
+    }else{
+      window.ammuGo?.('home');
+    }
+
+    document.body.classList.remove('modal-open');
+    document.body.classList.remove('chapter-mode');
+    document.body.style.overflow='';
+    document.documentElement.style.overflow='';
+
+    createPetals(window.innerWidth/2,window.innerHeight/3,35);
+    return {ok:true,data:state.site};
+  }catch(err){
+    console.error('ammuOpenBirthday failed:',err);
+    toast(err.message||'Could not open birthday universe. Please try again! 💗');
+    throw err;
+  }
+}
+window.ammuOpenBirthday=ammuOpenBirthday;
+window.ammuUnlock=ammuOpenBirthday;
+const openPresentBtn=$('#open-present');
+if(openPresentBtn)openPresentBtn.onclick=()=>ammuOpenBirthday();
+const introUnwrapBtn=$('#intro-unwrap');
+if(introUnwrapBtn)introUnwrapBtn.onclick=()=>{
+  let overlay=$('#intro-stage');
+  if(overlay){overlay.classList.add('opening');createPetals(window.innerWidth/2,window.innerHeight/2,28);setTimeout(()=>{overlay.hidden=true;overlay.style.display='none';},1250);}
+};
+async function init(freshData){
+  try{
+    let data=freshData;
+    if(!data||typeof data.open==='undefined'){
+      data=await request('/api/bootstrap');
+    }
+    state.site=data;
+    window.ammuBirthdayConfig=data;
+    if(data.open){
+      const btn=$('#open-present');if(btn)btn.hidden=false;
+      const gd=$('#gate-date');if(gd)gd.textContent='Birthday website is ready to open';
+      renderAll();
+    }else{
+      const btn=$('#open-present');if(btn)btn.hidden=true;
+    }
+    tick();
+    return data;
+  }catch(e){
+    toast('Could not reach birthday server: '+e.message);
+    throw e;
+  }
+}
 window.ammuReinitialize=init;
-setInterval(tick,1000);init();
+setInterval(tick,1000);
+init().catch(()=>{});
 function renderAll(){window.ammuBirthdayConfig=state.site;if(state.site.heroImage)$('#home .photo-big img').src=state.site.heroImage;renderTimeline();renderGallery();renderLetters();renderWishes();renderPranks();renderVouchers();renderExtras();setupKeepsakes(state.site);wireGlobal();document.dispatchEvent(new Event('ammu:ready'));}
 function openGiftOverlay(id){
  const pranks=$('#pranks');

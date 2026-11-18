@@ -58,7 +58,7 @@ async function apiJSON(url, options = {}) {
     throw new Error("Oops Pottiiii! Your little flower couldn't be saved. Please try again. 🌸");
   }
 
-  if (!response.ok || data.ok === false) {
+  if (!response.ok || (typeof data.ok !== 'undefined' && data.ok === false)) {
     const msg = data.error?.message || data.error || "Oops Pottiiii! Your little flower couldn't be saved. Please try again. 🌸";
     throw new Error(msg);
   }
@@ -223,13 +223,78 @@ function GoddessCalendar({info,checking,onCheck,onCountdown,poster}){
     <small>{birthday?'GRAND DAY ✨':`DAY ${String(d.index).padStart(2,'0')}`}</small><strong>{d.day}</strong><small>{d.mon}</small><div className="ad-day-flower">{checked?'✿':birthday?'♛':current?'🌷':'❀'}</div>{checked&&<svg className="ad-day-cross" viewBox="0 0 100 100" aria-hidden="true"><path d="M13 50 L42 76 L87 22"/></svg>}{current&&checking&&<div className="ad-paper-burn"/>}</div>})}</div><p className="ad-diary-note">Only today's flower can be collected. Every other date is part of our unfolding story. ♡</p></div></div>
   <div className="ad-corner-flower top">✿</div><div className="ad-corner-flower bottom">🌸</div></motion.main>}
 
-function CurtainCountdown({info,onBack,onEnter}){const [remaining,setRemaining]=useState(Math.max(0,TARGET-Date.now()));const [serverOffset,setServerOffset]=useState(0);useEffect(()=>{if(info.serverTime)setServerOffset(Date.parse(info.serverTime)-Date.now())},[info.serverTime]);useEffect(()=>{let raf=0;let last=0;const run=(ts)=>{if(ts-last>38){last=ts;setRemaining(Math.max(0,TARGET-(Date.now()+serverOffset)))}raf=requestAnimationFrame(run)};raf=requestAnimationFrame(run);return()=>cancelAnimationFrame(raf)},[serverOffset]);const d=Math.floor(remaining/86400000),h=Math.floor(remaining%86400000/3600000),m=Math.floor(remaining%3600000/60000),s=Math.floor(remaining%60000/1000),ms=remaining%1000;
-const canEnter = remaining<=0 || (info?.open ?? false);
-return <motion.main className="ad-countdown" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}><div className="ad-curtain ad-left"/><div className="ad-curtain ad-right"/><div className="ad-stage-light"/><div className="ad-stage-centre"><span className="ad-kicker">FROM ASHU • JUST FOR AMMUUUUUU ♡</span><h1>One Little Present…<br/><em>For One Very Special Ammuuuuuu 💗</em></h1><p>Pottiiiiiiii, your birthday universe is almost ready!</p><div className="ad-clock" aria-label="Birthday countdown"><div>{[d,h,m,s,ms].map((v,i)=><React.Fragment key={i}>{i>0&&<span className="ad-colon">:</span>}<span className="ad-clock-unit"><strong>{String(v).padStart(i===4?3:2,'0')}</strong><small>{['DAYS','HOURS','MINUTES','SECONDS','MILLISECONDS'][i]}</small></span></React.Fragment>)}</div></div>{canEnter?<button className="ad-button" onClick={onEnter}>UNTIE YOUR BIRTHDAY RIBBON 🎀</button>:(
-  <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'8px'}}>
-    <span className="ad-lock-caption">The curtains open on 17 November, 12:00 AM IST ✨</span>
-  </div>
-)}<button className="ad-back" onClick={onBack}>← Back to our little calendar</button></div><span className="ad-butterfly ad-float-one">🦋</span><span className="ad-butterfly ad-float-two">✧</span></motion.main>}
+function CurtainCountdown({info,onBack,onEnter,opening,unlockStage='idle'}){
+  const [remaining,setRemaining]=useState(Math.max(0,TARGET-Date.now()));
+  const [serverOffset,setServerOffset]=useState(0);
+  useEffect(()=>{if(info.serverTime)setServerOffset(Date.parse(info.serverTime)-Date.now())},[info.serverTime]);
+  useEffect(()=>{let raf=0;let last=0;const run=(ts)=>{if(ts-last>38){last=ts;setRemaining(Math.max(0,TARGET-(Date.now()+serverOffset)))}raf=requestAnimationFrame(run)};raf=requestAnimationFrame(run);return()=>cancelAnimationFrame(raf)},[serverOffset]);
+  const d=Math.floor(remaining/86400000),h=Math.floor(remaining%86400000/3600000),m=Math.floor(remaining%3600000/60000),s=Math.floor(remaining%60000/1000),ms=remaining%1000;
+  const canEnter = remaining<=0 || (info?.open ?? false);
+  const curtainsParted = unlockStage === 'curtains' || unlockStage === 'reveal';
+
+  return (
+    <motion.main className={`ad-countdown ${opening ? 'is-opening' : ''}`} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0,scale:1.04}} transition={{duration:.6}}>
+      <div className={`ad-curtain ad-left ${curtainsParted ? 'ad-parted-left' : ''}`}/>
+      <div className={`ad-curtain ad-right ${curtainsParted ? 'ad-parted-right' : ''}`}/>
+      <div className={`ad-stage-light ${curtainsParted ? 'ad-light-expanded' : ''}`}/>
+
+      {unlockStage === 'reveal' ? (
+        <div className="ad-stage-centre ad-stage-reveal">
+          <motion.div className="ad-birthday-reveal" initial={{opacity:0,scale:.88,y:15}} animate={{opacity:1,scale:1,y:0}} transition={{duration:.7,ease:[.16,1,.3,1]}}>
+            <span className="ad-kicker">✨ THE MOMENT IS FINALLY HERE ✨</span>
+            <div className="ad-reveal-crown" aria-hidden="true">🎂 🎀 🌸</div>
+            <h1 className="ad-reveal-title">HAPPIEST BIRTHDAYYYYY<br/><em>AMMUUUUUUU! 💗</em></h1>
+            <p className="ad-reveal-subtitle">Your Little Universe Is Finally Open, Pottiiiiiiii!</p>
+            <div className="ad-reveal-sparkles"><span>✧</span><span>✿</span><span>♡</span><span>🦋</span><span>🌸</span><span>✦</span></div>
+          </motion.div>
+        </div>
+      ) : (
+        <div className="ad-stage-centre">
+          <span className="ad-kicker">FROM ASHU • JUST FOR AMMUUUUUU ♡</span>
+          <h1>One Little Present…<br/><em>For One Very Special Ammuuuuuu 💗</em></h1>
+          <p>Pottiiiiiiii, your birthday universe is ready!</p>
+          <div className="ad-clock" aria-label="Birthday countdown">
+            <div>
+              {[d,h,m,s,ms].map((v,i)=><React.Fragment key={i}>
+                {i>0&&<span className="ad-colon">:</span>}
+                <span className="ad-clock-unit">
+                  <strong>{String(v).padStart(i===4?3:2,'0')}</strong>
+                  <small>{['DAYS','HOURS','MINUTES','SECONDS','MILLISECONDS'][i]}</small>
+                </span>
+              </React.Fragment>)}
+            </div>
+          </div>
+          {canEnter ? (
+            <button
+              className={`ad-button ${opening ? 'opening' : ''}`}
+              disabled={opening}
+              onClick={(e) => {
+                e.currentTarget.disabled = true;
+                onEnter();
+              }}
+              aria-label="Untie your birthday ribbon"
+            >
+              {opening ? (
+                <span style={{display:'inline-flex',alignItems:'center',gap:'8px'}}>
+                  <span className="ad-spin-sparkle">✨</span>
+                  <span>Untying Your Ribbon...</span>
+                  <span className="ad-pulse-heart">💗</span>
+                </span>
+              ) : 'UNTIE YOUR BIRTHDAY RIBBON 🎀'}
+            </button>
+          ) : (
+            <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'8px'}}>
+              <span className="ad-lock-caption">The curtains open on 17 November, 12:00 AM IST ✨</span>
+            </div>
+          )}
+          {!opening && <button className="ad-back" onClick={onBack}>← Back to our little calendar</button>}
+        </div>
+      )}
+      <span className="ad-butterfly ad-float-one">🦋</span>
+      <span className="ad-butterfly ad-float-two">✧</span>
+    </motion.main>
+  );
+}
 
 export default function BirthdayFrontdoor({skip=false}){
 if(skip)return null;
@@ -238,6 +303,8 @@ const [info,setInfo]=useState({today:istDate(Date.now()),checkedDates:[],checked
 const [checking,setChecking]=useState(false);
 const [poster,setPoster]=useState(false);
 const [notice,setNotice]=useState('');
+const [opening,setOpening]=useState(false);
+const [unlockStage,setUnlockStage]=useState('idle');
 const reduced=useReducedMotion();
 const infoRef=useRef(info);
 useEffect(()=>{infoRef.current=info},[info]);
@@ -281,7 +348,6 @@ const check=async()=>{
     }, reduced ? 200 : 1200);
   } catch(e) {
     console.error('Check-in failed:', e);
-    // Display required friendly error message - NEVER display raw JSON error or "Unexpected token T"
     setNotice("Oops Pottiiii! Your little flower couldn't be saved. Please try again. 🌸");
   } finally {
     setChecking(false);
@@ -289,14 +355,84 @@ const check=async()=>{
 };
 
 const enter=async()=>{
-  const b=await fetch('/api/bootstrap',{credentials:'same-origin'}).then(x=>x.json()).catch(()=>({}));
-  if(!b.open){setNotice('Birthday universe unlocks on 17 November 💗');return}
-  window.ammuTriggerMagicalBurst?.(window.innerWidth/2,window.innerHeight/2);
-  await window.ammuReinitialize?.();
-  window.ammuUnlock?.();
-  const btn=document.getElementById('open-present');
-  if(btn){btn.hidden=false;btn.click();{const i=document.getElementById('intro-stage');if(i)i.hidden=true}}
-  setPhase('done');
+  if(opening)return;
+  setOpening(true);
+  setNotice('');
+  setUnlockStage('untying');
+
+  try {
+    const b = await apiJSON('/api/bootstrap');
+    if(!b || !b.open){
+      setNotice('The curtains open on 17 November, 12:00 AM IST ✨');
+      setOpening(false);
+      setUnlockStage('idle');
+      return;
+    }
+
+    // Stage 1: Ribbon untying & burst
+    window.ammuTriggerMagicalBurst?.(window.innerWidth/2, window.innerHeight/2);
+    if (!reduced) {
+      await new Promise(r => setTimeout(r, 600));
+    }
+
+    // Stage 2: Curtains parting
+    setUnlockStage('curtains');
+
+    // Sync authoritative state with legacy app
+    const syncTask = (async () => {
+      try {
+        if (window.ammuOpenBirthday) {
+          return await window.ammuOpenBirthday(b);
+        } else if (window.ammuReinitialize) {
+          await window.ammuReinitialize(b);
+          if (window.ammuOpenBirthday) {
+            return await window.ammuOpenBirthday(b);
+          }
+        }
+      } catch (err) {
+        console.warn('Interactive engine sync note:', err);
+      }
+    })();
+
+    if (!reduced) {
+      await new Promise(r => setTimeout(r, 850));
+    }
+
+    // Stage 3: Grand Birthday Reveal
+    setUnlockStage('reveal');
+    window.ammuTriggerMagicalBurst?.(window.innerWidth/2, window.innerHeight * 0.42);
+
+    await syncTask;
+
+    if (!reduced) {
+      await new Promise(r => setTimeout(r, 1400));
+    }
+
+    // Ensure DOM is cleanly ready for full experience
+    const gate = document.getElementById('gate');
+    if (gate) { gate.hidden = true; gate.style.display = 'none'; }
+    const introStage = document.getElementById('intro-stage');
+    if (introStage) { introStage.hidden = true; introStage.style.display = 'none'; }
+    const exp = document.getElementById('experience');
+    if (exp) {
+      exp.hidden = false;
+      exp.style.display = 'block';
+      exp.style.opacity = '1';
+      exp.style.pointerEvents = 'auto';
+    }
+    document.body.classList.remove('modal-open');
+    document.body.classList.remove('chapter-mode');
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+
+    // Stage 4: Enter the real website
+    setPhase('done');
+  } catch (err) {
+    console.error('Birthday ribbon unlock failed:', err);
+    setNotice("Could not open your birthday universe. Please tap again! 💗");
+    setOpening(false);
+    setUnlockStage('idle');
+  }
 };
 
 if(phase==='done')return null;
@@ -307,7 +443,7 @@ return (
     <AnimatePresence mode="wait">
       {phase==='opening'&&<IntroCurtain key="intro" onOpen={()=>setPhase('calendar')}/>}
       {phase==='calendar'&&<GoddessCalendar key="calendar" info={info} checking={checking} onCheck={check} onCountdown={()=>setPhase('countdown')}/>}
-      {phase==='countdown'&&<CurtainCountdown key="curtain" info={info} onBack={()=>setPhase('calendar')} onEnter={enter}/>}
+      {phase==='countdown'&&<CurtainCountdown key="curtain" info={info} onBack={()=>setPhase('calendar')} onEnter={enter} opening={opening} unlockStage={unlockStage}/>}
     </AnimatePresence>
     {poster&&<Poster remaining={Math.max(0,Math.ceil((TARGET-Date.now())/86400000))} initialPoster={info.poster} close={()=>setPoster(false)}/>}
     {notice&&<div className="ad-notice" role="status">{notice}</div>}

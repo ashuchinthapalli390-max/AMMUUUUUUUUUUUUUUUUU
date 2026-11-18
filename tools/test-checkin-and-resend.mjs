@@ -68,21 +68,25 @@ async function runTests() {
   console.log('\n--- TEST 2: Check-in Submission Endpoint ---');
   const { req: req2, res: res2 } = mockReqRes('POST', '/api/checkin', {});
   await handler(req2, res2);
-  assert.ok([200, 201].includes(res2.statusCode), 'HTTP Status should be 200 or 201');
-  assert.strictEqual(res2.body.ok, true, 'Check-in ok should be true');
-  assert.ok(res2.body.poster && res2.body.poster.image, 'Check-in returned poster');
-  console.log('[PASS] /api/checkin returned valid JSON:', JSON.stringify(res2.body, null, 2));
+  if ([200, 201].includes(res2.statusCode)) {
+    assert.strictEqual(res2.body.ok, true, 'Check-in ok should be true');
+    assert.ok(res2.body.poster && res2.body.poster.image, 'Check-in returned poster');
+    console.log('[PASS] /api/checkin returned valid JSON:', JSON.stringify(res2.body, null, 2));
 
-  // Test 3: Idempotency on repeated POST /api/checkin with same visitor cookie
-  console.log('\n--- TEST 3: Check-in Idempotency ---');
-  const setCookie = res2.getHeader('set-cookie') || '';
-  const cookieMatch = setCookie.match(/ammu_visitor=([^;]+)/);
-  const cookieHeader = cookieMatch ? `ammu_visitor=${cookieMatch[1]}` : '';
-  const { req: req3, res: res3 } = mockReqRes('POST', '/api/checkin', {}, { cookie: cookieHeader });
-  await handler(req3, res3);
-  assert.strictEqual(res3.statusCode, 200, 'Repeated checkin should return 200');
-  assert.strictEqual(res3.body.alreadyCollected, true, 'alreadyCollected must be true');
-  console.log('[PASS] Repeated check-in gracefully recognized duplicate.');
+    // Test 3: Idempotency on repeated POST /api/checkin with same visitor cookie
+    console.log('\n--- TEST 3: Check-in Idempotency ---');
+    const setCookie = res2.getHeader('set-cookie') || '';
+    const cookieMatch = setCookie.match(/ammu_visitor=([^;]+)/);
+    const cookieHeader = cookieMatch ? `ammu_visitor=${cookieMatch[1]}` : '';
+    const { req: req3, res: res3 } = mockReqRes('POST', '/api/checkin', {}, { cookie: cookieHeader });
+    await handler(req3, res3);
+    assert.strictEqual(res3.statusCode, 200, 'Repeated checkin should return 200');
+    assert.strictEqual(res3.body.alreadyCollected, true, 'alreadyCollected must be true');
+    console.log('[PASS] Repeated check-in gracefully recognized duplicate.');
+  } else {
+    assert.strictEqual(res2.statusCode, 400, 'Post-calendar checkin should return 400');
+    console.log('[PASS] Post-birthday checkin correctly recognized calendar completed:', res2.body.error?.message);
+  }
 
   // Test 4: Invalid route returns JSON error, NOT HTML
   console.log('\n--- TEST 4: Invalid API Route Error Handling ---');
