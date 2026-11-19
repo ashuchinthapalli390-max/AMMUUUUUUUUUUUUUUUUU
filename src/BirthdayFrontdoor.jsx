@@ -296,8 +296,7 @@ function CurtainCountdown({info,onBack,onEnter,opening,unlockStage='idle'}){
   );
 }
 
-export default function BirthdayFrontdoor({skip=false}){
-if(skip)return null;
+export default function BirthdayFrontdoor({onUnlocked}){
 const [phase,setPhase]=useState('opening');
 const [info,setInfo]=useState({today:istDate(Date.now()),checkedDates:[],checkedToday:false,serverTime:new Date().toISOString(),open:false});
 const [checking,setChecking]=useState(false);
@@ -369,64 +368,11 @@ const enter=async()=>{
       return;
     }
 
-    // Stage 1: Ribbon untying & burst
+    // Hand over to the cinematic ribbon unlock + scroll story (server confirmed it is open).
     window.ammuTriggerMagicalBurst?.(window.innerWidth/2, window.innerHeight/2);
-    if (!reduced) {
-      await new Promise(r => setTimeout(r, 600));
-    }
-
-    // Stage 2: Curtains parting
-    setUnlockStage('curtains');
-
-    // Sync authoritative state with legacy app
-    const syncTask = (async () => {
-      try {
-        if (window.ammuOpenBirthday) {
-          return await window.ammuOpenBirthday(b);
-        } else if (window.ammuReinitialize) {
-          await window.ammuReinitialize(b);
-          if (window.ammuOpenBirthday) {
-            return await window.ammuOpenBirthday(b);
-          }
-        }
-      } catch (err) {
-        console.warn('Interactive engine sync note:', err);
-      }
-    })();
-
-    if (!reduced) {
-      await new Promise(r => setTimeout(r, 850));
-    }
-
-    // Stage 3: Grand Birthday Reveal
-    setUnlockStage('reveal');
-    window.ammuTriggerMagicalBurst?.(window.innerWidth/2, window.innerHeight * 0.42);
-
-    await syncTask;
-
-    if (!reduced) {
-      await new Promise(r => setTimeout(r, 1400));
-    }
-
-    // Ensure DOM is cleanly ready for full experience
-    const gate = document.getElementById('gate');
-    if (gate) { gate.hidden = true; gate.style.display = 'none'; }
-    const introStage = document.getElementById('intro-stage');
-    if (introStage) { introStage.hidden = true; introStage.style.display = 'none'; }
-    const exp = document.getElementById('experience');
-    if (exp) {
-      exp.hidden = false;
-      exp.style.display = 'block';
-      exp.style.opacity = '1';
-      exp.style.pointerEvents = 'auto';
-    }
-    document.body.classList.remove('modal-open');
-    document.body.classList.remove('chapter-mode');
     document.body.style.overflow = '';
     document.documentElement.style.overflow = '';
-
-    // Stage 4: Enter the real website
-    setPhase('done');
+    onUnlocked?.(b);
   } catch (err) {
     console.error('Birthday ribbon unlock failed:', err);
     setNotice("Could not open your birthday universe. Please tap again! 💗");

@@ -1,0 +1,44 @@
+html.bunny-cursor-on, html.bunny-cursor-on * { cursor: none !important; }
+html.bunny-cursor-on input:not([type=checkbox]):not([type=radio]),
+html.bunny-cursor-on textarea { cursor: text !important; }
+
+.bunny-cursor {
+  position: fixed; left: 0; top: 0; z-index: 2147483646; pointer-events: none;
+  width: 0; height: 0; opacity: 0; transition: opacity .25s;
+  will-change: transform;
+}
+.bunny-cursor.is-visible { opacity: 1; }
+.bunny-cursor svg {
+  /* the nose sits exactly on the pointer, so she clicks with the bunny's nose */
+  position: absolute; left: -23px; top: -36px; overflow: visible;
+  filter: drop-shadow(0 4px 6px rgba(140, 50, 90, .28));
+  transform-origin: 23px 36px;
+  transition: transform .28s cubic-bezier(.3, 1.7, .5, 1);
+}
+.bunny-cursor.is-hover svg { transform: scale(1.28) rotate(-6deg); }
+.bunny-cursor.is-down svg { transform: scale(.82, .74); transition-duration: .08s; }
+.bunny-cursor.is-text svg { transform: scale(.7) translate(14px, 14px); opacity: .7; }
+
+.bunny-ear { transform-box: fill-box; transition: transform .05s linear; }
+.bunny-ear.left { transform-origin: 50% 95%; transform: rotate(calc(var(--ear-l, 0deg) - 8deg)); }
+.bunny-ear.right { transform-origin: 50% 95%; transform: rotate(calc(var(--ear-r, 0deg) + 8deg)); }
+.bunny-cursor.is-hover .bunny-ear.left { transform: rotate(-22deg); }
+.bunny-cursor.is-hover .bunny-ear.right { transform: rotate(22deg); }
+
+.bunny-eyes { transform-box: fill-box; transform-origin: 50% 50%; transition: transform .1s; }
+.bunny-eyes.happy { opacity: 0; }
+.bunny-cursor.is-blink .bunny-eyes.open { transform: scaleY(.1); }
+.bunny-cursor.is-hover .bunny-eyes.open, .bunny-cursor.is-down .bunny-eyes.open { opacity: 0; }
+.bunny-cursor.is-hover .bunny-eyes.happy, .bunny-cursor.is-down .bunny-eyes.happy { opacity: 1; }
+.bunny-cheek { transition: opacity .2s, transform .2s; transform-box: fill-box; transform-origin: center; opacity: .75; }
+.bunny-cursor.is-hover .bunny-cheek { opacity: 1; transform: scale(1.25); }
+.bunny-nose { transform-box: fill-box; transform-origin: 50% 30%; animation: bunnySniff 1.6s ease-in-out infinite; }
+@keyframes bunnySniff { 0%, 70%, 100% { transform: translateY(0) scale(1); } 78% { transform: translateY(-.6px) scale(1.12, .9); } 86% { transform: translateY(0) scale(1); } 92% { transform: translateY(-.5px) scale(1.1, .92); } }
+.bunny-bow { transform-box: fill-box; transform-origin: center; transition: transform .3s cubic-bezier(.3, 1.7, .5, 1); }
+.bunny-cursor.is-hover .bunny-bow { transform: rotate(18deg) scale(1.2); }
+
+.bunny-fx-layer { position: fixed; inset: 0; pointer-events: none; z-index: 2147483645; overflow: hidden; }
+.bunny-spark, .bunny-trail { position: absolute; pointer-events: none; will-change: transform, opacity; line-height: 1; }
+.bunny-trail { font-size: 11px; color: #ff6fa5; }
+
+@media (prefers-reduced-motion: reduce) { .bunny-nose { animation: none; } }

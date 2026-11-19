@@ -53,16 +53,18 @@ assert(!JSON.stringify(siteJson).includes('POTTI1703'), 'No POTTI1703 coupon cod
 // -------------------------------------------------------------
 // TEST 3: GIFTS INTEGRITY (2 GIFTS ONLY)
 // -------------------------------------------------------------
-const giftsJsx = fs.readFileSync(path.join(screensDir, 'SectionGifts.jsx'), 'utf8');
-const giftCards = giftsJsx.match(/data-gift=\{?"([^"}]+)"\}?/g) || [];
-assert(giftCards.length === 2, `SectionGifts has exactly 2 gift cards (found: ${giftCards.length})`);
+// The scroll story (src/story) replaced the legacy section screens; gifts + cake live in ChaptersTwo.jsx.
+const storyChapters = fs.readFileSync(path.join(ROOT, 'src/story/ChaptersTwo.jsx'), 'utf8');
+const giftsJsx = storyChapters.slice(storyChapters.indexOf('export function Gifts'));
+const giftCards = giftsJsx.match(/\{box\('([^']+)'/g) || [];
+assert(giftCards.length === 2, `Gifts chapter has exactly 2 gift boxes (found: ${giftCards.length})`);
 assert(giftsJsx.includes('Two Little Surprises') && giftsJsx.includes('Just For You 💗'), 'Gifts heading verified');
 
 // -------------------------------------------------------------
 // TEST 4: CELEBRATION EMBEDDING INTEGRITY
 // -------------------------------------------------------------
-const cakeJsx = fs.readFileSync(path.join(screensDir, 'SectionCake.jsx'), 'utf8');
-assert(cakeJsx.includes('A Grand Little Celebration For Our Birthday Girl'), 'Celebration heading in SectionCake');
+const cakeJsx = storyChapters.slice(storyChapters.indexOf('export function Cake'), storyChapters.indexOf('export function Gifts'));
+assert(cakeJsx.includes('A Grand Little Celebration For Our Birthday Girl'), 'Celebration heading in Cake chapter');
 assert(cakeJsx.includes('Visit Your Birthday Celebration 💗'), 'Primary Visit Celebration button verified');
 assert(fs.existsSync(path.join(ROOT, 'src/components/CelebrationOverlay.jsx')), 'CelebrationOverlay component exists');
 const overlayContent = fs.readFileSync(path.join(ROOT, 'src/components/CelebrationOverlay.jsx'), 'utf8');

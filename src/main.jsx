@@ -12,10 +12,13 @@ window.ammuMakeQR=url=>QRCode.toDataURL(url,{width:250,margin:2,color:{dark:'#69
 const path = window.location.pathname.replace(/\/$/, '');
 const isAdmin = path === '/admin';
 
-const stylesheet = document.createElement('link');
-stylesheet.rel = 'stylesheet';
-stylesheet.href = isAdmin ? '/css/admin.css' : '/css/style.css';
-document.head.append(stylesheet);
+// The guest story ships its own bundled styles; only the admin uses a static sheet.
+if (isAdmin) {
+  const stylesheet = document.createElement('link');
+  stylesheet.rel = 'stylesheet';
+  stylesheet.href = '/css/admin.css';
+  document.head.append(stylesheet);
+}
 
 document.title = isAdmin
   ? "Ashu's Studio | Ammu Birthday Admin"

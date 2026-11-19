@@ -3,7 +3,7 @@
   "version": "9.0.0",
   "private": true,
   "type": "module",
-  "description": "Ammu Birthday React v9 source: calendar, check-in, cinematic chapters, keepsakes, 3D cake, sequential vouchers and lifetime promises",
+  "description": "Ammu Birthday React v9 source: calendar, check-in, cinematic ribbon unlock and a 3D scroll-story universe built from site data",
   "scripts": {
     "dev": "node tools/dev.mjs",
     "client": "vite --host 127.0.0.1 --port 5173 --strictPort",
@@ -13,7 +13,7 @@
     "preview": "vite preview --host 127.0.0.1 --port 5173",
     "vendor:three": "node tools/vendor-three.mjs",
     "postinstall": "node tools/vendor-three.mjs",
-    "check": "node --check server.mjs && node --check public/js/app.js && node --check public/js/experience.js && node --check public/js/keepsakes.js && node --check public/js/admin.js && node --check public/js/cake3d.js && node --check tools/dev.mjs && node tools/verify-layout.mjs && node tools/validate-env.mjs && node tools/test-v16-features.mjs",
+    "check": "node --check server.mjs && node --check public/js/admin.js && node --check tools/dev.mjs && node tools/verify-layout.mjs && node tools/validate-env.mjs && node tools/test-v16-features.mjs",
     "validate": "npm run check && npm run build",
     "test:v16": "node tools/test-v16-features.mjs",
     "test:api": "python tools/test-api.py",

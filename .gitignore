@@ -9,3 +9,5 @@ data/db.json
 .DS_Store
 .archive_backup/
 public/assets/uploads/
+
+.claude/
